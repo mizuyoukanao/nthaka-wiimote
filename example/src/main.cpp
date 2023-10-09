@@ -1,5 +1,8 @@
 #include <Arduino.h>
 
+#include "pico/stdlib.h"
+#include "hardware/timer.h"
+
 #include "nxamf.h"
 #include "nxamf/pokecon.h"
 #include "nxamf/nxmc2.h"
@@ -14,6 +17,18 @@ static Nxmc2Protocol *nxmc2_protocol;
 static NxamfBytesBuffer *nxmc2;
 
 static bool is_pokecon = false;
+
+static int64_t led_off(alarm_id_t id, void *user_data)
+{
+    digitalWrite(LED_BUILTIN, LOW);
+    return false;
+}
+
+static void async_led_on_for_100ms()
+{
+    digitalWrite(LED_BUILTIN, HIGH);
+    alarm_id_t alarm_id = add_alarm_in_ms(100, led_off, NULL, false);
+}
 
 static NxamfGamepadState *append_both(uint8_t packet)
 {
@@ -99,7 +114,7 @@ static void print_stick_state(const char *name, NxamfStickState *state)
 
 static void print_extension(uint8_t extension[])
 {
-    sprintf(buf, "Ext\t%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", extension[0], extension[1], extension[2], extension[3], extension[4], extension[5], extension[6], extension[7], extension[8], extension[9], extension[10], extension[11], extension[12], extension[13], extension[14], extension[15]);
+    sprintf(buf, "Extension\t%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", extension[0], extension[1], extension[2], extension[3], extension[4], extension[5], extension[6], extension[7], extension[8], extension[9], extension[10], extension[11], extension[12], extension[13], extension[14], extension[15]);
     Serial1.println(buf);
 }
 
@@ -109,6 +124,8 @@ static void reflect_state(NxamfGamepadState *state)
     {
         return;
     }
+
+    async_led_on_for_100ms();
 
     Serial1.println("--------------------");
     sprintf(buf, "Mode\t%s", is_pokecon ? "PokeCon" : "NXMC2");
@@ -144,6 +161,9 @@ void setup()
     Serial1.setTX(0);
     Serial1.setRX(1);
     Serial1.begin(115200);
+
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);
 
     pokecon_protocol = pokecon_protocol_new();
     if (pokecon_protocol == NULL)
@@ -190,18 +210,4 @@ void loop()
     }
 
     reflect_state(state);
-}
-
-void setup1()
-{
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, LOW);
-}
-
-void loop1()
-{
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(500);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(500);
 }
