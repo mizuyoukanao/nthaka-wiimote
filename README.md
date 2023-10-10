@@ -8,13 +8,13 @@ With the Nintendo Switch (codename: NX) now equipped with the widely-used USB in
 
 This library primarily focuses on the MCU aspect mentioned above. Regardless of the microcontroller or protocol used, its firmware would be abstracted to "receive byte arrays through communication, convert it into a data structure representing the next state of the gamepad, and reflect it to the NX."
 
+## Usage
+
 What this library offers is only an interface to represent the communication protocol, a structure to represent the state of the gamepad, and a buffer structure to accept/reject each packet according to the given protocol and extract the state. Users must combine these to define a specific communication protocol and create functions to reflect the extracted state to the NX.
 
-## Concept
+By implementing each method of `NxamfBytesProtocolInterface`, a specific communication protocol is defined. Implementations for the NX Macro Controller and Poke-Controller Modified are included as examples.
 
-By implementing each method of NxamfBytesProtocolInterface, a specific communication protocol is defined. Implementations for the NX Macro Controller and Poke-Controller Modified are included as examples.
-
-NxamfBytesBuffer holds the protocol as a member and provides an `append` for uint8_t. The determination of accept/reject is done by the protocol, and when ready, you get a pointer to NxamfGamepadState (please note that the state must be freed using `delete`). You can explicitly reset the buffer using the `clear` method.
+`NxamfBytesBuffer` holds a protocol as a member and provides `append` function for packets. The protocol determines acceptance or rejection. If ready, it provides a pointer to NxamfGamepadState (note that the state must be freed using delete), otherwise it returns NULL. You can also explicitly reset the buffer using `clear`.
 
 Below is a conceptual class diagram in a Java-like notation.
 
