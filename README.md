@@ -4,7 +4,7 @@ Meta firmware for NX automation.
 
 ## Overview
 
-With the inclusion of USB in the Nintendo Switch (codename: NX), several automated operation solutions using MCU have emerged. Currently, sophisticated methods have become common where, through two wiring paths: `PC->MCU->NX` and `NX->HDMI Video Capture->PC`, video feedback is received and calculations are performed on the PC side to transmit operations.
+With the Nintendo Switch (codename: NX) now equipped with the widely-used USB interface, several automated operation solutions using MCU have come to light. Presently, the prevalent method involves two wiring paths: `PC->MCU->NX` and `NX->HDMI Video Capture->PC`. Through these, video feedback is obtained, processed on the PC side, and then operations are transmitted accordingly.
 
 This library primarily focuses on the MCU aspect mentioned above. Regardless of the microcontroller or protocol used, its firmware would be abstracted to "receive byte arrays through communication, convert it into a data structure representing the next state of the gamepad, and reflect it to the NX."
 
@@ -14,7 +14,7 @@ What this library offers is only an interface to represent the communication pro
 
 By implementing each method of NxamfBytesProtocolInterface, a specific communication protocol is defined. Implementations for the NX Macro Controller and Poke-Controller Modified are included as examples.
 
-NxamfBytesBuffer holds the protocol as a member and provides an append for uint8_t. The determination of accept/reject is done by the protocol, and when ready, you get a pointer to NxamfGamepadState (please note that the state must be freed using delete). You can explicitly reset the buffer using the clear method.
+NxamfBytesBuffer holds the protocol as a member and provides an `append` for uint8_t. The determination of accept/reject is done by the protocol, and when ready, you get a pointer to NxamfGamepadState (please note that the state must be freed using `delete`). You can explicitly reset the buffer using the `clear` method.
 
 Below is a conceptual class diagram in a Java-like notation.
 
