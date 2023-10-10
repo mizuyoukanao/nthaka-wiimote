@@ -4,19 +4,19 @@
 #include "hardware/timer.h"
 
 #include "nxamf.h"
-#include "nxamf/pokecon.h"
 #include "nxamf/nxmc2.h"
+#include "nxamf/pokecon.h"
 
 static const int SERIAL_INACTIVE_TIMEOUT = 100;
 static int inactive_count = 0;
 
-static PokeConProtocol *pokecon_protocol;
-static NxamfBytesBuffer *pokecon;
-
 static Nxmc2Protocol *nxmc2_protocol;
 static NxamfBytesBuffer *nxmc2;
 
-static bool is_pokecon = false;
+static PokeConProtocol *pokecon_protocol;
+static NxamfBytesBuffer *pokecon;
+
+static bool is_nxmc2 = false;
 
 static int64_t led_off(alarm_id_t id, void *user_data)
 {
@@ -32,30 +32,22 @@ static void async_led_on_for_100ms()
 
 static NxamfGamepadState *append_both(uint8_t packet)
 {
-    NxamfGamepadState *p = nxamf_bytes_buffer_append(pokecon, packet);
     NxamfGamepadState *n = nxamf_bytes_buffer_append(nxmc2, packet);
-
-    if (p != NULL)
+    if (n != NULL)
     {
-        is_pokecon = true;
-        return p;
-    }
-    else if (n != NULL)
-    {
-        is_pokecon = false;
+        is_nxmc2 = true;
         return n;
     }
-    else
-    {
-        is_pokecon = false;
-        return NULL;
-    }
+    
+    NxamfGamepadState *p = nxamf_bytes_buffer_append(pokecon, packet);
+    is_nxmc2 = false;
+    return p;
 }
 
 static void clear_both()
 {
-    nxamf_bytes_buffer_clear(pokecon);
     nxamf_bytes_buffer_clear(nxmc2);
+    nxamf_bytes_buffer_clear(pokecon);
 }
 
 static char buf[256];
@@ -128,7 +120,7 @@ static void reflect_state(NxamfGamepadState *state)
     async_led_on_for_100ms();
 
     Serial1.println("--------------------");
-    sprintf(buf, "Mode\t%s", is_pokecon ? "PokeCon" : "NXMC2");
+    sprintf(buf, "Mode\t%s", is_nxmc2 ? "NXMC2" : "PokeCon");
     Serial1.println(buf);
 
     print_button_state("Y", state->y);
@@ -165,17 +157,6 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
 
-    pokecon_protocol = pokecon_protocol_new();
-    if (pokecon_protocol == NULL)
-    {
-        abort();
-    }
-    pokecon = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)pokecon_protocol);
-    if (pokecon == NULL)
-    {
-        abort();
-    }
-
     nxmc2_protocol = nxmc2_protocol_new();
     if (nxmc2_protocol == NULL)
     {
@@ -183,6 +164,17 @@ void setup()
     }
     nxmc2 = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)nxmc2_protocol);
     if (nxmc2 == NULL)
+    {
+        abort();
+    }
+
+    pokecon_protocol = pokecon_protocol_new();
+    if (pokecon_protocol == NULL)
+    {
+        abort();
+    }
+    pokecon = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)pokecon_protocol);
+    if (pokecon == NULL)
     {
         abort();
     }
