@@ -66,9 +66,9 @@ void nxamf_gamepad_state_delete(NxamfGamepadState *self);
 
 typedef struct NxamfBytesProtocolInterface
 {
-    bool (*is_acceptable)(struct NxamfBytesProtocolInterface *self, uint8_t packet, uint8_t buffer[], size_t length);
-    bool (*is_ready)(struct NxamfBytesProtocolInterface *self, uint8_t buffer[], size_t length);
-    void (*convert)(struct NxamfBytesProtocolInterface *self, uint8_t buffer[], size_t length, NxamfGamepadState *state);
+    bool (*is_acceptable)(struct NxamfBytesProtocolInterface *self, const uint8_t packet, const uint8_t buffer[], const size_t length);
+    bool (*is_ready)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length);
+    void (*convert)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length, NxamfGamepadState *state);
 } NxamfBytesProtocolInterface;
 
 typedef struct NxamfBytesBuffer
@@ -80,7 +80,7 @@ typedef struct NxamfBytesBuffer
 
 NxamfBytesBuffer *nxamf_bytes_buffer_new(NxamfBytesProtocolInterface *protocol);
 void nxamf_bytes_buffer_delete(NxamfBytesBuffer *self);
-NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, uint8_t packet);
+NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8_t packet);
 void nxamf_bytes_buffer_clear(NxamfBytesBuffer *self);
 
 #ifdef __cplusplus

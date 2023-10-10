@@ -45,7 +45,7 @@ static const char *POKECON_PROTOCOL_ALLOWED[18] = {
     "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]\r?$",
     "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]\r?\n$"};
 
-static bool pokecon_protocol_is_acceptable(NxamfBytesProtocolInterface *parent, uint8_t packet, uint8_t buffer[], size_t length)
+static bool pokecon_protocol_is_acceptable(NxamfBytesProtocolInterface *parent, const uint8_t packet, const uint8_t buffer[], const size_t length)
 {
     PokeConProtocol *self = (PokeConProtocol *)parent;
 
@@ -65,7 +65,7 @@ static bool pokecon_protocol_is_acceptable(NxamfBytesProtocolInterface *parent, 
     return false;
 }
 
-static bool pokecon_protocol_is_ready(NxamfBytesProtocolInterface *parent, uint8_t buffer[], size_t length)
+static bool pokecon_protocol_is_ready(NxamfBytesProtocolInterface *parent, const uint8_t buffer[], const size_t length)
 {
     PokeConProtocol *self = (PokeConProtocol *)parent;
 
@@ -92,7 +92,7 @@ static void remove_prefix_0x(char *str)
     }
 }
 
-static void pokecon_protocol_convert(NxamfBytesProtocolInterface *parent, uint8_t buffer[], size_t length, NxamfGamepadState *state)
+static void pokecon_protocol_convert(NxamfBytesProtocolInterface *parent, const uint8_t buffer[], const size_t length, NxamfGamepadState *state)
 {
     PokeConProtocol *self = (PokeConProtocol *)parent;
 

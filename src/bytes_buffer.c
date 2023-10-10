@@ -28,7 +28,7 @@ void nxamf_bytes_buffer_delete(NxamfBytesBuffer *self)
     free(self);
 }
 
-NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, uint8_t packet)
+NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8_t packet)
 {
     if (self == NULL)
     {

@@ -2,21 +2,21 @@
 
 #include <stdlib.h>
 
-static bool nxmc2_protocol_is_acceptable(NxamfBytesProtocolInterface *self, uint8_t packet, uint8_t buffer[], size_t length)
+static bool nxmc2_protocol_is_acceptable(NxamfBytesProtocolInterface *self, const uint8_t packet, const uint8_t buffer[], const size_t length)
 {
     return !(11 <= length ||
              (length == 0 && packet != 0xAB) ||
              (length == 3 && 8 < packet));
 }
 
-static bool nxmc2_protocol_is_ready(NxamfBytesProtocolInterface *self, uint8_t buffer[], size_t length)
+static bool nxmc2_protocol_is_ready(NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length)
 {
     return length == 11 &&
            buffer[0] == 0xAB &&
            buffer[3] <= 8;
 }
 
-static void nxmc2_protocol_convert(NxamfBytesProtocolInterface *self, uint8_t buffer[], size_t length, NxamfGamepadState *state)
+static void nxmc2_protocol_convert(NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length, NxamfGamepadState *state)
 {
     state->y = (buffer[1] & 0b00000001);
     state->b = (buffer[1] & 0b00000010) >> 1;

@@ -5,17 +5,17 @@ typedef struct MockProtocol
     NxamfBytesProtocolInterface parent;
 } MockProtocol;
 
-bool mock_protocol_is_acceptable(NxamfBytesProtocolInterface *, uint8_t, uint8_t[], size_t length)
+bool mock_protocol_is_acceptable(NxamfBytesProtocolInterface *, const uint8_t, const uint8_t[], const size_t length)
 {
     return length < 3;
 }
 
-bool mock_protocol_is_ready(NxamfBytesProtocolInterface *, uint8_t[], size_t length)
+bool mock_protocol_is_ready(NxamfBytesProtocolInterface *, const uint8_t[], const size_t length)
 {
     return length == 3;
 }
 
-void mock_protocol_convert(NxamfBytesProtocolInterface *, uint8_t buffer[], size_t, NxamfGamepadState *state)
+void mock_protocol_convert(NxamfBytesProtocolInterface *, const uint8_t buffer[], const size_t, NxamfGamepadState *state)
 {
     state->extension[0] = buffer[0];
     state->extension[1] = buffer[1];
