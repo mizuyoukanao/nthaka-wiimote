@@ -27,17 +27,24 @@ classDiagram
   NxamfBytesProtocolInterface : +convert(uint8_t buffer[], size_t length, NxamfGamepadState *state)
 
   class PokeConProtocol
-  PokeConProtocol --|> NxamfBytesProtocolInterface
+  PokeConProtocol ..|> NxamfBytesProtocolInterface
 
   class Nxmc2Protocol
-  Nxmc2Protocol --|> NxamfBytesProtocolInterface
+  Nxmc2Protocol ..|> NxamfBytesProtocolInterface
+
+  class NxamfProtocolMultiplexer
+  NxamfProtocolMultiplexer : -NxamfBytesProtocolInterface protocols[]
+  NxamfProtocolMultiplexer : +size_t ready_index
+
+  NxamfProtocolMultiplexer ..|> NxamfBytesProtocolInterface
+  NxamfBytesProtocolInterface --* NxamfProtocolMultiplexer
 
   class NxamfBytesBuffer
   NxamfBytesBuffer : -NxamfBytesProtocolInterface *protocol
   NxamfBytesBuffer : +append(uint8_t packet) NxamfGamepadState *
   NxamfBytesBuffer : +clear()
 
-  NxamfBytesProtocolInterface --* NxamfBytesBuffer
+  NxamfBytesBuffer ..> NxamfBytesProtocolInterface
 ```
 
 ## Dependency
