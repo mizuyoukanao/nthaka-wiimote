@@ -83,6 +83,17 @@ void nxamf_bytes_buffer_delete(NxamfBytesBuffer *self);
 NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8_t packet);
 void nxamf_bytes_buffer_clear(NxamfBytesBuffer *self);
 
+typedef struct NxamfProtocolMultiplexer
+{
+    NxamfBytesProtocolInterface parent;
+    NxamfBytesProtocolInterface **protocols;
+    size_t protocols_length;
+    size_t ready_index;
+} NxamfProtocolMultiplexer;
+
+NxamfProtocolMultiplexer *nxamf_protocol_multiplexer_new(NxamfBytesProtocolInterface *protocols[], size_t length);
+void nxamf_protocol_multiplexer_delete(NxamfProtocolMultiplexer *self);
+
 #ifdef __cplusplus
 }
 #endif
