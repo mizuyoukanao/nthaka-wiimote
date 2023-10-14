@@ -223,10 +223,9 @@ static void test_protocol_multiplexer(void)
     Nxmc2Protocol *nxmc2 = nxmc2_protocol_new();
     assert(nxmc2 != NULL);
 
-    NxamfProtocolMultiplexer *protocol = nxamf_protocol_multiplexer_new((NxamfBytesProtocolInterface *[]){(NxamfBytesProtocolInterface *)pokecon,
-                                                                                                          (NxamfBytesProtocolInterface *)nxmc2},
-                                                                        2);
-    assert(protocol != NULL);
+    NxamfBytesProtocolInterface *protocols[] = {(NxamfBytesProtocolInterface *)pokecon, (NxamfBytesProtocolInterface *)nxmc2};
+    NxamfProtocolMultiplexer *mux = nxamf_protocol_multiplexer_new(protocols, 2);
+    assert(mux != NULL);
 
     TestProtocolParams params[] = {
         {/* NXMC2 */ (uint8_t[]){0xABU, 0x01U, 0x20U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x00U, 0x00U, 0x00U},
@@ -275,9 +274,9 @@ static void test_protocol_multiplexer(void)
                          /* y */ NXAMF_STICK_STATE_NEUTRAL},
           /* extension */ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
 
-    test_protocol_params_run((NxamfBytesProtocolInterface *)protocol, params, 2);
+    test_protocol_params_run((NxamfBytesProtocolInterface *)mux, params, 2);
 
-    nxamf_protocol_multiplexer_delete(protocol);
+    nxamf_protocol_multiplexer_delete(mux);
     nxmc2_protocol_delete(nxmc2);
     pokecon_protocol_delete(pokecon);
 }

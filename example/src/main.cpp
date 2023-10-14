@@ -10,13 +10,11 @@
 static const int SERIAL_INACTIVE_TIMEOUT = 100;
 static int inactive_count = 0;
 
-static Nxmc2Protocol *nxmc2_protocol;
-static NxamfBytesBuffer *nxmc2;
-
-static PokeConProtocol *pokecon_protocol;
-static NxamfBytesBuffer *pokecon;
-
-static bool is_nxmc2 = false;
+static Nxmc2Protocol *nxmc2;
+static PokeConProtocol *pokecon;
+static NxamfBytesProtocolInterface *protocols[2];
+static NxamfProtocolMultiplexer *mux;
+static NxamfBytesBuffer *buffer;
 
 static int64_t led_off(alarm_id_t id, void *user_data)
 {
@@ -28,26 +26,6 @@ static void async_led_on_for_100ms()
 {
     digitalWrite(LED_BUILTIN, HIGH);
     alarm_id_t alarm_id = add_alarm_in_ms(100, led_off, NULL, false);
-}
-
-static NxamfGamepadState *append_both(uint8_t packet)
-{
-    NxamfGamepadState *n = nxamf_bytes_buffer_append(nxmc2, packet);
-    if (n != NULL)
-    {
-        is_nxmc2 = true;
-        return n;
-    }
-    
-    NxamfGamepadState *p = nxamf_bytes_buffer_append(pokecon, packet);
-    is_nxmc2 = false;
-    return p;
-}
-
-static void clear_both()
-{
-    nxamf_bytes_buffer_clear(nxmc2);
-    nxamf_bytes_buffer_clear(pokecon);
 }
 
 static char buf[256];
@@ -120,7 +98,7 @@ static void reflect_state(NxamfGamepadState *state)
     async_led_on_for_100ms();
 
     Serial1.println("--------------------");
-    sprintf(buf, "Mode\t%s", is_nxmc2 ? "NXMC2" : "PokeCon");
+    sprintf(buf, "Mode\t%s", mux->ready_index == 0 ? "NXMC2" : "PokeCon");
     Serial1.println(buf);
 
     print_button_state("Y", state->y);
@@ -157,24 +135,17 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
 
-    nxmc2_protocol = nxmc2_protocol_new();
-    if (nxmc2_protocol == NULL)
+    nxmc2 = nxmc2_protocol_new();
+    pokecon = pokecon_protocol_new();
+    protocols[0] = (NxamfBytesProtocolInterface *)nxmc2;
+    protocols[1] = (NxamfBytesProtocolInterface *)pokecon;
+    mux = nxamf_protocol_multiplexer_new(protocols, 2);
+    if (nxmc2 == NULL || pokecon == NULL || mux == NULL)
     {
         abort();
     }
-    nxmc2 = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)nxmc2_protocol);
-    if (nxmc2 == NULL)
-    {
-        abort();
-    }
-
-    pokecon_protocol = pokecon_protocol_new();
-    if (pokecon_protocol == NULL)
-    {
-        abort();
-    }
-    pokecon = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)pokecon_protocol);
-    if (pokecon == NULL)
+    buffer = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)mux);
+    if (buffer == NULL)
     {
         abort();
     }
@@ -188,14 +159,14 @@ void loop()
         if (SERIAL_INACTIVE_TIMEOUT < inactive_count)
         {
             inactive_count = 0;
-            clear_both();
+            nxamf_bytes_buffer_clear(buffer);
         }
         return;
     }
     inactive_count = 0;
 
     uint8_t packet = Serial.read();
-    NxamfGamepadState *state = append_both(packet);
+    NxamfGamepadState *state = nxamf_bytes_buffer_append(buffer, packet);
     if (state == NULL)
     {
         return;
