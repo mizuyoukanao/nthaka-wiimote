@@ -1,5 +1,5 @@
-#ifndef POKECON_RULE_H_
-#define POKECON_RULE_H_
+#ifndef POKECON_PROTOCOL_H_
+#define POKECON_PROTOCOL_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -25,4 +25,4 @@ void pokecon_protocol_delete(PokeConProtocol *self);
 }
 #endif
 
-#endif
+#endif // POKECON_PROTOCOL_H_

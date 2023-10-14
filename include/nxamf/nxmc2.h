@@ -1,5 +1,5 @@
-#ifndef NXMC2_RULE_H_
-#define NXMC2_RULE_H_
+#ifndef NXMC2_PROTOCOL_H_
+#define NXMC2_PROTOCOL_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -20,4 +20,4 @@ void nxmc2_protocol_delete(Nxmc2Protocol *self);
 }
 #endif
 
-#endif
+#endif // NXMC2_PROTOCOL_H_
