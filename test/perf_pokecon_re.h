@@ -124,7 +124,7 @@ static double _perf(int iter, nxamf_buffer_interface_t *impl, char seq[], size_t
 
 bool test_perf_pokecon_re(void)
 {
-    const int ITERATIONS = 10000;
+    const int ITERATIONS = 100000;
 
     pokecon_buffer_t sm_;
     pokecon_buffer_init(&sm_);
