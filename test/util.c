@@ -1,4 +1,4 @@
-#include "test_util.h"
+#include "util.h"
 
 #include "nxamf.h"
 

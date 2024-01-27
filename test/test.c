@@ -11,9 +11,9 @@
 #include <stdlib.h>
 
 #include "mock_protocol.h"
-#include "test_util.h"
+#include "util.h"
 
-#include "test_pokecon_buffer.h"
+#include "pokecon_buffer.h"
 
 static void test_mock_protocol(void)
 {
