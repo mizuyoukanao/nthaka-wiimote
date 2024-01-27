@@ -103,11 +103,11 @@ static void pokecon_protocol_convert(NxamfBytesProtocolInterface *parent, const 
     remove_prefix_0x(stringified);
 
     uint16_t btns = 0;
-    uint8_t hat = NXAMF_HAT_STATE_NEUTRAL;
-    uint8_t lx = NXAMF_STICK_STATE_NEUTRAL;
-    uint8_t ly = NXAMF_STICK_STATE_NEUTRAL;
-    uint8_t rx = NXAMF_STICK_STATE_NEUTRAL;
-    uint8_t ry = NXAMF_STICK_STATE_NEUTRAL;
+    uint8_t hat = NXAMF_HAT_NEUTRAL;
+    uint8_t lx = NXAMF_STICK_NEUTRAL;
+    uint8_t ly = NXAMF_STICK_NEUTRAL;
+    uint8_t rx = NXAMF_STICK_NEUTRAL;
+    uint8_t ry = NXAMF_STICK_NEUTRAL;
     sscanf(stringified, "%hx %hhx %hhx %hhx %hhx %hhx", &btns, &hat, &lx, &ly, &rx, &ry);
 
     state->y = (btns & 0b0000000000000100) >> 2;
@@ -125,7 +125,7 @@ static void pokecon_protocol_convert(NxamfBytesProtocolInterface *parent, const 
     state->home = (btns & 0b0100000000000000) >> 14;
     state->capture = (btns & 0b1000000000000000) >> 15;
 
-    state->hat = hat <= NXAMF_HAT_STATE_NEUTRAL ? (NxamfHatState)hat : NXAMF_HAT_STATE_NEUTRAL;
+    state->hat = hat <= NXAMF_HAT_NEUTRAL ? (NxamfHat)hat : NXAMF_HAT_NEUTRAL;
 
     bool update_ls = ((btns & 0b0000000000000010) >> 1) == 1;
     if (update_ls)
@@ -179,10 +179,10 @@ PokeConProtocol *pokecon_protocol_new(void)
     self->parent.is_ready = pokecon_protocol_is_ready;
     self->parent.convert = pokecon_protocol_convert;
 
-    self->prev_lx = NXAMF_STICK_STATE_NEUTRAL;
-    self->prev_ly = NXAMF_STICK_STATE_NEUTRAL;
-    self->prev_rx = NXAMF_STICK_STATE_NEUTRAL;
-    self->prev_ry = NXAMF_STICK_STATE_NEUTRAL;
+    self->prev_lx = NXAMF_STICK_NEUTRAL;
+    self->prev_ly = NXAMF_STICK_NEUTRAL;
+    self->prev_rx = NXAMF_STICK_NEUTRAL;
+    self->prev_ry = NXAMF_STICK_NEUTRAL;
 
     return self;
 }

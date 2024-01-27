@@ -58,11 +58,11 @@ NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8
     {
         return NULL;
     }
-    state->hat = NXAMF_HAT_STATE_NEUTRAL;
-    state->l_stick.x = NXAMF_STICK_STATE_NEUTRAL;
-    state->l_stick.y = NXAMF_STICK_STATE_NEUTRAL;
-    state->r_stick.x = NXAMF_STICK_STATE_NEUTRAL;
-    state->r_stick.y = NXAMF_STICK_STATE_NEUTRAL;
+    state->hat = NXAMF_HAT_NEUTRAL;
+    state->l_stick.x = NXAMF_STICK_NEUTRAL;
+    state->l_stick.y = NXAMF_STICK_NEUTRAL;
+    state->r_stick.x = NXAMF_STICK_NEUTRAL;
+    state->r_stick.y = NXAMF_STICK_NEUTRAL;
     self->protocol->convert(self->protocol, self->buffer, self->length, state);
     return state;
 }
