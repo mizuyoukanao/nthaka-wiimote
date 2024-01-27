@@ -62,30 +62,24 @@ extern "C"
         uint8_t extension[16];
     } NxamfGamepadState;
 
-    typedef struct NxamfBytesProtocolInterface
-    {
-        bool (*is_acceptable)(struct NxamfBytesProtocolInterface *self, const uint8_t packet, const uint8_t buffer[], const size_t length);
-        bool (*is_ready)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length);
-        void (*convert)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length, NxamfGamepadState *state);
-    } NxamfBytesProtocolInterface;
-
-    typedef struct NxamfProtocolMultiplexer
-    {
-        NxamfBytesProtocolInterface parent;
-        NxamfBytesProtocolInterface **protocols;
-        size_t protocols_length;
-        size_t ready_index;
-    } NxamfProtocolMultiplexer;
-
-    NxamfProtocolMultiplexer *nxamf_protocol_multiplexer_new(NxamfBytesProtocolInterface *protocols[], size_t length);
-    void nxamf_protocol_multiplexer_delete(NxamfProtocolMultiplexer *self);
-
     typedef struct nxamf_buffer_interface_t
     {
         void (*append)(struct nxamf_buffer_interface_t *buf, uint8_t d);
         bool (*deserialize)(struct nxamf_buffer_interface_t *buf, NxamfGamepadState *out);
         void (*clear)(struct nxamf_buffer_interface_t *buf);
     } nxamf_buffer_interface_t;
+
+    typedef struct nxamf_multi_buffer_manager_t
+    {
+        nxamf_buffer_interface_t parent;
+
+        nxamf_buffer_interface_t **bufs;
+        size_t len;
+        int last_deserialized_index;
+    } nxamf_multi_buffer_manager_t;
+
+    void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_buffer_interface_t **bufs, size_t len);
+    size_t nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf);
 
 #ifdef __cplusplus
 }
