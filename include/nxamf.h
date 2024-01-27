@@ -62,6 +62,9 @@ extern "C"
         uint8_t extension[16];
     } NxamfGamepadState;
 
+    bool nxamf_gamepad_state_equals(NxamfGamepadState *s1, NxamfGamepadState *s2);
+    void nxamf_gamepad_state_copy(NxamfGamepadState *src, NxamfGamepadState *dst);
+
     typedef struct nxamf_buffer_interface_t
     {
         void (*append)(struct nxamf_buffer_interface_t *buf, uint8_t d);

@@ -1,5 +1,3 @@
-#include "util.h"
-
 #include "nxamf.h"
 
 bool nxamf_gamepad_state_equals(NxamfGamepadState *s1, NxamfGamepadState *s2)
@@ -39,4 +37,33 @@ bool nxamf_gamepad_state_equals(NxamfGamepadState *s1, NxamfGamepadState *s2)
            s1->extension[13] == s2->extension[13] &&
            s1->extension[14] == s2->extension[14] &&
            s1->extension[15] == s2->extension[15];
+}
+
+void nxamf_gamepad_state_copy(NxamfGamepadState *src, NxamfGamepadState *dst)
+{
+    dst->y = src->y;
+    dst->b = src->b;
+    dst->a = src->a;
+    dst->x = src->x;
+    dst->l = src->l;
+    dst->r = src->r;
+    dst->zl = src->zl;
+    dst->zr = src->zr;
+    dst->minus = src->minus;
+    dst->plus = src->plus;
+    dst->l_click = src->l_click;
+    dst->r_click = src->r_click;
+    dst->home = src->home;
+    dst->capture = src->capture;
+    dst->hat = src->hat;
+    dst->l_stick.x = src->l_stick.x;
+    dst->l_stick.y = src->l_stick.y;
+    dst->r_stick.x = src->r_stick.x;
+    dst->r_stick.y = src->r_stick.y;
+
+    size_t length = sizeof(dst->extension) / sizeof(uint8_t);
+    for (size_t i = 0; i < length; i++)
+    {
+        dst->extension[i] = src->extension[i];
+    }
 }

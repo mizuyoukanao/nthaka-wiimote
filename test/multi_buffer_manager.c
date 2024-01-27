@@ -1,5 +1,4 @@
 #include "multi_buffer_manager.h"
-#include "util.h"
 
 #include <stdio.h>
 

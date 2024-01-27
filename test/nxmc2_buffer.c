@@ -1,5 +1,4 @@
 #include "nxmc2_buffer.h"
-#include "util.h"
 
 #include <stdio.h>
 

@@ -41,8 +41,8 @@ static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
     else if ((buf->len == NXMC2_BUFFER_INDEX_HAT && _MAX_HAT_VALUE < d) ||
              NXMC2_BUFFER_LENGTH <= buf->len)
     {
-        _clear(parent);
-        _append(parent, d);
+        parent->clear(parent);
+        parent->append(parent, d);
         return;
     }
 
@@ -92,7 +92,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *ou
     out->extension[0] = buf->buf[NXMC2_BUFFER_INDEX_EXTENSION_0];
     out->extension[1] = buf->buf[NXMC2_BUFFER_INDEX_EXTENSION_1];
     out->extension[2] = buf->buf[NXMC2_BUFFER_INDEX_EXTENSION_2];
-    
+
     size_t length = sizeof(out->extension) / sizeof(uint8_t);
     for (size_t i = 3; i < length; i++)
     {
