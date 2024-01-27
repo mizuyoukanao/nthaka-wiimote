@@ -10,89 +10,96 @@ extern "C"
 #include <stddef.h>
 #include <stdint.h>
 
-typedef enum NxamfButtonState
-{
-    NXAMF_BUTTON_STATE_RELEASED,
-    NXAMF_BUTTON_STATE_PRESSED
-} NxamfButtonState;
+    typedef enum NxamfButton
+    {
+        NXAMF_BUTTON_RELEASED,
+        NXAMF_BUTTON_PRESSED
+    } NxamfButton;
 
-typedef enum NxamfHatState
-{
-    NXAMF_HAT_STATE_UP,
-    NXAMF_HAT_STATE_UPRIGHT,
-    NXAMF_HAT_STATE_RIGHT,
-    NXAMF_HAT_STATE_DOWNRIGHT,
-    NXAMF_HAT_STATE_DOWN,
-    NXAMF_HAT_STATE_DOWNLEFT,
-    NXAMF_HAT_STATE_LEFT,
-    NXAMF_HAT_STATE_UPLEFT,
-    NXAMF_HAT_STATE_NEUTRAL
-} NxamfHatState;
+    typedef enum NxamfHat
+    {
+        NXAMF_HAT_UP,
+        NXAMF_HAT_UPRIGHT,
+        NXAMF_HAT_RIGHT,
+        NXAMF_HAT_DOWNRIGHT,
+        NXAMF_HAT_DOWN,
+        NXAMF_HAT_DOWNLEFT,
+        NXAMF_HAT_LEFT,
+        NXAMF_HAT_UPLEFT,
+        NXAMF_HAT_NEUTRAL
+    } NxamfHat;
 
-#define NXAMF_STICK_STATE_NEUTRAL 128U
+#define NXAMF_STICK_NEUTRAL 128U
 
-typedef struct NxamfStickState
-{
-    uint8_t x;
-    uint8_t y;
-} NxamfStickState;
+    typedef struct NxamfStick
+    {
+        uint8_t x;
+        uint8_t y;
+    } NxamfStick;
 
-typedef struct NxamfGamepadState
-{
-    NxamfButtonState y;
-    NxamfButtonState b;
-    NxamfButtonState a;
-    NxamfButtonState x;
-    NxamfButtonState l;
-    NxamfButtonState r;
-    NxamfButtonState zl;
-    NxamfButtonState zr;
-    NxamfButtonState minus;
-    NxamfButtonState plus;
-    NxamfButtonState l_click;
-    NxamfButtonState r_click;
-    NxamfButtonState home;
-    NxamfButtonState capture;
+    typedef struct NxamfGamepadState
+    {
+        NxamfButton y;
+        NxamfButton b;
+        NxamfButton a;
+        NxamfButton x;
+        NxamfButton l;
+        NxamfButton r;
+        NxamfButton zl;
+        NxamfButton zr;
+        NxamfButton minus;
+        NxamfButton plus;
+        NxamfButton l_click;
+        NxamfButton r_click;
+        NxamfButton home;
+        NxamfButton capture;
 
-    NxamfHatState hat;
+        NxamfHat hat;
 
-    NxamfStickState l_stick;
-    NxamfStickState r_stick;
+        NxamfStick l_stick;
+        NxamfStick r_stick;
 
-    uint8_t extension[16];
-} NxamfGamepadState;
+        uint8_t extension[16];
+    } NxamfGamepadState;
 
-void nxamf_gamepad_state_delete(NxamfGamepadState *self);
+    void nxamf_gamepad_state_delete(NxamfGamepadState *self);
 
-typedef struct NxamfBytesProtocolInterface
-{
-    bool (*is_acceptable)(struct NxamfBytesProtocolInterface *self, const uint8_t packet, const uint8_t buffer[], const size_t length);
-    bool (*is_ready)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length);
-    void (*convert)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length, NxamfGamepadState *state);
-} NxamfBytesProtocolInterface;
+    typedef struct NxamfBytesProtocolInterface
+    {
+        bool (*is_acceptable)(struct NxamfBytesProtocolInterface *self, const uint8_t packet, const uint8_t buffer[], const size_t length);
+        bool (*is_ready)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length);
+        void (*convert)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length, NxamfGamepadState *state);
+    } NxamfBytesProtocolInterface;
 
-typedef struct NxamfBytesBuffer
-{
-    NxamfBytesProtocolInterface *protocol;
-    uint8_t buffer[64]; // isn't it enough?
-    size_t length;
-} NxamfBytesBuffer;
+    typedef struct NxamfBytesBuffer
+    {
+        NxamfBytesProtocolInterface *protocol;
+        uint8_t buffer[64]; // isn't it enough?
+        size_t length;
+    } NxamfBytesBuffer;
 
-NxamfBytesBuffer *nxamf_bytes_buffer_new(NxamfBytesProtocolInterface *protocol);
-void nxamf_bytes_buffer_delete(NxamfBytesBuffer *self);
-NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8_t packet);
-void nxamf_bytes_buffer_clear(NxamfBytesBuffer *self);
+    NxamfBytesBuffer *nxamf_bytes_buffer_new(NxamfBytesProtocolInterface *protocol);
+    void nxamf_bytes_buffer_delete(NxamfBytesBuffer *self);
+    NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8_t packet);
+    void nxamf_bytes_buffer_clear(NxamfBytesBuffer *self);
 
-typedef struct NxamfProtocolMultiplexer
-{
-    NxamfBytesProtocolInterface parent;
-    NxamfBytesProtocolInterface **protocols;
-    size_t protocols_length;
-    size_t ready_index;
-} NxamfProtocolMultiplexer;
+    typedef struct NxamfProtocolMultiplexer
+    {
+        NxamfBytesProtocolInterface parent;
+        NxamfBytesProtocolInterface **protocols;
+        size_t protocols_length;
+        size_t ready_index;
+    } NxamfProtocolMultiplexer;
 
-NxamfProtocolMultiplexer *nxamf_protocol_multiplexer_new(NxamfBytesProtocolInterface *protocols[], size_t length);
-void nxamf_protocol_multiplexer_delete(NxamfProtocolMultiplexer *self);
+    NxamfProtocolMultiplexer *nxamf_protocol_multiplexer_new(NxamfBytesProtocolInterface *protocols[], size_t length);
+    void nxamf_protocol_multiplexer_delete(NxamfProtocolMultiplexer *self);
+
+    typedef struct nxamf_buffer_interface_t
+    {
+        void (*append)(struct nxamf_buffer_interface_t *buf, uint8_t d);
+        bool (*deserialize)(struct nxamf_buffer_interface_t *buf, NxamfGamepadState *out);
+        void (*clear)(struct nxamf_buffer_interface_t *buf);
+    } nxamf_buffer_interface_t;
 
 #ifdef __cplusplus
 }

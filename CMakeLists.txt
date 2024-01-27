@@ -14,5 +14,6 @@ file(GLOB NXMC2_SOURCES "src/nxmc2/*.c")
 add_library(nxamf_nxmc2 STATIC ${NXMC2_SOURCES})
 
 # Create test executable
-add_executable(test test/test.c)
+file(GLOB TEST_SOURCES "test/*.c")
+add_executable(test ${TEST_SOURCES})
 target_link_libraries(test nxamf nxamf_pokecon nxamf_nxmc2)
