@@ -84,11 +84,11 @@ extern "C"
         size_t len;
         pokecon_buffer_state_t s;
 
-        NxamfStick prev_l;
-        NxamfStick prev_r;
+        nxamf_stick_t prev_l;
+        nxamf_stick_t prev_r;
 
         bool cached;
-        NxamfGamepadState cache;
+        nxamf_gamepad_state_t cache;
     } pokecon_buffer_t;
 
     void pokecon_buffer_init(pokecon_buffer_t *buf);

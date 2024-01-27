@@ -100,9 +100,9 @@ void pokecon_buffer_re_init(pokecon_buffer_t *buf)
     buf->parent.append = _append_re;
 }
 
-static double _perf(int iter, nxamf_buffer_interface_t *impl, char seq[], size_t len, NxamfGamepadState *expected)
+static double _perf(int iter, nxamf_buffer_interface_t *impl, char seq[], size_t len, nxamf_gamepad_state_t *expected)
 {
-    NxamfGamepadState actual;
+    nxamf_gamepad_state_t actual;
     clock_t start;
     clock_t end;
 
@@ -136,7 +136,7 @@ bool test_perf_pokecon_re(void)
 
     char seq[] = "0x0000 8\r\n";
     size_t len = sizeof(seq) / sizeof(char) - 1;
-    NxamfGamepadState expected = {.y = NXAMF_BUTTON_RELEASED,
+    nxamf_gamepad_state_t expected = {.y = NXAMF_BUTTON_RELEASED,
                                   .b = NXAMF_BUTTON_RELEASED,
                                   .a = NXAMF_BUTTON_RELEASED,
                                   .x = NXAMF_BUTTON_RELEASED,

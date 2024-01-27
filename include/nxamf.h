@@ -10,13 +10,13 @@ extern "C"
 #include <stddef.h>
 #include <stdint.h>
 
-    typedef enum NxamfButton
+    typedef enum nxamf_button_t
     {
         NXAMF_BUTTON_RELEASED,
         NXAMF_BUTTON_PRESSED
-    } NxamfButton;
+    } nxamf_button_t;
 
-    typedef enum NxamfHat
+    typedef enum nxamf_hat_t
     {
         NXAMF_HAT_UP,
         NXAMF_HAT_UPRIGHT,
@@ -27,48 +27,48 @@ extern "C"
         NXAMF_HAT_LEFT,
         NXAMF_HAT_UPLEFT,
         NXAMF_HAT_NEUTRAL
-    } NxamfHat;
+    } nxamf_hat_t;
 
 #define NXAMF_STICK_NEUTRAL 128U
 
-    typedef struct NxamfStick
+    typedef struct nxamf_stick_t
     {
         uint8_t x;
         uint8_t y;
-    } NxamfStick;
+    } nxamf_stick_t;
 
-    typedef struct NxamfGamepadState
+    typedef struct nxamf_gamepad_state_t
     {
-        NxamfButton y;
-        NxamfButton b;
-        NxamfButton a;
-        NxamfButton x;
-        NxamfButton l;
-        NxamfButton r;
-        NxamfButton zl;
-        NxamfButton zr;
-        NxamfButton minus;
-        NxamfButton plus;
-        NxamfButton l_click;
-        NxamfButton r_click;
-        NxamfButton home;
-        NxamfButton capture;
+        nxamf_button_t y;
+        nxamf_button_t b;
+        nxamf_button_t a;
+        nxamf_button_t x;
+        nxamf_button_t l;
+        nxamf_button_t r;
+        nxamf_button_t zl;
+        nxamf_button_t zr;
+        nxamf_button_t minus;
+        nxamf_button_t plus;
+        nxamf_button_t l_click;
+        nxamf_button_t r_click;
+        nxamf_button_t home;
+        nxamf_button_t capture;
 
-        NxamfHat hat;
+        nxamf_hat_t hat;
 
-        NxamfStick l_stick;
-        NxamfStick r_stick;
+        nxamf_stick_t l_stick;
+        nxamf_stick_t r_stick;
 
         uint8_t extension[16];
-    } NxamfGamepadState;
+    } nxamf_gamepad_state_t;
 
-    bool nxamf_gamepad_state_equals(NxamfGamepadState *s1, NxamfGamepadState *s2);
-    void nxamf_gamepad_state_copy(NxamfGamepadState *src, NxamfGamepadState *dst);
+    bool nxamf_gamepad_state_equals(nxamf_gamepad_state_t *s1, nxamf_gamepad_state_t *s2);
+    void nxamf_gamepad_state_copy(nxamf_gamepad_state_t *src, nxamf_gamepad_state_t *dst);
 
     typedef struct nxamf_buffer_interface_t
     {
         void (*append)(struct nxamf_buffer_interface_t *buf, uint8_t d);
-        bool (*deserialize)(struct nxamf_buffer_interface_t *buf, NxamfGamepadState *out);
+        bool (*deserialize)(struct nxamf_buffer_interface_t *buf, nxamf_gamepad_state_t *out);
         void (*clear)(struct nxamf_buffer_interface_t *buf);
     } nxamf_buffer_interface_t;
 

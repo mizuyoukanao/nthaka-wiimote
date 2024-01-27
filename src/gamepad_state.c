@@ -1,6 +1,6 @@
 #include "nxamf.h"
 
-bool nxamf_gamepad_state_equals(NxamfGamepadState *s1, NxamfGamepadState *s2)
+bool nxamf_gamepad_state_equals(nxamf_gamepad_state_t *s1, nxamf_gamepad_state_t *s2)
 {
     return s1->y == s2->y &&
            s1->b == s2->b &&
@@ -39,7 +39,7 @@ bool nxamf_gamepad_state_equals(NxamfGamepadState *s1, NxamfGamepadState *s2)
            s1->extension[15] == s2->extension[15];
 }
 
-void nxamf_gamepad_state_copy(NxamfGamepadState *src, NxamfGamepadState *dst)
+void nxamf_gamepad_state_copy(nxamf_gamepad_state_t *src, nxamf_gamepad_state_t *dst)
 {
     dst->y = src->y;
     dst->b = src->b;

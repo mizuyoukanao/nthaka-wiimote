@@ -13,7 +13,7 @@ void _append(nxamf_buffer_interface_t *parent, uint8_t d)
     }
 }
 
-bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *out)
+bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
 {
     nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
     assert(buf != NULL);

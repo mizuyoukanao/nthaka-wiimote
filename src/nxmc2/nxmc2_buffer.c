@@ -50,7 +50,7 @@ static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
     buf->len++;
 }
 
-static bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *out)
+static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
 {
     nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
     assert(buf != NULL);

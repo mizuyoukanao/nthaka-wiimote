@@ -1257,7 +1257,7 @@ static const int _MIN_VALID_LENGTH = 4;
 static const int _MAX_VALID_LENGTH = 30;
 static const int _STICK_UNSET = -1;
 
-static bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *out)
+static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
 {
     pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
     assert(buf != NULL);
