@@ -1,5 +1,5 @@
-#ifndef POKECON_PROTOCOL_H_
-#define POKECON_PROTOCOL_H_
+#ifndef NXAMF_POKECON_H_
+#define NXAMF_POKECON_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -107,4 +107,4 @@ extern "C"
 }
 #endif
 
-#endif // POKECON_PROTOCOL_H_
+#endif // NXAMF_POKECON_H_

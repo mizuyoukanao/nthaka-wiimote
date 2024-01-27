@@ -1,5 +1,5 @@
-#ifndef NXMC2_PROTOCOL_H_
-#define NXMC2_PROTOCOL_H_
+#ifndef NXAMF_NXMC2_H_
+#define NXAMF_NXMC2_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -32,4 +32,4 @@ extern "C"
 }
 #endif
 
-#endif // NXMC2_PROTOCOL_H_
+#endif // NXAMF_NXMC2_H_
