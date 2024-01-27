@@ -1426,3 +1426,92 @@ void pokecon_buffer_init(pokecon_buffer_t *buf)
     buf->prev_r.x = NXAMF_STICK_NEUTRAL;
     buf->prev_r.y = NXAMF_STICK_NEUTRAL;
 }
+
+#include "re.h"
+
+static const size_t POKECON_PROTOCOL_ALLOWED_LENGTH = 18;
+static const char *POKECON_PROTOCOL_ALLOWED[] = {
+    // 使えなさそうなもの
+    // - |
+    // - ()
+
+    // ボタンとスティックは2通りのフォーマットがあるらしい
+    // 0-ffff（画面クリックでスティック操作時）
+    // 0x0000-0xffff（その他）
+    // 少し不正確だけど0?x?と、0xの後に続かないのを許容するパターンでお茶を濁す
+
+    "^0x$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[0-9a-f] ?$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[0-9a-f] [0-8]$",
+
+    // 下位2bitは0b00で確定
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[048c] [0-8]\r$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[048c] [0-8]\r?\n$",
+
+    // 下位2bitのどちらかが0b1
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] $",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] 0x$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] 0?x?[1-9a-f]?[0-9a-f] ?$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0x$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]$",
+
+    // 下位2bitは0b10で確定 [26ae]
+    // => しない。"Use LStick Mouse"、"Use RStick Mouse"を有効にすると、キャプチャ画面をクリックした際のbtnsの下位2ビットが、どちらかしか操作していない場合でも0b11になる。
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]\r$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[1235679abdef] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]\r?\n$",
+
+    // 最下位bitが0b1
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] $",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0x$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] ?$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0x$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]\r?$",
+    "^0?x?[0-9a-f]?[0-9a-f]?[0-9a-f]?[13579bdf] [0-8] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f] 0?x?[1-9a-f]?[0-9a-f]\r?\n$"};
+
+static void _append_re(nxamf_buffer_interface_t *parent, uint8_t d)
+{
+    pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
+    assert(buf != NULL);
+
+    char combined[buf->len + 2]; // buffer + d + '\0'
+    memcpy(combined, buf->buf, buf->len);
+    combined[buf->len] = (char)d;
+    combined[buf->len + 1] = '\0';
+
+    bool is_acceptable = false;
+    int _;
+    for (int i = 0; i < POKECON_PROTOCOL_ALLOWED_LENGTH; i++)
+    {
+        if (0 <= re_match(POKECON_PROTOCOL_ALLOWED[i], combined, &_))
+        {
+            is_acceptable = true;
+            break;
+        }
+    }
+    if (!is_acceptable)
+    {
+        // Rejected
+        buf->len = 0;
+        return;
+    }
+
+    buf->buf[buf->len] = d;
+    buf->len++;
+}
+
+void pokecon_buffer_re_init(pokecon_buffer_t *buf)
+{
+    assert(buf != NULL);
+
+    buf->parent.append = _append_re;
+    buf->parent.deserialize = _deserialize;
+    buf->parent.clear = _clear;
+
+    buf->len = 0;
+    buf->s = POKECON_BUFFER_STATE_INITIAL;
+
+    buf->prev_l.x = NXAMF_STICK_NEUTRAL;
+    buf->prev_l.y = NXAMF_STICK_NEUTRAL;
+    buf->prev_r.x = NXAMF_STICK_NEUTRAL;
+    buf->prev_r.y = NXAMF_STICK_NEUTRAL;
+}

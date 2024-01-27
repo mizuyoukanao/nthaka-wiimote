@@ -62,26 +62,12 @@ extern "C"
         uint8_t extension[16];
     } NxamfGamepadState;
 
-    void nxamf_gamepad_state_delete(NxamfGamepadState *self);
-
     typedef struct NxamfBytesProtocolInterface
     {
         bool (*is_acceptable)(struct NxamfBytesProtocolInterface *self, const uint8_t packet, const uint8_t buffer[], const size_t length);
         bool (*is_ready)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length);
         void (*convert)(struct NxamfBytesProtocolInterface *self, const uint8_t buffer[], const size_t length, NxamfGamepadState *state);
     } NxamfBytesProtocolInterface;
-
-    typedef struct NxamfBytesBuffer
-    {
-        NxamfBytesProtocolInterface *protocol;
-        uint8_t buffer[64]; // isn't it enough?
-        size_t length;
-    } NxamfBytesBuffer;
-
-    NxamfBytesBuffer *nxamf_bytes_buffer_new(NxamfBytesProtocolInterface *protocol);
-    void nxamf_bytes_buffer_delete(NxamfBytesBuffer *self);
-    NxamfGamepadState *nxamf_bytes_buffer_append(NxamfBytesBuffer *self, const uint8_t packet);
-    void nxamf_bytes_buffer_clear(NxamfBytesBuffer *self);
 
     typedef struct NxamfProtocolMultiplexer
     {

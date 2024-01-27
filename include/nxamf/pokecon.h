@@ -8,19 +8,6 @@ extern "C"
 
 #include "../nxamf.h"
 
-    typedef struct PokeConProtocol
-    {
-        NxamfBytesProtocolInterface parent;
-
-        uint8_t prev_lx;
-        uint8_t prev_ly;
-        uint8_t prev_rx;
-        uint8_t prev_ry;
-    } PokeConProtocol;
-
-    PokeConProtocol *pokecon_protocol_new(void);
-    void pokecon_protocol_delete(PokeConProtocol *self);
-
     typedef enum pokecon_buffer_state_t
     {
         POKECON_BUFFER_STATE_INITIAL,
@@ -102,6 +89,7 @@ extern "C"
     } pokecon_buffer_t;
 
     void pokecon_buffer_init(pokecon_buffer_t *buf);
+    void pokecon_buffer_re_init(pokecon_buffer_t *buf);
 
 #ifdef __cplusplus
 }
