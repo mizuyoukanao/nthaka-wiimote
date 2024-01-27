@@ -1295,20 +1295,20 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *ou
     // sscanf doesn't care whether the "0x" prefix is present or not
     sscanf(str, "%hx %hhx %hhx %hhx %hhx %hhx", &btns, &hat, &x_0, &y_0, &x_1, &y_1);
 
-    out->y = (btns & 0b0000000000000100) >> 2;
-    out->b = (btns & 0b0000000000001000) >> 3;
-    out->a = (btns & 0b0000000000010000) >> 4;
-    out->x = (btns & 0b0000000000100000) >> 5;
-    out->l = (btns & 0b0000000001000000) >> 6;
-    out->r = (btns & 0b0000000010000000) >> 7;
-    out->zl = (btns & 0b0000000100000000) >> 8;
-    out->zr = (btns & 0b0000001000000000) >> 9;
-    out->minus = (btns & 0b0000010000000000) >> 10;
-    out->plus = (btns & 0b0000100000000000) >> 11;
-    out->l_click = (btns & 0b0001000000000000) >> 12;
-    out->r_click = (btns & 0b0010000000000000) >> 13;
-    out->home = (btns & 0b0100000000000000) >> 14;
-    out->capture = (btns & 0b1000000000000000) >> 15;
+    out->y = (btns & 0b0000000000000100U) >> 2;
+    out->b = (btns & 0b0000000000001000U) >> 3;
+    out->a = (btns & 0b0000000000010000U) >> 4;
+    out->x = (btns & 0b0000000000100000U) >> 5;
+    out->l = (btns & 0b0000000001000000U) >> 6;
+    out->r = (btns & 0b0000000010000000U) >> 7;
+    out->zl = (btns & 0b0000000100000000U) >> 8;
+    out->zr = (btns & 0b0000001000000000U) >> 9;
+    out->minus = (btns & 0b0000010000000000U) >> 10;
+    out->plus = (btns & 0b0000100000000000U) >> 11;
+    out->l_click = (btns & 0b0001000000000000U) >> 12;
+    out->r_click = (btns & 0b0010000000000000U) >> 13;
+    out->home = (btns & 0b0100000000000000U) >> 14;
+    out->capture = (btns & 0b1000000000000000U) >> 15;
 
     switch (hat)
     {
@@ -1342,7 +1342,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *ou
         break;
     }
 
-    bool update_ls = ((btns & 0b0000000000000010) >> 1) == 1;
+    bool update_ls = ((btns & 0b0000000000000010U) >> 1) == 1;
     if (update_ls)
     {
         out->l_stick.x = x_0;
@@ -1357,7 +1357,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, NxamfGamepadState *ou
         out->l_stick.y = buf->prev_l.y;
     }
 
-    bool update_rs = (btns & 0b0000000000000001) == 1;
+    bool update_rs = (btns & 0b0000000000000001U) == 1;
     if (update_rs)
     {
         if (x_1 == _STICK_UNSET)

@@ -13,6 +13,7 @@
 #include "mock_protocol.h"
 #include "util.h"
 
+#include "nxmc2_buffer.h"
 #include "pokecon_buffer.h"
 
 static void test_mock_protocol(void)
@@ -290,7 +291,8 @@ int main(void)
     test_nxmc2_protocol();
     test_protocol_multiplexer();
 
-    bool (*tests[])(void) = {test_pokecon_buffer};
+    bool (*tests[])(void) = {
+        test_nxmc2_buffer, test_pokecon_buffer};
     size_t length = sizeof(tests) / sizeof(bool (*)(void));
     for (size_t i = 0; i < length; i++)
     {
