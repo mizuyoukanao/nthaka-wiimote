@@ -75,7 +75,10 @@ static bool _test_deserialize(void)
                                                      .y = NXAMF_STICK_NEUTRAL},
                                          .r_stick = {.x = NXAMF_STICK_NEUTRAL,
                                                      .y = NXAMF_STICK_NEUTRAL},
-                                         .extension = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
+                                         .extension = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                           {.seq = (uint8_t[]){0xABU, 0x00U, 0x00U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x01U, 0x02U, 0x03U, /**/ 0xABU, 0x00U, 0x00U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x00U, 0x00U, 0x00U},
+                            .len = 22,
+                            .expected = NXAMF_GAMEPAD_STATE_NEUTRAL}};
     size_t length = sizeof(cases) / sizeof(test_case_t);
 
     for (size_t i = 0; i < length; i++)
@@ -105,13 +108,30 @@ static bool _test_clear(void)
     nxmc2_buffer_init(&buf_);
     nxamf_buffer_interface_t *buf = (nxamf_buffer_interface_t *)&buf_;
 
-    nxamf_gamepad_state_t expected = {.y = NXAMF_BUTTON_RELEASED, .b = NXAMF_BUTTON_RELEASED, .a = NXAMF_BUTTON_RELEASED, .x = NXAMF_BUTTON_RELEASED, .l = NXAMF_BUTTON_RELEASED, .r = NXAMF_BUTTON_RELEASED, .zl = NXAMF_BUTTON_RELEASED, .zr = NXAMF_BUTTON_RELEASED, .minus = NXAMF_BUTTON_RELEASED, .plus = NXAMF_BUTTON_RELEASED, .l_click = NXAMF_BUTTON_RELEASED, .r_click = NXAMF_BUTTON_RELEASED, .home = NXAMF_BUTTON_RELEASED, .capture = NXAMF_BUTTON_RELEASED, .hat = NXAMF_HAT_NEUTRAL, .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL}, .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL}, .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    nxamf_gamepad_state_t expected = {.y = NXAMF_BUTTON_PRESSED,
+                                      .b = NXAMF_BUTTON_RELEASED,
+                                      .a = NXAMF_BUTTON_RELEASED,
+                                      .x = NXAMF_BUTTON_RELEASED,
+                                      .l = NXAMF_BUTTON_RELEASED,
+                                      .r = NXAMF_BUTTON_RELEASED,
+                                      .zl = NXAMF_BUTTON_RELEASED,
+                                      .zr = NXAMF_BUTTON_RELEASED,
+                                      .minus = NXAMF_BUTTON_RELEASED,
+                                      .plus = NXAMF_BUTTON_RELEASED,
+                                      .l_click = NXAMF_BUTTON_RELEASED,
+                                      .r_click = NXAMF_BUTTON_RELEASED,
+                                      .home = NXAMF_BUTTON_RELEASED,
+                                      .capture = NXAMF_BUTTON_RELEASED,
+                                      .hat = NXAMF_HAT_NEUTRAL,
+                                      .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
+                                      .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
+                                      .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     nxamf_gamepad_state_t actual;
 
     buf->clear(buf);
 
     buf->append(buf, 0xAB);
-    buf->append(buf, 0);
+    buf->append(buf, 1);
     buf->append(buf, 0);
     buf->append(buf, 8);
     buf->append(buf, 128);

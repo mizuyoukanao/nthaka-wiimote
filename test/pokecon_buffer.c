@@ -154,24 +154,7 @@ static bool _test_deserialize(void)
                                          .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
                            {.seq = "3 8 80 80\r\n",
                             .len = 11,
-                            .expected = {.y = NXAMF_BUTTON_RELEASED,
-                                         .b = NXAMF_BUTTON_RELEASED,
-                                         .a = NXAMF_BUTTON_RELEASED,
-                                         .x = NXAMF_BUTTON_RELEASED,
-                                         .l = NXAMF_BUTTON_RELEASED,
-                                         .r = NXAMF_BUTTON_RELEASED,
-                                         .zl = NXAMF_BUTTON_RELEASED,
-                                         .zr = NXAMF_BUTTON_RELEASED,
-                                         .minus = NXAMF_BUTTON_RELEASED,
-                                         .plus = NXAMF_BUTTON_RELEASED,
-                                         .l_click = NXAMF_BUTTON_RELEASED,
-                                         .r_click = NXAMF_BUTTON_RELEASED,
-                                         .home = NXAMF_BUTTON_RELEASED,
-                                         .capture = NXAMF_BUTTON_RELEASED,
-                                         .hat = NXAMF_HAT_NEUTRAL,
-                                         .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                         .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                         .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                            .expected = NXAMF_GAMEPAD_STATE_NEUTRAL},
                            {.seq = "0x0002 8 81 81\r\n0x0000 8\r\n",
                             .len = 26,
                             .expected = {.y = NXAMF_BUTTON_RELEASED,
@@ -221,7 +204,24 @@ static bool _test_clear(void)
     pokecon_buffer_init(&buf_);
     nxamf_buffer_interface_t *buf = (nxamf_buffer_interface_t *)&buf_;
 
-    nxamf_gamepad_state_t expected = {.y = NXAMF_BUTTON_RELEASED, .b = NXAMF_BUTTON_RELEASED, .a = NXAMF_BUTTON_RELEASED, .x = NXAMF_BUTTON_RELEASED, .l = NXAMF_BUTTON_RELEASED, .r = NXAMF_BUTTON_RELEASED, .zl = NXAMF_BUTTON_RELEASED, .zr = NXAMF_BUTTON_RELEASED, .minus = NXAMF_BUTTON_RELEASED, .plus = NXAMF_BUTTON_RELEASED, .l_click = NXAMF_BUTTON_RELEASED, .r_click = NXAMF_BUTTON_RELEASED, .home = NXAMF_BUTTON_RELEASED, .capture = NXAMF_BUTTON_RELEASED, .hat = NXAMF_HAT_UP, .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL}, .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL}, .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    nxamf_gamepad_state_t expected = {.y = NXAMF_BUTTON_RELEASED,
+                                      .b = NXAMF_BUTTON_RELEASED,
+                                      .a = NXAMF_BUTTON_RELEASED,
+                                      .x = NXAMF_BUTTON_RELEASED,
+                                      .l = NXAMF_BUTTON_RELEASED,
+                                      .r = NXAMF_BUTTON_RELEASED,
+                                      .zl = NXAMF_BUTTON_RELEASED,
+                                      .zr = NXAMF_BUTTON_RELEASED,
+                                      .minus = NXAMF_BUTTON_RELEASED,
+                                      .plus = NXAMF_BUTTON_RELEASED,
+                                      .l_click = NXAMF_BUTTON_RELEASED,
+                                      .r_click = NXAMF_BUTTON_RELEASED,
+                                      .home = NXAMF_BUTTON_RELEASED,
+                                      .capture = NXAMF_BUTTON_RELEASED,
+                                      .hat = NXAMF_HAT_UP,
+                                      .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
+                                      .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
+                                      .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     nxamf_gamepad_state_t actual;
 
     buf->clear(buf);

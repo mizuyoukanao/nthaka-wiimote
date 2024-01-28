@@ -87,7 +87,7 @@ extern "C"
     } nxamf_multi_buffer_manager_t;
 
     void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_buffer_interface_t **bufs, size_t len);
-    size_t nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf);
+    int nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf);
 
 #ifdef __cplusplus
 }
