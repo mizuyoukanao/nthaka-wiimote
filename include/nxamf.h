@@ -67,7 +67,7 @@ extern "C"
     void nxamf_gamepad_state_copy(nxamf_gamepad_state_t *src, nxamf_gamepad_state_t *dst);
 
     // char max[] = "{.y = NXAMF_BUTTON_RELEASED, .b = NXAMF_BUTTON_RELEASED, .a = NXAMF_BUTTON_RELEASED, .x = NXAMF_BUTTON_RELEASED, .l = NXAMF_BUTTON_RELEASED, .r = NXAMF_BUTTON_RELEASED, .zl = NXAMF_BUTTON_RELEASED, .zr = NXAMF_BUTTON_RELEASED, .minus = NXAMF_BUTTON_RELEASED, .plus = NXAMF_BUTTON_RELEASED, .l_click = NXAMF_BUTTON_RELEASED, .r_click = NXAMF_BUTTON_RELEASED, .home = NXAMF_BUTTON_RELEASED, .capture = NXAMF_BUTTON_RELEASED, .hat = NXAMF_HAT_DOWNRIGHT, .l_stick = {.x = 255, .y = 255}, .r_stick = {.x = 255, .y = 255}, .extension = {255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}}";
-#define NXAMF_GAMEPAD_STATE_STRING_MAX_LENGTH 612
+#define NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX 612
     void nxamf_gamepad_state_stringify(nxamf_gamepad_state_t *s, char *out, size_t len);
 
     typedef struct nxamf_buffer_interface_t
@@ -83,11 +83,11 @@ extern "C"
 
         nxamf_buffer_interface_t **bufs;
         size_t len;
-        int last_deserialized_index;
+        size_t last_deserialized_index;
     } nxamf_multi_buffer_manager_t;
 
     void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_buffer_interface_t **bufs, size_t len);
-    int nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf);
+    size_t nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf);
 
 #ifdef __cplusplus
 }

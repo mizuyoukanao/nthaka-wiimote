@@ -85,8 +85,31 @@ static bool _test_deserialize(void)
                                 .r_stick = {.x = NXAMF_STICK_NEUTRAL,
                                             .y = NXAMF_STICK_NEUTRAL},
                                 .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
-                           {.seq = "0x0000 8\r\n", // (Enforce formatting)
+                           {.seq = "0x0000 8\r\n", //
                             .len = 10,
+                            .from = 2,
+                            .expected = {.y = NXAMF_BUTTON_RELEASED, //
+                                         .b = NXAMF_BUTTON_RELEASED,
+                                         .a = NXAMF_BUTTON_RELEASED,
+                                         .x = NXAMF_BUTTON_RELEASED,
+                                         .l = NXAMF_BUTTON_RELEASED,
+                                         .r = NXAMF_BUTTON_RELEASED,
+                                         .zl = NXAMF_BUTTON_RELEASED,
+                                         .zr = NXAMF_BUTTON_RELEASED,
+                                         .minus = NXAMF_BUTTON_RELEASED,
+                                         .plus = NXAMF_BUTTON_RELEASED,
+                                         .l_click = NXAMF_BUTTON_RELEASED,
+                                         .r_click = NXAMF_BUTTON_RELEASED,
+                                         .home = NXAMF_BUTTON_RELEASED,
+                                         .capture = NXAMF_BUTTON_RELEASED,
+                                         .hat = NXAMF_HAT_NEUTRAL,
+                                         .l_stick = {.x = NXAMF_STICK_NEUTRAL, //
+                                                     .y = NXAMF_STICK_NEUTRAL},
+                                         .r_stick = {.x = NXAMF_STICK_NEUTRAL, //
+                                                     .y = NXAMF_STICK_NEUTRAL},
+                                         .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                           {.seq = "0x0002 8 80 80\r\n0x0002 8 ff 80\r\n0x0002 8 80 80\r\n", //
+                            .len = 48,
                             .from = 2,
                             .expected = {.y = NXAMF_BUTTON_RELEASED, //
                                          .b = NXAMF_BUTTON_RELEASED,
@@ -139,7 +162,7 @@ static bool _test_deserialize(void)
 
             if (ret)
             {
-                char str[NXAMF_GAMEPAD_STATE_STRING_MAX_LENGTH];
+                char str[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
                 size_t len = sizeof(str) / sizeof(char);
                 nxamf_gamepad_state_stringify(&(cases[i].expected), str, len);
                 fprintf(stderr, "from: %d\n", cases[i].from);

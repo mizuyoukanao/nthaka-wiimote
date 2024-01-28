@@ -122,7 +122,7 @@ static bool _test_deserialize(void)
 
             if (ret)
             {
-                char str[NXAMF_GAMEPAD_STATE_STRING_MAX_LENGTH];
+                char str[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
                 size_t len = sizeof(str) / sizeof(char);
                 nxamf_gamepad_state_stringify(&(cases[i].expected), str, len);
                 fprintf(stderr, "expected: %s\n", str);

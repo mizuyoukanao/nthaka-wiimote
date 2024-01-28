@@ -1,0 +1,26 @@
+Press Y -d=1000
+Wait 1000
+Press B -d=1000
+Wait 1000
+Press A -d=1000
+Wait 1000
+Press X -d=1000
+Wait 1000
+Press L -d=1000
+Wait 1000
+Press R -d=1000
+Wait 1000
+Press Z -d=1000
+Wait 1000
+Press St -d=1000
+Wait 1000
+Press dU -d=1000
+Wait 1000
+Press dL -d=1000
+Wait 1000
+Press dD -d=1000
+Wait 1000
+Press dR -d=1000
+Wait 1000
+Press tl -d=1000
+Wait 1000

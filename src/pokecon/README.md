@@ -9,66 +9,7 @@
 <details>
 <summary>Log</summary>
 <details>
-<summary>Python</summary>
-
-```python
-from Commands.Keys import Button, Direction, Hat
-from Commands.PythonCommandBase import PythonCommand
-
-
-class TestSerial(PythonCommand):
-    NAME = "TestSerial"
-
-    def __init__(self):
-        super().__init__()
-
-    def do(self):
-        self.wait(1)
-
-        self.press(Button.Y, duration=0.5, wait=0.5)
-        self.press(Button.B, duration=0.5, wait=0.5)
-        self.press(Button.A, duration=0.5, wait=0.5)
-        self.press(Button.X, duration=0.5, wait=0.5)
-        self.press(Button.L, duration=0.5, wait=0.5)
-        self.press(Button.R, duration=0.5, wait=0.5)
-        self.press(Button.ZL, duration=0.5, wait=0.5)
-        self.press(Button.ZR, duration=0.5, wait=0.5)
-        self.press(Button.MINUS, duration=0.5, wait=0.5)
-        self.press(Button.PLUS, duration=0.5, wait=0.5)
-        self.press(Button.LCLICK, duration=0.5, wait=0.5)
-        self.press(Button.RCLICK, duration=0.5, wait=0.5)
-        self.press(Button.HOME, duration=0.5, wait=0.5)
-        self.press(Button.CAPTURE, duration=0.5, wait=0.5)
-
-        self.press(Hat.TOP, duration=0.5, wait=0.5)
-        self.press(Hat.TOP_RIGHT, duration=0.5, wait=0.5)
-        self.press(Hat.RIGHT, duration=0.5, wait=0.5)
-        self.press(Hat.BTM_RIGHT, duration=0.5, wait=0.5)
-        self.press(Hat.BTM, duration=0.5, wait=0.5)
-        self.press(Hat.BTM_LEFT, duration=0.5, wait=0.5)
-        self.press(Hat.LEFT, duration=0.5, wait=0.5)
-        self.press(Hat.TOP_LEFT, duration=0.5, wait=0.5)
-
-        self.press(Direction.UP, duration=0.5, wait=0.5)
-        self.press(Direction.UP_RIGHT, duration=0.5, wait=0.5)
-        self.press(Direction.RIGHT, duration=0.5, wait=0.5)
-        self.press(Direction.DOWN_RIGHT, duration=0.5, wait=0.5)
-        self.press(Direction.DOWN, duration=0.5, wait=0.5)
-        self.press(Direction.DOWN_LEFT, duration=0.5, wait=0.5)
-        self.press(Direction.LEFT, duration=0.5, wait=0.5)
-        self.press(Direction.UP_LEFT, duration=0.5, wait=0.5)
-
-        self.press(Direction.R_UP, duration=0.5, wait=0.5)
-        self.press(Direction.R_UP_RIGHT, duration=0.5, wait=0.5)
-        self.press(Direction.R_RIGHT, duration=0.5, wait=0.5)
-        self.press(Direction.R_DOWN_RIGHT, duration=0.5, wait=0.5)
-        self.press(Direction.R_DOWN, duration=0.5, wait=0.5)
-        self.press(Direction.R_DOWN_LEFT, duration=0.5, wait=0.5)
-        self.press(Direction.R_LEFT, duration=0.5, wait=0.5)
-        self.press(Direction.R_UP_LEFT, duration=0.5, wait=0.5)
-
-        self.wait(1)
-```
+<summary>Python(TestSerial.py)</summary>
 
 ```
 0x0004 8

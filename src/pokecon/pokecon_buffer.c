@@ -1255,7 +1255,6 @@ static void _clear(nxamf_buffer_interface_t *parent)
 
 static const int _MIN_VALID_LENGTH = 4;
 static const int _MAX_VALID_LENGTH = 30;
-static const int _STICK_UNSET = -1;
 
 static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
 {
@@ -1285,12 +1284,8 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
 
     uint16_t btns = 0b0000000000000000U;
     uint8_t hat = NXAMF_HAT_NEUTRAL;
-    int x_0 = _STICK_UNSET;
-    int y_0 = _STICK_UNSET;
-    int x_1 = _STICK_UNSET;
-    int y_1 = _STICK_UNSET;
     // sscanf doesn't care whether the "0x" prefix is present or not
-    sscanf(str, "%hx %hhx %hhx %hhx %hhx %hhx", &btns, &hat, &x_0, &y_0, &x_1, &y_1);
+    sscanf(str, "%hx %hhx", &btns, &hat);
 
     out->y = (btns & 0b0000000000000100U) >> 2;
     out->b = (btns & 0b0000000000001000U) >> 3;
@@ -1340,55 +1335,58 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     }
 
     bool update_ls = ((btns & 0b0000000000000010U) >> 1) == 1;
-    if (update_ls)
+    bool update_rs = (btns & 0b0000000000000001U) == 1;
+
+    if (update_ls && update_rs)
     {
-        assert(x_0 != _STICK_UNSET);
-        assert(y_0 != _STICK_UNSET);
+        uint8_t lx = NXAMF_STICK_NEUTRAL;
+        uint8_t ly = NXAMF_STICK_NEUTRAL;
+        uint8_t rx = NXAMF_STICK_NEUTRAL;
+        uint8_t ry = NXAMF_STICK_NEUTRAL;
+        sscanf(str, "%*hx %*hhx %hhx %hhx %hhx %hhx", &lx, &ly, &rx, &ry);
 
-        out->l_stick.x = x_0;
-        out->l_stick.y = y_0;
-
+        out->l_stick.x = lx;
+        out->l_stick.y = ly;
         buf->prev_l.x = out->l_stick.x;
         buf->prev_l.y = out->l_stick.y;
+
+        out->r_stick.x = rx;
+        out->r_stick.y = ry;
+        buf->prev_r.x = out->r_stick.x;
+        buf->prev_r.y = out->r_stick.y;
+    }
+    else if (update_ls || update_rs)
+    {
+        uint8_t x = NXAMF_STICK_NEUTRAL;
+        uint8_t y = NXAMF_STICK_NEUTRAL;
+        sscanf(str, "%*hx %*hhx %hhx %hhx", &x, &y);
+
+        if (update_ls)
+        {
+            out->l_stick.x = x;
+            out->l_stick.y = y;
+            buf->prev_l.x = out->l_stick.x;
+            buf->prev_l.y = out->l_stick.y;
+
+            out->r_stick.x = buf->prev_r.x;
+            out->r_stick.y = buf->prev_r.y;
+        }
+        else
+        {
+            out->l_stick.x = buf->prev_l.x;
+            out->l_stick.y = buf->prev_l.y;
+
+            out->r_stick.x = x;
+            out->r_stick.y = y;
+            buf->prev_r.x = out->r_stick.x;
+            buf->prev_r.y = out->r_stick.y;
+        }
     }
     else
     {
         out->l_stick.x = buf->prev_l.x;
         out->l_stick.y = buf->prev_l.y;
-    }
 
-    bool update_rs = (btns & 0b0000000000000001U) == 1;
-    if (update_rs)
-    {
-        if (x_1 == _STICK_UNSET)
-        {
-            assert(y_1 == _STICK_UNSET);
-
-            if (!update_ls)
-            {
-                out->r_stick.x = x_0;
-                out->r_stick.y = y_0;
-            }
-            else
-            {
-                // Tentative measures for "3 8 80 80"
-                out->r_stick.x = NXAMF_STICK_NEUTRAL;
-                out->r_stick.y = NXAMF_STICK_NEUTRAL;
-            }
-        }
-        else
-        {
-            assert(update_ls);
-
-            out->r_stick.x = x_1;
-            out->r_stick.y = y_1;
-        }
-
-        buf->prev_r.x = out->r_stick.x;
-        buf->prev_r.y = out->r_stick.y;
-    }
-    else
-    {
         out->r_stick.x = buf->prev_r.x;
         out->r_stick.y = buf->prev_r.y;
     }

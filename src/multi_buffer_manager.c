@@ -68,10 +68,10 @@ void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_bu
 
     buf->bufs = bufs;
     buf->len = len;
-    buf->last_deserialized_index = -1;
+    buf->last_deserialized_index = SIZE_MAX;
 }
 
-int nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf)
+size_t nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf)
 {
     assert(buf != NULL);
     return buf->last_deserialized_index;

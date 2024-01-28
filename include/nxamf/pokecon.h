@@ -74,13 +74,13 @@ extern "C"
         POKECON_BUFFER_STATE_FINAL,
     } pokecon_buffer_state_t;
 
-#define POKECON_BUFFER_MAX_LENGTH 30
+#define POKECON_BUFFER_LENGTH_MAX 30
 
     typedef struct pokecon_buffer_t
     {
         nxamf_buffer_interface_t parent;
 
-        uint8_t buf[POKECON_BUFFER_MAX_LENGTH];
+        uint8_t buf[POKECON_BUFFER_LENGTH_MAX];
         size_t len;
         pokecon_buffer_state_t s;
 
