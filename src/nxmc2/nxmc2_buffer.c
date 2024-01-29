@@ -3,7 +3,7 @@
 #include <assert.h>
 
 static const uint8_t _HEADER = 0xAB;
-static const uint8_t _MAX_HAT_VALUE = 8;
+static const uint8_t _HAT_VALUE_MAX = 8;
 
 typedef enum nxmc2_buffer_index_t
 {
@@ -20,48 +20,24 @@ typedef enum nxmc2_buffer_index_t
     NXMC2_BUFFER_INDEX_EXTENSION_2,
 } nxmc2_buffer_index_t;
 
-static void _clear(nxamf_buffer_interface_t *parent)
+static nxamf_gamepad_state_t _;
+
+static bool _deserialize(nxmc2_buffer_t *buf, nxamf_gamepad_state_t *out)
 {
-    nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
     assert(buf != NULL);
-
-    buf->len = 0;
-}
-
-static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
-{
-    nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
-    assert(buf != NULL);
-
-    if (buf->len == NXMC2_BUFFER_INDEX_HEADER && d != _HEADER)
-    {
-        // Rejected
-        return;
-    }
-    else if ((buf->len == NXMC2_BUFFER_INDEX_HAT && _MAX_HAT_VALUE < d) ||
-             NXMC2_BUFFER_LENGTH <= buf->len)
-    {
-        parent->clear(parent);
-        parent->append(parent, d);
-        return;
-    }
-
-    buf->buf[buf->len] = d;
-    buf->len++;
-}
-
-static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
-{
-    nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
-    assert(buf != NULL);
-    assert(out != NULL);
 
     if (buf->len != NXMC2_BUFFER_LENGTH)
     {
         return false;
     }
     assert(buf->buf[NXMC2_BUFFER_INDEX_HEADER] == _HEADER);
-    assert(buf->buf[NXMC2_BUFFER_INDEX_HAT] <= _MAX_HAT_VALUE);
+    assert(buf->buf[NXMC2_BUFFER_INDEX_HAT] <= _HAT_VALUE_MAX);
+
+    if (out == NULL)
+    {
+        // Since there are no side effects.
+        return true;
+    }
 
     uint8_t btns_lsb = buf->buf[NXMC2_BUFFER_INDEX_BUTTONS_LSB];
     out->y = (btns_lsb & 0b00000001U);
@@ -102,12 +78,37 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     return true;
 }
 
+static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
+{
+    nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
+
+    if (buf == NULL ||
+        NXMC2_BUFFER_LENGTH <= buf->len ||
+        (buf->len == NXMC2_BUFFER_INDEX_HEADER && d != _HEADER) ||
+        (buf->len == NXMC2_BUFFER_INDEX_HAT && _HAT_VALUE_MAX < d))
+    {
+        return false;
+    }
+
+    buf->buf[buf->len] = d;
+    buf->len++;
+
+    return _deserialize(buf, out);
+}
+
+static void _clear(nxamf_buffer_interface_t *parent)
+{
+    nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
+    assert(buf != NULL);
+
+    buf->len = 0;
+}
+
 void nxmc2_buffer_init(nxmc2_buffer_t *buf)
 {
     assert(buf != NULL);
 
     buf->parent.append = _append;
-    buf->parent.deserialize = _deserialize;
     buf->parent.clear = _clear;
 
     buf->len = 0;

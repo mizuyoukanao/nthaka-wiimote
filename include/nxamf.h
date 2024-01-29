@@ -72,8 +72,7 @@ extern "C"
 
     typedef struct nxamf_buffer_interface_t
     {
-        void (*append)(struct nxamf_buffer_interface_t *buf, uint8_t d);
-        bool (*deserialize)(struct nxamf_buffer_interface_t *buf, nxamf_gamepad_state_t *out);
+        bool (*append)(struct nxamf_buffer_interface_t *buf, uint8_t d, nxamf_gamepad_state_t *out);
         void (*clear)(struct nxamf_buffer_interface_t *buf);
     } nxamf_buffer_interface_t;
 
@@ -88,6 +87,52 @@ extern "C"
 
     void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_buffer_interface_t **bufs, size_t len);
     size_t nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf);
+
+    typedef enum nxamf_buffer_state_t
+    {
+        NXAMF_BUFFER_STATE_PENDING,
+        NXAMF_BUFFER_STATE_REJECTED,
+        NXAMF_BUFFER_STATE_ACCEPTED
+    } nxamf_buffer_state_t;
+
+    typedef struct nxamf_state_machine_t
+    {
+        nxamf_buffer_state_t (*next)(struct nxamf_state_machine_t *sm, uint8_t d);
+        bool (*deserialize)(struct nxamf_state_machine_t *sm, uint8_t buf[], size_t size, nxamf_gamepad_state_t *out);
+        void (*reset)(struct nxamf_state_machine_t *sm);
+    } nxamf_state_machine_t;
+
+#define nxamf_state_machine_next(sm, d) ((sm) != NULL ? (sm)->next((sm), (d)) \
+                                                      : NXAMF_BUFFER_STATE_REJECTED)
+#define nxamf_state_machine_deserialize(sm, buf, size, out) ((sm) != NULL &&  \
+                                                             (buf) != NULL && \
+                                                             (sm)->deserialize((sm), (buf), (size), (out)))
+#define nxamf_state_machine_reset(sm) ((sm) != NULL ? (sm)->reset((sm)) \
+                                                    : (void)0)
+
+#ifndef NXAMF_BUFFER_SIZE
+#define NXAMF_BUFFER_SIZE (size_t)(256)
+#endif
+
+    typedef struct nxamf_buffer_t
+    {
+        uint8_t _buf[NXAMF_BUFFER_SIZE];
+        size_t _size;
+        nxamf_state_machine_t *_sm;
+
+        nxamf_buffer_state_t _tmp;
+    } nxamf_buffer_t;
+
+#define nxamf_buffer_init(buf, sm) ((buf) != NULL &&           \
+                                    (sm) != NULL &&            \
+                                    ((buf)->_size = 0) == 0 && \
+                                    ((buf)->_sm = (sm)) == (sm))
+#define nxamf_buffer_append(buf, d, out) ((buf) != NULL && ((buf)->_tmp = nxamf_state_machine_next((buf)->_sm, (d))) != NXAMF_BUFFER_STATE_REJECTED ? (((buf)->_buf[(buf)->_size++] = (d)) == (d) && (buf)->_tmp == NXAMF_BUFFER_STATE_ACCEPTED ? (nxamf_state_machine_deserialize((buf)->_sm, (buf)->_buf, (buf)->_size, (out)) ? NXAMF_BUFFER_STATE_ACCEPTED  \
+                                                                                                                                                                                                                                                                                                                                 : NXAMF_BUFFER_STATE_REJECTED) \
+                                                                                                                                                                                                                                                : NXAMF_BUFFER_STATE_PENDING)                                                                                   \
+                                                                                                                                                    : NXAMF_BUFFER_STATE_REJECTED)
+#define nxamf_buffer_clear(buf) ((buf) != NULL && ((buf)->_size = 0) == 0 ? nxamf_state_machine_reset((buf)->_sm) \
+                                                                          : (void)0)
 
 #ifdef __cplusplus
 }

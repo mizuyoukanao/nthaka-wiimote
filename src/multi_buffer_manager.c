@@ -2,25 +2,27 @@
 
 #include <assert.h>
 
-void _append(nxamf_buffer_interface_t *parent, uint8_t d)
+static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
 {
     nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
     assert(buf != NULL);
 
     for (size_t i = 0; i < buf->len; i++)
     {
-        buf->bufs[i]->append(buf->bufs[i], d);
+        buf->bufs[i]->append(buf->bufs[i], d, NULL);
     }
+
+    return true;
 }
 
-bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
+static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
 {
     nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
     assert(buf != NULL);
 
     for (size_t i = 0; i < buf->len; i++)
     {
-        if (buf->bufs[i]->deserialize(buf->bufs[i], out))
+        if (false/*buf->bufs[i]->deserialize(buf->bufs[i], out)*/)
         {
             // Clear other buffers
             for (size_t j = 0; j < buf->len; j++)
@@ -40,7 +42,7 @@ bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
     return false;
 }
 
-void _clear(nxamf_buffer_interface_t *parent)
+static void _clear(nxamf_buffer_interface_t *parent)
 {
     nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
     assert(buf != NULL);
@@ -63,7 +65,6 @@ void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_bu
 #endif
 
     buf->parent.append = _append;
-    buf->parent.deserialize = _deserialize;
     buf->parent.clear = _clear;
 
     buf->bufs = bufs;

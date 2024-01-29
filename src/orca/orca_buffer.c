@@ -21,7 +21,7 @@ static bool _is_completed(orca_buffer_t *buf)
            buf->len == ORCA_BUFFER_LENGTH;
 }
 
-static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
+static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
 {
     orca_buffer_t *buf = (orca_buffer_t *)parent;
     assert(buf != NULL);
@@ -36,7 +36,7 @@ static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
     else if (_is_completed(buf))
     {
         parent->clear(parent);
-        parent->append(parent, d);
+        parent->append(parent, d, NULL);
         return;
     }
 
@@ -45,9 +45,11 @@ static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
 
     if (_is_completed(buf))
     {
-        parent->deserialize(parent, &buf->prev);
+        // parent->deserialize(parent, &buf->prev);
         buf->cached = true;
     }
+
+    return true;
 }
 
 static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
@@ -162,7 +164,6 @@ void orca_buffer_init(orca_buffer_t *buf)
     assert(buf != NULL);
 
     buf->parent.append = _append;
-    buf->parent.deserialize = _deserialize;
     buf->parent.clear = _clear;
 
     buf->len = 0;

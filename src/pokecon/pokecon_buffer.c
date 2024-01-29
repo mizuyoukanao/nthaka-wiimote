@@ -1400,7 +1400,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     return true;
 }
 
-static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
+static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
 {
     pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
     assert(buf != NULL);
@@ -1414,7 +1414,7 @@ static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
         if (buf->len != 0)
         {
             parent->clear(parent);
-            parent->append(parent, d);
+            parent->append(parent, d, NULL);
         }
         return;
     }
@@ -1426,9 +1426,11 @@ static void _append(nxamf_buffer_interface_t *parent, uint8_t d)
     // 使わなくてもデシリアライズして、0x81をprev_l.x, prev_l.yに入れる必要がある。
     if (buf->s == POKECON_BUFFER_STATE_FINAL)
     {
-        parent->deserialize(parent, &buf->cache);
+        // parent->deserialize(parent, &buf->cache);
         buf->cached = true;
     }
+
+    return true;
 }
 
 void pokecon_buffer_init(pokecon_buffer_t *buf)
@@ -1436,7 +1438,6 @@ void pokecon_buffer_init(pokecon_buffer_t *buf)
     assert(buf != NULL);
 
     buf->parent.append = _append;
-    buf->parent.deserialize = _deserialize;
     buf->parent.clear = _clear;
 
     buf->len = 0;
