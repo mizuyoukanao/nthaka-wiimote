@@ -1,32 +1,32 @@
 #include "nthaka/nxmc2.h"
 #include "../internal.h"
 
-nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t d)
+nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
-    nxmc2_protocol_t *ph = (nxmc2_protocol_t *)parent;
-    if (ph == NULL)
+    nxmc2_protocol_t *fmt = (nxmc2_protocol_t *)parent;
+    if (fmt == NULL)
     {
         return NTHAKA_BUFFER_REJECTED;
     }
 
-    switch (ph->_s)
+    switch (fmt->_s)
     {
     case NXMC2_PROTOCOL_INITIAL:
         if (d != 0xAB)
             break;
-        ph->_s++;
+        fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB_0x00:
         if (0x3F < d)
             break;
-        ph->_s++;
+        fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB_0x00_0x00:
         if (0x08 < d)
             break;
-        ph->_s++;
+        fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB:
@@ -36,11 +36,11 @@ nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t d)
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80:
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80:
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00:
-        ph->_s++;
+        fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00_0x00:
-        ph->_s++;
+        fmt->_s++;
         return NTHAKA_BUFFER_ACCEPTED;
 
     case NXMC2_PROTOCOL_FINAL:
@@ -49,21 +49,21 @@ nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t d)
     return NTHAKA_BUFFER_REJECTED;
 }
 
-void _reset(nthaka_protocol_handler_t *parent)
+void _reset(nthaka_format_t *parent)
 {
-    nxmc2_protocol_t *ph = (nxmc2_protocol_t *)parent;
-    if (ph == NULL)
+    nxmc2_protocol_t *fmt = (nxmc2_protocol_t *)parent;
+    if (fmt == NULL)
     {
         return;
     }
 
-    ph->_s = NXMC2_PROTOCOL_INITIAL;
+    fmt->_s = NXMC2_PROTOCOL_INITIAL;
 }
 
-bool _deserialize(nthaka_protocol_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
+bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
-    nxmc2_protocol_t *ph = (nxmc2_protocol_t *)parent;
-    if (ph == NULL || ph->_s != NXMC2_PROTOCOL_FINAL)
+    nxmc2_protocol_t *fmt = (nxmc2_protocol_t *)parent;
+    if (fmt == NULL || fmt->_s != NXMC2_PROTOCOL_FINAL)
     {
         return false;
     }
@@ -113,18 +113,18 @@ bool _deserialize(nthaka_protocol_handler_t *parent, uint8_t *buf, size_t size, 
     return true;
 }
 
-bool nxmc2_protocol_init(nxmc2_protocol_t *ph)
+bool nxmc2_protocol_init(nxmc2_protocol_t *fmt)
 {
-    if (ph == NULL)
+    if (fmt == NULL)
     {
         return false;
     }
 
-    ph->parent.deserialize = _deserialize;
-    ph->parent.reset = _reset;
-    ph->parent.update = _update;
+    fmt->parent.deserialize = _deserialize;
+    fmt->parent.reset = _reset;
+    fmt->parent.update = _update;
 
-    ph->_s = NXMC2_PROTOCOL_INITIAL;
+    fmt->_s = NXMC2_PROTOCOL_INITIAL;
 
     return true;
 }

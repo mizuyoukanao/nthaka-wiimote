@@ -16,10 +16,10 @@ typedef enum mock_state_t
  */
 typedef struct mock_protocol_t
 {
-    nthaka_protocol_handler_t parent;
+    nthaka_format_t parent;
     mock_state_t s;
 } mock_protocol_t;
 
-void mock_protocol_init(mock_protocol_t *ph);
+void mock_protocol_init(mock_protocol_t *fmt);
 
 #endif // TEST_MOCK_PROTOCOL_H_

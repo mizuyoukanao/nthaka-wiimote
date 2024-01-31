@@ -94,20 +94,20 @@ extern "C"
         NTHAKA_BUFFER_ACCEPTED
     } nthaka_buffer_state_t;
 
-    typedef struct nthaka_protocol_handler_t
+    typedef struct nthaka_format_t
     {
-        nthaka_buffer_state_t (*update)(struct nthaka_protocol_handler_t *ph, uint8_t d);
-        bool (*deserialize)(struct nthaka_protocol_handler_t *ph, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out);
-        void (*reset)(struct nthaka_protocol_handler_t *ph);
-    } nthaka_protocol_handler_t;
+        nthaka_buffer_state_t (*update)(struct nthaka_format_t *fmt, uint8_t d);
+        bool (*deserialize)(struct nthaka_format_t *fmt, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out);
+        void (*reset)(struct nthaka_format_t *fmt);
+    } nthaka_format_t;
 
-#define nthaka_protocol_handler_update(ph, d) ((ph) != NULL ? (ph)->update((ph), (d)) \
-                                                            : NTHAKA_BUFFER_REJECTED)
-#define nthaka_protocol_handler_deserialize(ph, buf, size, out) ((ph) != NULL &&  \
-                                                                 (buf) != NULL && \
-                                                                 (ph)->deserialize((ph), (buf), (size), (out)))
-#define nthaka_protocol_handler_reset(ph) ((ph) != NULL ? (ph)->reset((ph)) \
-                                                        : (void)0)
+#define nthaka_format_update(fmt, d) ((fmt) != NULL ? (fmt)->update((fmt), (d)) \
+                                                    : NTHAKA_BUFFER_REJECTED)
+#define nthaka_format_deserialize(fmt, buf, size, out) ((fmt) != NULL && \
+                                                        (buf) != NULL && \
+                                                        (fmt)->deserialize((fmt), (buf), (size), (out)))
+#define nthaka_format_reset(fmt) ((fmt) != NULL ? (fmt)->reset((fmt)) \
+                                                : (void)0)
 
 #ifndef NTHAKA_BUFFER_SIZE
 #define NTHAKA_BUFFER_SIZE (size_t)(256)
@@ -117,20 +117,20 @@ extern "C"
     {
         uint8_t _buf[NTHAKA_BUFFER_SIZE];
         size_t _size;
-        nthaka_protocol_handler_t *_ph;
+        nthaka_format_t *_fmt;
 
         nthaka_buffer_state_t _tmp;
     } nthaka_buffer_t;
 
-#define nthaka_buffer_init(buf, ph) ((buf) != NULL &&           \
-                                     (ph) != NULL &&            \
-                                     ((buf)->_size = 0) == 0 && \
-                                     ((buf)->_ph = (ph)) == (ph))
-#define nthaka_buffer_append(buf, d, out) ((buf) != NULL && ((buf)->_tmp = nthaka_protocol_handler_update((buf)->_ph, (d))) != NTHAKA_BUFFER_REJECTED ? (((buf)->_buf[(buf)->_size++] = (d)) == (d) && (buf)->_tmp == NTHAKA_BUFFER_ACCEPTED ? (nthaka_protocol_handler_deserialize((buf)->_ph, (buf)->_buf, (buf)->_size, (out)) ? NTHAKA_BUFFER_ACCEPTED  \
-                                                                                                                                                                                                                                                                                                                                  : NTHAKA_BUFFER_REJECTED) \
-                                                                                                                                                                                                                                             : NTHAKA_BUFFER_PENDING)                                                                                       \
-                                                                                                                                                      : NTHAKA_BUFFER_REJECTED)
-#define nthaka_buffer_clear(buf) ((buf) != NULL && ((buf)->_size = 0) == 0 ? nthaka_protocol_handler_reset((buf)->_ph) \
+#define nthaka_buffer_init(buf, fmt) ((buf) != NULL &&           \
+                                      (fmt) != NULL &&           \
+                                      ((buf)->_size = 0) == 0 && \
+                                      ((buf)->_fmt = (fmt)) == (fmt))
+#define nthaka_buffer_append(buf, d, out) ((buf) != NULL && ((buf)->_tmp = nthaka_format_update((buf)->_fmt, (d))) != NTHAKA_BUFFER_REJECTED ? (((buf)->_buf[(buf)->_size++] = (d)) == (d) && (buf)->_tmp == NTHAKA_BUFFER_ACCEPTED ? (nthaka_format_deserialize((buf)->_fmt, (buf)->_buf, (buf)->_size, (out)) ? NTHAKA_BUFFER_ACCEPTED  \
+                                                                                                                                                                                                                                                                                                                : NTHAKA_BUFFER_REJECTED) \
+                                                                                                                                                                                                                                    : NTHAKA_BUFFER_PENDING)                                                                              \
+                                                                                                                                             : NTHAKA_BUFFER_REJECTED)
+#define nthaka_buffer_clear(buf) ((buf) != NULL && ((buf)->_size = 0) == 0 ? nthaka_format_reset((buf)->_fmt) \
                                                                            : (void)0)
 
 #ifdef __cplusplus

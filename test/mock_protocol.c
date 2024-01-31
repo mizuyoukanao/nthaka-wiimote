@@ -2,15 +2,15 @@
 
 #include <assert.h>
 
-static nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t d)
+static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
-    mock_protocol_t *ph = (mock_protocol_t *)parent;
-    switch (ph->s)
+    mock_protocol_t *fmt = (mock_protocol_t *)parent;
+    switch (fmt->s)
     {
     case MOCK_STATE_INITIAL:
         if (d == 0)
         {
-            ph->s = MOCK_STATE_0;
+            fmt->s = MOCK_STATE_0;
             return NTHAKA_BUFFER_PENDING;
         }
         break;
@@ -18,7 +18,7 @@ static nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t 
     case MOCK_STATE_0:
         if (d == 1)
         {
-            ph->s = MOCK_STATE_1;
+            fmt->s = MOCK_STATE_1;
             return NTHAKA_BUFFER_PENDING;
         }
         break;
@@ -26,7 +26,7 @@ static nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t 
     case MOCK_STATE_1:
         if (d == 2)
         {
-            ph->s = MOCK_STATE_FINAL;
+            fmt->s = MOCK_STATE_FINAL;
             return NTHAKA_BUFFER_ACCEPTED;
         }
         break;
@@ -37,7 +37,7 @@ static nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t 
     }
     return NTHAKA_BUFFER_REJECTED;
 }
-static bool _deserialize(nthaka_protocol_handler_t *parent, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out)
+static bool _deserialize(nthaka_format_t *parent, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out)
 {
     assert(buf[0] == 0);
     assert(buf[1] == 1);
@@ -53,16 +53,16 @@ static bool _deserialize(nthaka_protocol_handler_t *parent, uint8_t buf[], size_
     }
     return true;
 }
-static void _reset(nthaka_protocol_handler_t *parent)
+static void _reset(nthaka_format_t *parent)
 {
-    mock_protocol_t *ph = (mock_protocol_t *)parent;
-    ph->s = MOCK_STATE_INITIAL;
+    mock_protocol_t *fmt = (mock_protocol_t *)parent;
+    fmt->s = MOCK_STATE_INITIAL;
 }
 
-void mock_protocol_init(mock_protocol_t *ph)
+void mock_protocol_init(mock_protocol_t *fmt)
 {
-    ph->parent.update = _update;
-    ph->parent.deserialize = _deserialize;
-    ph->parent.reset = _reset;
-    ph->s = MOCK_STATE_INITIAL;
+    fmt->parent.update = _update;
+    fmt->parent.deserialize = _deserialize;
+    fmt->parent.reset = _reset;
+    fmt->s = MOCK_STATE_INITIAL;
 }
