@@ -8,18 +8,6 @@ extern "C"
 
 #include "../nthaka.h"
 
-#define NXMC2_BUFFER_LENGTH 11
-
-    typedef struct nxmc2_buffer_t
-    {
-        nthaka_buffer_interface_t parent;
-
-        uint8_t buf[NXMC2_BUFFER_LENGTH];
-        size_t len;
-    } nxmc2_buffer_t;
-
-    void nxmc2_buffer_init(nxmc2_buffer_t *buf);
-
     typedef enum nxmc2_format_state_t
     {
         NXMC2_FORMAT_INITIAL,
