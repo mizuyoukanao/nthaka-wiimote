@@ -50,37 +50,37 @@ static int test_append(void)
     typedef struct test_case_t
     {
         uint8_t *prev;
-        size_t len;
+        size_t size;
         uint8_t d;
 
         nthaka_buffer_state_t expected_ret;
         nthaka_gamepad_state_t expected_out;
     } test_case_t;
 
-    test_case_t cases[] = {{.prev = (uint8_t[]){}, .len = 0, .d = 0, .expected_ret = NTHAKA_BUFFER_PENDING},
-                           {.prev = (uint8_t[]){}, .len = 0, .d = 1, .expected_ret = NTHAKA_BUFFER_REJECTED},
-                           {.prev = (uint8_t[]){0}, .len = 1, .d = 1, .expected_ret = NTHAKA_BUFFER_PENDING},
-                           {.prev = (uint8_t[]){0}, .len = 1, .d = 2, .expected_ret = NTHAKA_BUFFER_REJECTED},
-                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 2, .expected_ret = NTHAKA_BUFFER_ACCEPTED, .expected_out = {.y = NTHAKA_BUTTON_RELEASED, //
-                                                                                                                                  .b = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .a = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .x = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .l = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .r = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .zl = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .zr = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .minus = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .plus = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .l_click = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .r_click = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .home = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .capture = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                  .hat = NTHAKA_HAT_NEUTRAL,
-                                                                                                                                  .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                                                                                                                  .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                                                                                                                  .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
-                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 3, .expected_ret = NTHAKA_BUFFER_REJECTED},
-                           {.prev = (uint8_t[]){0, 1, 2}, .len = 3, .d = 0, .expected_ret = NTHAKA_BUFFER_REJECTED}};
+    test_case_t cases[] = {{.prev = (uint8_t[]){}, .size = 0, .d = 0, .expected_ret = NTHAKA_BUFFER_PENDING},
+                           {.prev = (uint8_t[]){}, .size = 0, .d = 1, .expected_ret = NTHAKA_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0}, .size = 1, .d = 1, .expected_ret = NTHAKA_BUFFER_PENDING},
+                           {.prev = (uint8_t[]){0}, .size = 1, .d = 2, .expected_ret = NTHAKA_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0, 1}, .size = 2, .d = 2, .expected_ret = NTHAKA_BUFFER_ACCEPTED, .expected_out = {.y = NTHAKA_BUTTON_RELEASED, //
+                                                                                                                                   .b = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .a = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .x = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .l = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .r = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .zl = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .zr = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .minus = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .plus = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .l_click = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .r_click = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .home = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .capture = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                   .hat = NTHAKA_HAT_NEUTRAL,
+                                                                                                                                   .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                                                                                   .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                                                                                   .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                           {.prev = (uint8_t[]){0, 1}, .size = 2, .d = 3, .expected_ret = NTHAKA_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0, 1, 2}, .size = 3, .d = 0, .expected_ret = NTHAKA_BUFFER_REJECTED}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {
@@ -92,7 +92,7 @@ static int test_append(void)
         assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
         nthaka_gamepad_state_t actual_out;
 
-        for (size_t j = 0; j < case_.len; j++)
+        for (size_t j = 0; j < case_.size; j++)
         {
             nthaka_buffer_append(&buf, case_.prev[j], NULL);
         }

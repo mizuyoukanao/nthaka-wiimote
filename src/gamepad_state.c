@@ -24,8 +24,8 @@ void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state
     dst->r_stick.x = src->r_stick.x;
     dst->r_stick.y = src->r_stick.y;
 
-    size_t length = sizeof(dst->extension) / sizeof(uint8_t);
-    for (size_t i = 0; i < length; i++)
+    size_t size = sizeof(dst->extension) / sizeof(uint8_t);
+    for (size_t i = 0; i < size; i++)
     {
         dst->extension[i] = src->extension[i];
     }
@@ -71,28 +71,28 @@ static const char *_hat(nthaka_hat_t hat)
     }
 }
 
-void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t len)
+void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t size)
 {
-    snprintf(out, len, "{.y = %s, "
-                       ".b = %s, "
-                       ".a = %s, "
-                       ".x = %s, "
-                       ".l = %s, "
-                       ".r = %s, "
-                       ".zl = %s, "
-                       ".zr = %s, "
-                       ".minus = %s, "
-                       ".plus = %s, "
-                       ".l_click = %s, "
-                       ".r_click = %s, "
-                       ".home = %s, "
-                       ".capture = %s, "
-                       ".hat = %s, "
-                       ".l_stick = {.x = %d, "
-                       ".y = %d}, "
-                       ".r_stick = {.x = %d, "
-                       ".y = %d}, "
-                       ".extension = {%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d}}",
+    snprintf(out, size, "{.y = %s, "
+                        ".b = %s, "
+                        ".a = %s, "
+                        ".x = %s, "
+                        ".l = %s, "
+                        ".r = %s, "
+                        ".zl = %s, "
+                        ".zr = %s, "
+                        ".minus = %s, "
+                        ".plus = %s, "
+                        ".l_click = %s, "
+                        ".r_click = %s, "
+                        ".home = %s, "
+                        ".capture = %s, "
+                        ".hat = %s, "
+                        ".l_stick = {.x = %d, "
+                        ".y = %d}, "
+                        ".r_stick = {.x = %d, "
+                        ".y = %d}, "
+                        ".extension = {%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d}}",
              _btn(s->y),
              _btn(s->b),
              _btn(s->a),

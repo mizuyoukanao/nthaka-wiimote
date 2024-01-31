@@ -105,8 +105,8 @@ bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gam
     out->extension[1] = buf[NXMC2_BUFFER_INDEX_EXTENSION_1];
     out->extension[2] = buf[NXMC2_BUFFER_INDEX_EXTENSION_2];
 
-    size_t length = sizeof(out->extension) / sizeof(uint8_t);
-    for (size_t i = 3; i < length; i++)
+    size_t size_ = sizeof(out->extension) / sizeof(uint8_t);
+    for (size_t i = 3; i < size_; i++)
     {
         out->extension[i] = 0;
     }
