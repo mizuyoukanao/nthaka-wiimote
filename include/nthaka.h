@@ -67,7 +67,7 @@ extern "C"
 
     // char max[] = "{.y = NTHAKA_BUTTON_RELEASED, .b = NTHAKA_BUTTON_RELEASED, .a = NTHAKA_BUTTON_RELEASED, .x = NTHAKA_BUTTON_RELEASED, .l = NTHAKA_BUTTON_RELEASED, .r = NTHAKA_BUTTON_RELEASED, .zl = NTHAKA_BUTTON_RELEASED, .zr = NTHAKA_BUTTON_RELEASED, .minus = NTHAKA_BUTTON_RELEASED, .plus = NTHAKA_BUTTON_RELEASED, .l_click = NTHAKA_BUTTON_RELEASED, .r_click = NTHAKA_BUTTON_RELEASED, .home = NTHAKA_BUTTON_RELEASED, .capture = NTHAKA_BUTTON_RELEASED, .hat = NTHAKA_HAT_DOWNRIGHT, .l_stick = {.x = 255, .y = 255}, .r_stick = {.x = 255, .y = 255}, .extension = {255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}}";
 #define NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX 612
-    void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t len);
+    void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t size);
 
     typedef struct nthaka_buffer_interface_t
     {
