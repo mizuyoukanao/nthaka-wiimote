@@ -1270,7 +1270,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
 
     if (buf->cached)
     {
-        nxamf_gamepad_state_copy(&buf->cache, out);
+        nxamf_gamepad_state_copy(out, &buf->cache);
         return true;
     }
 

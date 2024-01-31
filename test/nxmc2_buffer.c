@@ -4,6 +4,8 @@
 
 #include "nxamf/nxmc2.h"
 
+#include "util.h"
+
 static bool _test_init(void)
 {
     nxmc2_buffer_t buf;

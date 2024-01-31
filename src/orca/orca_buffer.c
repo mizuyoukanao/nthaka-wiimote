@@ -63,7 +63,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
         return false;
     }
 
-    nxamf_gamepad_state_copy(&buf->prev, out);
+    nxamf_gamepad_state_copy(out, &buf->prev);
     if (buf->cached)
     {
         return true;
@@ -154,7 +154,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
         }
     }
 
-    nxamf_gamepad_state_copy(out, &buf->prev);
+    nxamf_gamepad_state_copy(&buf->prev, out);
 
     return true;
 }
@@ -167,6 +167,6 @@ void orca_buffer_init(orca_buffer_t *buf)
     buf->parent.clear = _clear;
 
     buf->len = 0;
-    nxamf_gamepad_state_copy(&NXAMF_GAMEPAD_STATE_NEUTRAL, &(buf->prev));
+    nxamf_gamepad_state_copy(&(buf->prev), &NXAMF_GAMEPAD_STATE_NEUTRAL);
     buf->cached = false;
 }

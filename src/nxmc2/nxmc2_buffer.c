@@ -5,21 +5,6 @@
 static const uint8_t _HEADER = 0xAB;
 static const uint8_t _HAT_VALUE_MAX = 8;
 
-typedef enum nxmc2_buffer_index_t
-{
-    NXMC2_BUFFER_INDEX_HEADER,
-    NXMC2_BUFFER_INDEX_BUTTONS_LSB,
-    NXMC2_BUFFER_INDEX_BUTTONS_MSB,
-    NXMC2_BUFFER_INDEX_HAT,
-    NXMC2_BUFFER_INDEX_LX,
-    NXMC2_BUFFER_INDEX_LY,
-    NXMC2_BUFFER_INDEX_RX,
-    NXMC2_BUFFER_INDEX_RY,
-    NXMC2_BUFFER_INDEX_EXTENSION_0,
-    NXMC2_BUFFER_INDEX_EXTENSION_1,
-    NXMC2_BUFFER_INDEX_EXTENSION_2,
-} nxmc2_buffer_index_t;
-
 static nxamf_gamepad_state_t _;
 
 static bool _deserialize(nxmc2_buffer_t *buf, nxamf_gamepad_state_t *out)

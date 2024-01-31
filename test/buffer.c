@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "mock_state_machine.h"
+#include "mock_protocol.h"
 #include "util.h"
 
 static int test_init(void)
@@ -13,19 +13,19 @@ static int test_init(void)
     typedef struct test_case_t
     {
         nxamf_buffer_t *arg0;
-        nxamf_state_machine_t *arg1;
+        nxamf_protocol_handler_t *arg1;
 
         bool expected;
     } test_case_t;
 
     nxamf_buffer_t buf;
-    nxamf_state_machine_t sm;
+    nxamf_protocol_handler_t ph;
 
     test_case_t cases[] = {
         {.arg0 = NULL, .arg1 = NULL, .expected = false},
         {.arg0 = &buf, .arg1 = NULL, .expected = false},
-        {.arg0 = NULL, .arg1 = &sm, .expected = false},
-        {.arg0 = &buf, .arg1 = &sm, .expected = true},
+        {.arg0 = NULL, .arg1 = &ph, .expected = false},
+        {.arg0 = &buf, .arg1 = &ph, .expected = true},
     };
     const size_t len = sizeof(cases) / sizeof(test_case_t);
 
@@ -58,40 +58,40 @@ static int test_append(void)
         nxamf_gamepad_state_t expected_out;
     } test_case_t;
 
-    test_case_t cases[] = {{.prev = (uint8_t[]){}, .len = 0, .d = 0, .expected_ret = NXAMF_BUFFER_STATE_PENDING},
-                           {.prev = (uint8_t[]){}, .len = 0, .d = 1, .expected_ret = NXAMF_BUFFER_STATE_REJECTED},
-                           {.prev = (uint8_t[]){0}, .len = 1, .d = 1, .expected_ret = NXAMF_BUFFER_STATE_PENDING},
-                           {.prev = (uint8_t[]){0}, .len = 1, .d = 2, .expected_ret = NXAMF_BUFFER_STATE_REJECTED},
-                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 2, .expected_ret = NXAMF_BUFFER_STATE_ACCEPTED, .expected_out = {.y = NXAMF_BUTTON_RELEASED, //
-                                                                                                                                       .b = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .a = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .x = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .l = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .r = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .zl = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .zr = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .minus = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .plus = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .l_click = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .r_click = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .home = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .capture = NXAMF_BUTTON_RELEASED,
-                                                                                                                                       .hat = NXAMF_HAT_NEUTRAL,
-                                                                                                                                       .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                                                                                                                       .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                                                                                                                       .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
-                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 3, .expected_ret = NXAMF_BUFFER_STATE_REJECTED},
-                           {.prev = (uint8_t[]){0, 1, 2}, .len = 3, .d = 0, .expected_ret = NXAMF_BUFFER_STATE_REJECTED}};
+    test_case_t cases[] = {{.prev = (uint8_t[]){}, .len = 0, .d = 0, .expected_ret = NXAMF_BUFFER_PENDING},
+                           {.prev = (uint8_t[]){}, .len = 0, .d = 1, .expected_ret = NXAMF_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0}, .len = 1, .d = 1, .expected_ret = NXAMF_BUFFER_PENDING},
+                           {.prev = (uint8_t[]){0}, .len = 1, .d = 2, .expected_ret = NXAMF_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 2, .expected_ret = NXAMF_BUFFER_ACCEPTED, .expected_out = {.y = NXAMF_BUTTON_RELEASED, //
+                                                                                                                                 .b = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .a = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .x = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .l = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .r = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .zl = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .zr = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .minus = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .plus = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .l_click = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .r_click = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .home = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .capture = NXAMF_BUTTON_RELEASED,
+                                                                                                                                 .hat = NXAMF_HAT_NEUTRAL,
+                                                                                                                                 .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
+                                                                                                                                 .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
+                                                                                                                                 .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 3, .expected_ret = NXAMF_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0, 1, 2}, .len = 3, .d = 0, .expected_ret = NXAMF_BUFFER_REJECTED}};
     const size_t len = sizeof(cases) / sizeof(test_case_t);
 
     for (size_t i = 0; i < len; i++)
     {
         test_case_t case_ = cases[i];
 
-        mock_state_machine_t sm;
-        mock_state_machine_init(&sm);
+        mock_protocol_t ph;
+        mock_protocol_init(&ph);
         nxamf_buffer_t buf;
-        assert(nxamf_buffer_init(&buf, (nxamf_state_machine_t *)&sm));
+        assert(nxamf_buffer_init(&buf, (nxamf_protocol_handler_t *)&ph));
         nxamf_gamepad_state_t actual_out;
 
         for (size_t j = 0; j < case_.len; j++)
@@ -105,7 +105,7 @@ static int test_append(void)
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, nxamf_buffer_state_t_(case_.expected_ret), nxamf_buffer_state_t_(actual_ret));
             ret++;
         }
-        else if (actual_ret == NXAMF_BUFFER_STATE_ACCEPTED && !nxamf_gamepad_state_equals(&actual_out, &(case_.expected_out)))
+        else if (actual_ret == NXAMF_BUFFER_ACCEPTED && !nxamf_gamepad_state_equals(&actual_out, &(case_.expected_out)))
         {
             char str0[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
             char str1[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
@@ -124,26 +124,26 @@ static int test_clear(void)
 {
     int ret = 0;
 
-    mock_state_machine_t sm;
-    mock_state_machine_init(&sm);
+    mock_protocol_t ph;
+    mock_protocol_init(&ph);
     nxamf_buffer_t buf;
-    assert(nxamf_buffer_init(&buf, (nxamf_state_machine_t *)&sm));
+    assert(nxamf_buffer_init(&buf, (nxamf_protocol_handler_t *)&ph));
 
     nxamf_buffer_append(&buf, 0, NULL);
     nxamf_buffer_append(&buf, 1, NULL);
     nxamf_buffer_append(&buf, 2, NULL);
 
-    assert(sm.s == MOCK_STATE_FINAL);
+    assert(ph.s == MOCK_STATE_FINAL);
 
     nxamf_buffer_clear(&buf);
 
-    assert(sm.s == MOCK_STATE_INITIAL);
+    assert(ph.s == MOCK_STATE_INITIAL);
 
     nxamf_buffer_append(&buf, 0, NULL);
     nxamf_buffer_append(&buf, 1, NULL);
     nxamf_buffer_append(&buf, 2, NULL);
 
-    assert(sm.s == MOCK_STATE_FINAL);
+    assert(ph.s == MOCK_STATE_FINAL);
 
     return ret;
 }
