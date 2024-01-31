@@ -53,12 +53,12 @@ extern "C"
 
     typedef struct nxmc2_protocol_t
     {
-        nthaka_protocol_handler_t parent;
+        nthaka_format_t parent;
 
         nxmc2_protocol_state_t _s;
     } nxmc2_protocol_t;
 
-    bool nxmc2_protocol_init(nxmc2_protocol_t *ph);
+    bool nxmc2_protocol_init(nxmc2_protocol_t *fmt);
 
 #ifdef __cplusplus
 }

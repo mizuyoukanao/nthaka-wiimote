@@ -13,19 +13,19 @@ static int test_init(void)
     typedef struct test_case_t
     {
         nthaka_buffer_t *arg0;
-        nthaka_protocol_handler_t *arg1;
+        nthaka_format_t *arg1;
 
         bool expected;
     } test_case_t;
 
     nthaka_buffer_t buf;
-    nthaka_protocol_handler_t ph;
+    nthaka_format_t fmt;
 
     test_case_t cases[] = {
         {.arg0 = NULL, .arg1 = NULL, .expected = false},
         {.arg0 = &buf, .arg1 = NULL, .expected = false},
-        {.arg0 = NULL, .arg1 = &ph, .expected = false},
-        {.arg0 = &buf, .arg1 = &ph, .expected = true},
+        {.arg0 = NULL, .arg1 = &fmt, .expected = false},
+        {.arg0 = &buf, .arg1 = &fmt, .expected = true},
     };
     const size_t len = sizeof(cases) / sizeof(test_case_t);
 
@@ -88,10 +88,10 @@ static int test_append(void)
     {
         test_case_t case_ = cases[i];
 
-        mock_protocol_t ph;
-        mock_protocol_init(&ph);
+        mock_protocol_t fmt;
+        mock_protocol_init(&fmt);
         nthaka_buffer_t buf;
-        assert(nthaka_buffer_init(&buf, (nthaka_protocol_handler_t *)&ph));
+        assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
         nthaka_gamepad_state_t actual_out;
 
         for (size_t j = 0; j < case_.len; j++)
@@ -124,26 +124,26 @@ static int test_clear(void)
 {
     int ret = 0;
 
-    mock_protocol_t ph;
-    mock_protocol_init(&ph);
+    mock_protocol_t fmt;
+    mock_protocol_init(&fmt);
     nthaka_buffer_t buf;
-    assert(nthaka_buffer_init(&buf, (nthaka_protocol_handler_t *)&ph));
+    assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
 
     nthaka_buffer_append(&buf, 0, NULL);
     nthaka_buffer_append(&buf, 1, NULL);
     nthaka_buffer_append(&buf, 2, NULL);
 
-    assert(ph.s == MOCK_STATE_FINAL);
+    assert(fmt.s == MOCK_STATE_FINAL);
 
     nthaka_buffer_clear(&buf);
 
-    assert(ph.s == MOCK_STATE_INITIAL);
+    assert(fmt.s == MOCK_STATE_INITIAL);
 
     nthaka_buffer_append(&buf, 0, NULL);
     nthaka_buffer_append(&buf, 1, NULL);
     nthaka_buffer_append(&buf, 2, NULL);
 
-    assert(ph.s == MOCK_STATE_FINAL);
+    assert(fmt.s == MOCK_STATE_FINAL);
 
     return ret;
 }
