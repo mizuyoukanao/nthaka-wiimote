@@ -1,6 +1,9 @@
 #include "buffer.h"
+#include "nxmc2.h"
 
-#include "nxmc2_buffer.h"
+#include "util.h"
+
+// #include "nxmc2_buffer.h"
 // #include "orca_buffer.h"
 // #include "pokecon_buffer.h"
 // #include "multi_buffer_manager.h"
@@ -9,20 +12,24 @@
 
 int main(void)
 {
-    bool (*tests[])(void) = {test_nxmc2_buffer,
-                             test_buffer,
-                             /*test_pokecon_buffer,*/
-                             /*test_multi_buffer_manager,*/
-                             /*test_orca_buffer*/};
-    size_t length = sizeof(tests) / sizeof(bool (*)(void));
-    for (size_t i = 0; i < length; i++)
+    int ret = 0;
+
+    test_t tests[] = {{.name = "test_buffer", .test = test_buffer},
+                      {.name = "test_nxmc2", .test = test_nxmc2}};
+
+    for (size_t i = 0; i < SIZE_OF(tests); i++)
     {
-        if (!tests[i]())
+        printf("%s:\n", tests[i].name);
+        if (tests[i].test() != 0)
         {
-            return 1;
+            ret++;
         }
+        printf("\n");
     }
 
-    printf("OK");
-    return 0;
+    if (ret == 0)
+    {
+        printf("OK");
+    }
+    return ret;
 }

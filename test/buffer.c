@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "nthaka.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -27,9 +27,8 @@ static int test_init(void)
         {.arg0 = NULL, .arg1 = &fmt, .expected = false},
         {.arg0 = &buf, .arg1 = &fmt, .expected = true},
     };
-    const size_t len = sizeof(cases) / sizeof(test_case_t);
 
-    for (size_t i = 0; i < len; i++)
+    for (size_t i = 0; i < SIZE_OF(cases); i++)
     {
         test_case_t case_ = cases[i];
 
@@ -82,9 +81,8 @@ static int test_append(void)
                                                                                                                                   .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
                            {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 3, .expected_ret = NTHAKA_BUFFER_REJECTED},
                            {.prev = (uint8_t[]){0, 1, 2}, .len = 3, .d = 0, .expected_ret = NTHAKA_BUFFER_REJECTED}};
-    const size_t len = sizeof(cases) / sizeof(test_case_t);
 
-    for (size_t i = 0; i < len; i++)
+    for (size_t i = 0; i < SIZE_OF(cases); i++)
     {
         test_case_t case_ = cases[i];
 
@@ -150,32 +148,8 @@ static int test_clear(void)
 
 int test_buffer(void)
 {
-    printf("test_buffer:\n");
-    int ret = 0;
-
-    typedef struct test_t
-    {
-        char *name;
-        int (*test)(void);
-    } test_t;
-
-    test_t tests[] = {{.name = "test_init", test_init},
-                      {.name = "test_append", test_append},
-                      {.name = "test_clear", test_clear}};
-    const size_t len = sizeof(tests) / sizeof(test_t);
-
-    for (size_t i = 0; i < len; i++)
-    {
-        if (tests[i].test() == 0)
-        {
-            printf("    %s: passed\n", tests[i].name);
-        }
-        else
-        {
-            printf("    %s: failed\n", tests[i].name);
-            ret++;
-        }
-    }
-
-    return ret;
+    return run_tests((test_t[]){TEST(test_init),
+                                TEST(test_append),
+                                TEST(test_clear)},
+                     3);
 }

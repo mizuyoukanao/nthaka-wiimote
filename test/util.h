@@ -1,6 +1,25 @@
 #ifndef TEST_UTIL_H_
 #define TEST_UTIL_H_
 
+#include <stddef.h>
+#include <stdio.h>
+
+typedef struct test_t
+{
+    char *name;
+    int (*test)(void);
+} test_t;
+
+#define TEST(t) {.name = (#t), .test = (t)}
+
+#define SIZE_OF(a) (sizeof((a)) / sizeof((a)[0]))
+
+// Always returns true.
+#define TEST_PASSED(name) (printf("\e[32m[  PASSED  ]\e[0m %s\n", (name)) != 0)
+#define TEST_FAILED(name) (printf("\e[31m[  FAILED  ]\e[0m %s\n", (name)) != 0)
+
+int run_tests(test_t tests[], size_t size);
+
 #define bool_(b) ((b) ? "true" : "false")
 #define nthaka_buffer_state_t_(s) ((s) == NTHAKA_BUFFER_PENDING    ? "NTHAKA_BUFFER_PENDING"  \
                                    : (s) == NTHAKA_BUFFER_REJECTED ? "NTHAKA_BUFFER_REJECTED" \

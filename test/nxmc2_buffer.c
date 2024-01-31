@@ -29,24 +29,7 @@ static bool _test_append(void)
         {.pre = (uint8_t[]){}, .len = 0, .d = 0xAB, .expected_ret = false},
         {.pre = (uint8_t[]){}, .len = 0, .d = 0x80, .expected_ret = false},
         {.pre = (uint8_t[]){0xAB, 0, 0, 8, 128, 128, 128, 128, 0, 0}, .len = 10, .d = 0, .expected_ret = true, .expected_out = NTHAKA_GAMEPAD_STATE_NEUTRAL},
-        {.pre = (uint8_t[]){0xAB, 1, 1, 8, 129, 129, 127, 127, 1, 2}, .len = 10, .d = 3, .expected_ret = true, .expected_out = {.y = NTHAKA_BUTTON_PRESSED, //
-                                                                                                                                .b = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .a = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .x = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .l = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .r = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .zl = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .zr = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .minus = NTHAKA_BUTTON_PRESSED,
-                                                                                                                                .plus = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .l_click = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .r_click = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .home = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .capture = NTHAKA_BUTTON_RELEASED,
-                                                                                                                                .hat = NTHAKA_HAT_NEUTRAL,
-                                                                                                                                .l_stick = {.x = 129, .y = 129},
-                                                                                                                                .r_stick = {.x = 127, .y = 127},
-                                                                                                                                .extension = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
+        };
     size_t length = sizeof(cases) / sizeof(test_case_t);
 
     for (size_t i = 0; i < length; i++)

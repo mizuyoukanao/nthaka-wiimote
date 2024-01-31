@@ -3,7 +3,7 @@
 
 nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
-    nxmc2_protocol_t *fmt = (nxmc2_protocol_t *)parent;
+    nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
     if (fmt == NULL)
     {
         return NTHAKA_BUFFER_REJECTED;
@@ -11,59 +11,60 @@ nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 
     switch (fmt->_s)
     {
-    case NXMC2_PROTOCOL_INITIAL:
+    case NXMC2_FORMAT_INITIAL:
         if (d != 0xAB)
             break;
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
-    case NXMC2_PROTOCOL_0xAB_0x00:
+    case NXMC2_FORMAT_0xAB_0x00:
         if (0x3F < d)
             break;
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00:
+    case NXMC2_FORMAT_0xAB_0x00_0x00:
         if (0x08 < d)
             break;
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
-    case NXMC2_PROTOCOL_0xAB:
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08:
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80:
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80:
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80:
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80:
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00:
+    case NXMC2_FORMAT_0xAB:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08_0x80:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08_0x80_0x80:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08_0x80_0x80_0x80:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00:
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
-    case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00_0x00:
+    case NXMC2_FORMAT_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00_0x00:
         fmt->_s++;
         return NTHAKA_BUFFER_ACCEPTED;
 
-    case NXMC2_PROTOCOL_FINAL:
+    case NXMC2_FORMAT_FINAL:
     default:
     }
+    fmt->_s = NXMC2_FORMAT_FINAL;
     return NTHAKA_BUFFER_REJECTED;
 }
 
 void _reset(nthaka_format_t *parent)
 {
-    nxmc2_protocol_t *fmt = (nxmc2_protocol_t *)parent;
+    nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
     if (fmt == NULL)
     {
         return;
     }
 
-    fmt->_s = NXMC2_PROTOCOL_INITIAL;
+    fmt->_s = NXMC2_FORMAT_INITIAL;
 }
 
 bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
-    nxmc2_protocol_t *fmt = (nxmc2_protocol_t *)parent;
-    if (fmt == NULL || fmt->_s != NXMC2_PROTOCOL_FINAL)
+    nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
+    if (fmt == NULL || fmt->_s != NXMC2_FORMAT_FINAL)
     {
         return false;
     }
@@ -113,7 +114,7 @@ bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gam
     return true;
 }
 
-bool nxmc2_protocol_init(nxmc2_protocol_t *fmt)
+bool nxmc2_format_init(nxmc2_format_t *fmt)
 {
     if (fmt == NULL)
     {
@@ -124,7 +125,7 @@ bool nxmc2_protocol_init(nxmc2_protocol_t *fmt)
     fmt->parent.reset = _reset;
     fmt->parent.update = _update;
 
-    fmt->_s = NXMC2_PROTOCOL_INITIAL;
+    fmt->_s = NXMC2_FORMAT_INITIAL;
 
     return true;
 }
