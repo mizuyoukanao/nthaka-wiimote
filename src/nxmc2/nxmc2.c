@@ -1,12 +1,12 @@
-#include "nxamf/nxmc2.h"
+#include "nthaka/nxmc2.h"
 #include "../internal.h"
 
-nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
+nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t d)
 {
     nxmc2_protocol_t *ph = (nxmc2_protocol_t *)parent;
     if (ph == NULL)
     {
-        return NXAMF_BUFFER_REJECTED;
+        return NTHAKA_BUFFER_REJECTED;
     }
 
     switch (ph->_s)
@@ -15,19 +15,19 @@ nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
         if (d != 0xAB)
             break;
         ph->_s++;
-        return NXAMF_BUFFER_PENDING;
+        return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB_0x00:
         if (0x3F < d)
             break;
         ph->_s++;
-        return NXAMF_BUFFER_PENDING;
+        return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB_0x00_0x00:
         if (0x08 < d)
             break;
         ph->_s++;
-        return NXAMF_BUFFER_PENDING;
+        return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB:
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08:
@@ -37,19 +37,19 @@ nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80:
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00:
         ph->_s++;
-        return NXAMF_BUFFER_PENDING;
+        return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_PROTOCOL_0xAB_0x00_0x00_0x08_0x80_0x80_0x80_0x80_0x00_0x00:
         ph->_s++;
-        return NXAMF_BUFFER_ACCEPTED;
+        return NTHAKA_BUFFER_ACCEPTED;
 
     case NXMC2_PROTOCOL_FINAL:
     default:
     }
-    return NXAMF_BUFFER_REJECTED;
+    return NTHAKA_BUFFER_REJECTED;
 }
 
-void _reset(nxamf_protocol_handler_t *parent)
+void _reset(nthaka_protocol_handler_t *parent)
 {
     nxmc2_protocol_t *ph = (nxmc2_protocol_t *)parent;
     if (ph == NULL)
@@ -60,7 +60,7 @@ void _reset(nxamf_protocol_handler_t *parent)
     ph->_s = NXMC2_PROTOCOL_INITIAL;
 }
 
-bool _deserialize(nxamf_protocol_handler_t *parent, uint8_t *buf, size_t size, nxamf_gamepad_state_t *out)
+bool _deserialize(nthaka_protocol_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     nxmc2_protocol_t *ph = (nxmc2_protocol_t *)parent;
     if (ph == NULL || ph->_s != NXMC2_PROTOCOL_FINAL)
@@ -76,22 +76,22 @@ bool _deserialize(nxamf_protocol_handler_t *parent, uint8_t *buf, size_t size, n
     }
 
     uint8_t btns_lsb = buf[NXMC2_BUFFER_INDEX_BUTTONS_LSB];
-    out->y = nxamf_internal_bit(btns_lsb, 0);
-    out->b = nxamf_internal_bit(btns_lsb, 1);
-    out->a = nxamf_internal_bit(btns_lsb, 2);
-    out->x = nxamf_internal_bit(btns_lsb, 3);
-    out->l = nxamf_internal_bit(btns_lsb, 4);
-    out->r = nxamf_internal_bit(btns_lsb, 5);
-    out->zl = nxamf_internal_bit(btns_lsb, 6);
-    out->zr = nxamf_internal_bit(btns_lsb, 7);
+    out->y = nthaka_internal_bit(btns_lsb, 0);
+    out->b = nthaka_internal_bit(btns_lsb, 1);
+    out->a = nthaka_internal_bit(btns_lsb, 2);
+    out->x = nthaka_internal_bit(btns_lsb, 3);
+    out->l = nthaka_internal_bit(btns_lsb, 4);
+    out->r = nthaka_internal_bit(btns_lsb, 5);
+    out->zl = nthaka_internal_bit(btns_lsb, 6);
+    out->zr = nthaka_internal_bit(btns_lsb, 7);
 
     uint8_t btns_msb = buf[NXMC2_BUFFER_INDEX_BUTTONS_MSB];
-    out->minus = nxamf_internal_bit(btns_msb, 0);
-    out->plus = nxamf_internal_bit(btns_msb, 1);
-    out->l_click = nxamf_internal_bit(btns_msb, 2);
-    out->r_click = nxamf_internal_bit(btns_msb, 3);
-    out->home = nxamf_internal_bit(btns_msb, 4);
-    out->capture = nxamf_internal_bit(btns_msb, 5);
+    out->minus = nthaka_internal_bit(btns_msb, 0);
+    out->plus = nthaka_internal_bit(btns_msb, 1);
+    out->l_click = nthaka_internal_bit(btns_msb, 2);
+    out->r_click = nthaka_internal_bit(btns_msb, 3);
+    out->home = nthaka_internal_bit(btns_msb, 4);
+    out->capture = nthaka_internal_bit(btns_msb, 5);
 
     out->hat = buf[NXMC2_BUFFER_INDEX_HAT];
 

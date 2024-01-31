@@ -1,18 +1,18 @@
-#ifndef NXAMF_NXMC2_H_
-#define NXAMF_NXMC2_H_
+#ifndef NTHAKA_NXMC2_H_
+#define NTHAKA_NXMC2_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-#include "../nxamf.h"
+#include "../nthaka.h"
 
 #define NXMC2_BUFFER_LENGTH 11
 
     typedef struct nxmc2_buffer_t
     {
-        nxamf_buffer_interface_t parent;
+        nthaka_buffer_interface_t parent;
 
         uint8_t buf[NXMC2_BUFFER_LENGTH];
         size_t len;
@@ -53,7 +53,7 @@ extern "C"
 
     typedef struct nxmc2_protocol_t
     {
-        nxamf_protocol_handler_t parent;
+        nthaka_protocol_handler_t parent;
 
         nxmc2_protocol_state_t _s;
     } nxmc2_protocol_t;
@@ -64,4 +64,4 @@ extern "C"
 }
 #endif
 
-#endif // NXAMF_NXMC2_H_
+#endif // NTHAKA_NXMC2_H_

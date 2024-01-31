@@ -1,6 +1,6 @@
-#ifndef NXAMF_INTERNAL_H_
-#define NXAMF_INTERNAL_H_
+#ifndef NTHAKA_INTERNAL_H_
+#define NTHAKA_INTERNAL_H_
 
-#define nxamf_internal_bit(d, n) (((d) >> (n)) & 1)
+#define nthaka_internal_bit(d, n) (((d) >> (n)) & 1)
 
-#endif // NXAMF_INTERNAL_H_
+#endif // NTHAKA_INTERNAL_H_

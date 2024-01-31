@@ -12,14 +12,14 @@ static int test_init(void)
 
     typedef struct test_case_t
     {
-        nxamf_buffer_t *arg0;
-        nxamf_protocol_handler_t *arg1;
+        nthaka_buffer_t *arg0;
+        nthaka_protocol_handler_t *arg1;
 
         bool expected;
     } test_case_t;
 
-    nxamf_buffer_t buf;
-    nxamf_protocol_handler_t ph;
+    nthaka_buffer_t buf;
+    nthaka_protocol_handler_t ph;
 
     test_case_t cases[] = {
         {.arg0 = NULL, .arg1 = NULL, .expected = false},
@@ -33,7 +33,7 @@ static int test_init(void)
     {
         test_case_t case_ = cases[i];
 
-        bool actual = nxamf_buffer_init(case_.arg0, case_.arg1);
+        bool actual = nthaka_buffer_init(case_.arg0, case_.arg1);
         if (actual != case_.expected)
         {
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, bool_(case_.expected), bool_(actual));
@@ -54,34 +54,34 @@ static int test_append(void)
         size_t len;
         uint8_t d;
 
-        nxamf_buffer_state_t expected_ret;
-        nxamf_gamepad_state_t expected_out;
+        nthaka_buffer_state_t expected_ret;
+        nthaka_gamepad_state_t expected_out;
     } test_case_t;
 
-    test_case_t cases[] = {{.prev = (uint8_t[]){}, .len = 0, .d = 0, .expected_ret = NXAMF_BUFFER_PENDING},
-                           {.prev = (uint8_t[]){}, .len = 0, .d = 1, .expected_ret = NXAMF_BUFFER_REJECTED},
-                           {.prev = (uint8_t[]){0}, .len = 1, .d = 1, .expected_ret = NXAMF_BUFFER_PENDING},
-                           {.prev = (uint8_t[]){0}, .len = 1, .d = 2, .expected_ret = NXAMF_BUFFER_REJECTED},
-                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 2, .expected_ret = NXAMF_BUFFER_ACCEPTED, .expected_out = {.y = NXAMF_BUTTON_RELEASED, //
-                                                                                                                                 .b = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .a = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .x = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .l = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .r = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .zl = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .zr = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .minus = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .plus = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .l_click = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .r_click = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .home = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .capture = NXAMF_BUTTON_RELEASED,
-                                                                                                                                 .hat = NXAMF_HAT_NEUTRAL,
-                                                                                                                                 .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                                                                                                                 .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                                                                                                                 .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
-                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 3, .expected_ret = NXAMF_BUFFER_REJECTED},
-                           {.prev = (uint8_t[]){0, 1, 2}, .len = 3, .d = 0, .expected_ret = NXAMF_BUFFER_REJECTED}};
+    test_case_t cases[] = {{.prev = (uint8_t[]){}, .len = 0, .d = 0, .expected_ret = NTHAKA_BUFFER_PENDING},
+                           {.prev = (uint8_t[]){}, .len = 0, .d = 1, .expected_ret = NTHAKA_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0}, .len = 1, .d = 1, .expected_ret = NTHAKA_BUFFER_PENDING},
+                           {.prev = (uint8_t[]){0}, .len = 1, .d = 2, .expected_ret = NTHAKA_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 2, .expected_ret = NTHAKA_BUFFER_ACCEPTED, .expected_out = {.y = NTHAKA_BUTTON_RELEASED, //
+                                                                                                                                  .b = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .a = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .x = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .l = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .r = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .zl = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .zr = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .minus = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .plus = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .l_click = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .r_click = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .home = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .capture = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                  .hat = NTHAKA_HAT_NEUTRAL,
+                                                                                                                                  .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                                                                                  .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                                                                                  .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                           {.prev = (uint8_t[]){0, 1}, .len = 2, .d = 3, .expected_ret = NTHAKA_BUFFER_REJECTED},
+                           {.prev = (uint8_t[]){0, 1, 2}, .len = 3, .d = 0, .expected_ret = NTHAKA_BUFFER_REJECTED}};
     const size_t len = sizeof(cases) / sizeof(test_case_t);
 
     for (size_t i = 0; i < len; i++)
@@ -90,27 +90,27 @@ static int test_append(void)
 
         mock_protocol_t ph;
         mock_protocol_init(&ph);
-        nxamf_buffer_t buf;
-        assert(nxamf_buffer_init(&buf, (nxamf_protocol_handler_t *)&ph));
-        nxamf_gamepad_state_t actual_out;
+        nthaka_buffer_t buf;
+        assert(nthaka_buffer_init(&buf, (nthaka_protocol_handler_t *)&ph));
+        nthaka_gamepad_state_t actual_out;
 
         for (size_t j = 0; j < case_.len; j++)
         {
-            nxamf_buffer_append(&buf, case_.prev[j], NULL);
+            nthaka_buffer_append(&buf, case_.prev[j], NULL);
         }
 
-        nxamf_buffer_state_t actual_ret = nxamf_buffer_append(&buf, case_.d, &actual_out);
+        nthaka_buffer_state_t actual_ret = nthaka_buffer_append(&buf, case_.d, &actual_out);
         if (actual_ret != case_.expected_ret)
         {
-            fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, nxamf_buffer_state_t_(case_.expected_ret), nxamf_buffer_state_t_(actual_ret));
+            fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, nthaka_buffer_state_t_(case_.expected_ret), nthaka_buffer_state_t_(actual_ret));
             ret++;
         }
-        else if (actual_ret == NXAMF_BUFFER_ACCEPTED && !nxamf_gamepad_state_equals(&actual_out, &(case_.expected_out)))
+        else if (actual_ret == NTHAKA_BUFFER_ACCEPTED && !nthaka_gamepad_state_equals(&actual_out, &(case_.expected_out)))
         {
-            char str0[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
-            char str1[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
-            nxamf_gamepad_state_stringify(&(case_.expected_out), str0, NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX);
-            nxamf_gamepad_state_stringify(&actual_out, str1, NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX);
+            char str0[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
+            char str1[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
+            nthaka_gamepad_state_stringify(&(case_.expected_out), str0, NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX);
+            nthaka_gamepad_state_stringify(&actual_out, str1, NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX);
 
             fprintf(stderr, "index: %i, expected: %s, actual: %s\n", i, str0, str1);
             ret++;
@@ -126,22 +126,22 @@ static int test_clear(void)
 
     mock_protocol_t ph;
     mock_protocol_init(&ph);
-    nxamf_buffer_t buf;
-    assert(nxamf_buffer_init(&buf, (nxamf_protocol_handler_t *)&ph));
+    nthaka_buffer_t buf;
+    assert(nthaka_buffer_init(&buf, (nthaka_protocol_handler_t *)&ph));
 
-    nxamf_buffer_append(&buf, 0, NULL);
-    nxamf_buffer_append(&buf, 1, NULL);
-    nxamf_buffer_append(&buf, 2, NULL);
+    nthaka_buffer_append(&buf, 0, NULL);
+    nthaka_buffer_append(&buf, 1, NULL);
+    nthaka_buffer_append(&buf, 2, NULL);
 
     assert(ph.s == MOCK_STATE_FINAL);
 
-    nxamf_buffer_clear(&buf);
+    nthaka_buffer_clear(&buf);
 
     assert(ph.s == MOCK_STATE_INITIAL);
 
-    nxamf_buffer_append(&buf, 0, NULL);
-    nxamf_buffer_append(&buf, 1, NULL);
-    nxamf_buffer_append(&buf, 2, NULL);
+    nthaka_buffer_append(&buf, 0, NULL);
+    nthaka_buffer_append(&buf, 1, NULL);
+    nthaka_buffer_append(&buf, 2, NULL);
 
     assert(ph.s == MOCK_STATE_FINAL);
 

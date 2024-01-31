@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "nxamf/nxmc2.h"
+#include "nthaka/nxmc2.h"
 
 #include "util.h"
 
@@ -22,28 +22,28 @@ static bool _test_append(void)
         size_t len;
         uint8_t d;
         bool expected_ret;
-        nxamf_gamepad_state_t expected_out;
+        nthaka_gamepad_state_t expected_out;
     } test_case_t;
 
     test_case_t cases[] = {
         {.pre = (uint8_t[]){}, .len = 0, .d = 0xAB, .expected_ret = false},
         {.pre = (uint8_t[]){}, .len = 0, .d = 0x80, .expected_ret = false},
-        {.pre = (uint8_t[]){0xAB, 0, 0, 8, 128, 128, 128, 128, 0, 0}, .len = 10, .d = 0, .expected_ret = true, .expected_out = NXAMF_GAMEPAD_STATE_NEUTRAL},
-        {.pre = (uint8_t[]){0xAB, 1, 1, 8, 129, 129, 127, 127, 1, 2}, .len = 10, .d = 3, .expected_ret = true, .expected_out = {.y = NXAMF_BUTTON_PRESSED, //
-                                                                                                                                .b = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .a = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .x = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .l = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .r = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .zl = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .zr = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .minus = NXAMF_BUTTON_PRESSED,
-                                                                                                                                .plus = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .l_click = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .r_click = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .home = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .capture = NXAMF_BUTTON_RELEASED,
-                                                                                                                                .hat = NXAMF_HAT_NEUTRAL,
+        {.pre = (uint8_t[]){0xAB, 0, 0, 8, 128, 128, 128, 128, 0, 0}, .len = 10, .d = 0, .expected_ret = true, .expected_out = NTHAKA_GAMEPAD_STATE_NEUTRAL},
+        {.pre = (uint8_t[]){0xAB, 1, 1, 8, 129, 129, 127, 127, 1, 2}, .len = 10, .d = 3, .expected_ret = true, .expected_out = {.y = NTHAKA_BUTTON_PRESSED, //
+                                                                                                                                .b = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .a = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .x = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .l = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .r = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .zl = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .zr = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .minus = NTHAKA_BUTTON_PRESSED,
+                                                                                                                                .plus = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .l_click = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .r_click = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .home = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .capture = NTHAKA_BUTTON_RELEASED,
+                                                                                                                                .hat = NTHAKA_HAT_NEUTRAL,
                                                                                                                                 .l_stick = {.x = 129, .y = 129},
                                                                                                                                 .r_stick = {.x = 127, .y = 127},
                                                                                                                                 .extension = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
@@ -53,8 +53,8 @@ static bool _test_append(void)
     {
         nxmc2_buffer_t buf_;
         nxmc2_buffer_init(&buf_);
-        nxamf_buffer_interface_t *buf = (nxamf_buffer_interface_t *)&buf_;
-        nxamf_gamepad_state_t actual;
+        nthaka_buffer_interface_t *buf = (nthaka_buffer_interface_t *)&buf_;
+        nthaka_gamepad_state_t actual;
 
         for (size_t j = 0; j < cases[i].len; j++)
         {
@@ -67,16 +67,16 @@ static bool _test_append(void)
             fprintf(stderr, "[_test_append] Test failed at index %d.\n", i);
             return false;
         }
-        if (ret && !nxamf_gamepad_state_equals(&(cases[i].expected_out), &actual))
+        if (ret && !nthaka_gamepad_state_equals(&(cases[i].expected_out), &actual))
         {
             fprintf(stderr, "[_test_append] Test failed at index %d.\n", i);
 
-            char str[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
+            char str[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
             size_t len = sizeof(str) / sizeof(char);
-            nxamf_gamepad_state_stringify(&(cases[i].expected_out), str, len);
+            nthaka_gamepad_state_stringify(&(cases[i].expected_out), str, len);
             fprintf(stderr, "expected: %s\n", str);
 
-            nxamf_gamepad_state_stringify(&actual, str, len);
+            nthaka_gamepad_state_stringify(&actual, str, len);
             fprintf(stderr, "actual  : %s\n", str);
 
             return false;
@@ -92,51 +92,51 @@ static bool _test_append(void)
 //     {
 //         uint8_t *seq;
 //         size_t len;
-//         nxamf_gamepad_state_t expected;
+//         nthaka_gamepad_state_t expected;
 //     } test_case_t;
 
 //     test_case_t cases[] = {{.seq = (uint8_t[]){0xABU, 0x01U, 0x20U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x00U, 0x00U, 0x00U},
 //                             .len = 11,
-//                             .expected = {.y = NXAMF_BUTTON_PRESSED,
-//                                          .b = NXAMF_BUTTON_RELEASED,
-//                                          .a = NXAMF_BUTTON_RELEASED,
-//                                          .x = NXAMF_BUTTON_RELEASED,
-//                                          .l = NXAMF_BUTTON_RELEASED,
-//                                          .r = NXAMF_BUTTON_RELEASED,
-//                                          .zl = NXAMF_BUTTON_RELEASED,
-//                                          .zr = NXAMF_BUTTON_RELEASED,
-//                                          .minus = NXAMF_BUTTON_RELEASED,
-//                                          .plus = NXAMF_BUTTON_RELEASED,
-//                                          .l_click = NXAMF_BUTTON_RELEASED,
-//                                          .r_click = NXAMF_BUTTON_RELEASED,
-//                                          .home = NXAMF_BUTTON_RELEASED,
-//                                          .capture = NXAMF_BUTTON_PRESSED,
-//                                          .hat = NXAMF_HAT_NEUTRAL,
-//                                          .l_stick = {.x = NXAMF_STICK_NEUTRAL,
-//                                                      .y = NXAMF_STICK_NEUTRAL},
-//                                          .r_stick = {.x = NXAMF_STICK_NEUTRAL,
-//                                                      .y = NXAMF_STICK_NEUTRAL},
+//                             .expected = {.y = NTHAKA_BUTTON_PRESSED,
+//                                          .b = NTHAKA_BUTTON_RELEASED,
+//                                          .a = NTHAKA_BUTTON_RELEASED,
+//                                          .x = NTHAKA_BUTTON_RELEASED,
+//                                          .l = NTHAKA_BUTTON_RELEASED,
+//                                          .r = NTHAKA_BUTTON_RELEASED,
+//                                          .zl = NTHAKA_BUTTON_RELEASED,
+//                                          .zr = NTHAKA_BUTTON_RELEASED,
+//                                          .minus = NTHAKA_BUTTON_RELEASED,
+//                                          .plus = NTHAKA_BUTTON_RELEASED,
+//                                          .l_click = NTHAKA_BUTTON_RELEASED,
+//                                          .r_click = NTHAKA_BUTTON_RELEASED,
+//                                          .home = NTHAKA_BUTTON_RELEASED,
+//                                          .capture = NTHAKA_BUTTON_PRESSED,
+//                                          .hat = NTHAKA_HAT_NEUTRAL,
+//                                          .l_stick = {.x = NTHAKA_STICK_NEUTRAL,
+//                                                      .y = NTHAKA_STICK_NEUTRAL},
+//                                          .r_stick = {.x = NTHAKA_STICK_NEUTRAL,
+//                                                      .y = NTHAKA_STICK_NEUTRAL},
 //                                          .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
 //                            {.seq = (uint8_t[]){0xABU, 0x00U, 0x00U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x01U, 0x02U, 0x03U},
 //                             .len = 11,
 //                             .expected =
 //                            {.seq = (uint8_t[]){0xABU, 0x00U, 0x00U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x01U, 0x02U, 0x03U, /**/ 0xABU, 0x00U, 0x00U, 0x08U, 0x80U, 0x80U, 0x80U, 0x80U, 0x00U, 0x00U, 0x00U},
 //                             .len = 22,
-//                             .expected = NXAMF_GAMEPAD_STATE_NEUTRAL}};
+//                             .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL}};
 //     size_t length = sizeof(cases) / sizeof(test_case_t);
 
 //     for (size_t i = 0; i < length; i++)
 //     {
 //         nxmc2_buffer_t buf_;
 //         nxmc2_buffer_init(&buf_);
-//         nxamf_buffer_interface_t *buf = (nxamf_buffer_interface_t *)&buf_;
-//         nxamf_gamepad_state_t actual;
+//         nthaka_buffer_interface_t *buf = (nthaka_buffer_interface_t *)&buf_;
+//         nthaka_gamepad_state_t actual;
 
 //         for (size_t j = 0; j < cases[i].len; j++)
 //         {
 //             buf->append(buf, (uint8_t)cases[i].seq[j]);
 //         }
-//         if (!buf->deserialize(buf, &actual) || !nxamf_gamepad_state_equals(&(cases[i].expected), &actual))
+//         if (!buf->deserialize(buf, &actual) || !nthaka_gamepad_state_equals(&(cases[i].expected), &actual))
 //         {
 //             fprintf(stderr, "[_test_deserialize] Test failed at index %d.\n", i);
 //             return false;
@@ -150,27 +150,27 @@ static bool _test_clear(void)
 {
     nxmc2_buffer_t buf_;
     nxmc2_buffer_init(&buf_);
-    nxamf_buffer_interface_t *buf = (nxamf_buffer_interface_t *)&buf_;
+    nthaka_buffer_interface_t *buf = (nthaka_buffer_interface_t *)&buf_;
 
-    nxamf_gamepad_state_t expected = {.y = NXAMF_BUTTON_PRESSED,
-                                      .b = NXAMF_BUTTON_RELEASED,
-                                      .a = NXAMF_BUTTON_RELEASED,
-                                      .x = NXAMF_BUTTON_RELEASED,
-                                      .l = NXAMF_BUTTON_RELEASED,
-                                      .r = NXAMF_BUTTON_RELEASED,
-                                      .zl = NXAMF_BUTTON_RELEASED,
-                                      .zr = NXAMF_BUTTON_RELEASED,
-                                      .minus = NXAMF_BUTTON_RELEASED,
-                                      .plus = NXAMF_BUTTON_RELEASED,
-                                      .l_click = NXAMF_BUTTON_RELEASED,
-                                      .r_click = NXAMF_BUTTON_RELEASED,
-                                      .home = NXAMF_BUTTON_RELEASED,
-                                      .capture = NXAMF_BUTTON_RELEASED,
-                                      .hat = NXAMF_HAT_NEUTRAL,
-                                      .l_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                      .r_stick = {.x = NXAMF_STICK_NEUTRAL, .y = NXAMF_STICK_NEUTRAL},
-                                      .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-    nxamf_gamepad_state_t actual;
+    nthaka_gamepad_state_t expected = {.y = NTHAKA_BUTTON_PRESSED,
+                                       .b = NTHAKA_BUTTON_RELEASED,
+                                       .a = NTHAKA_BUTTON_RELEASED,
+                                       .x = NTHAKA_BUTTON_RELEASED,
+                                       .l = NTHAKA_BUTTON_RELEASED,
+                                       .r = NTHAKA_BUTTON_RELEASED,
+                                       .zl = NTHAKA_BUTTON_RELEASED,
+                                       .zr = NTHAKA_BUTTON_RELEASED,
+                                       .minus = NTHAKA_BUTTON_RELEASED,
+                                       .plus = NTHAKA_BUTTON_RELEASED,
+                                       .l_click = NTHAKA_BUTTON_RELEASED,
+                                       .r_click = NTHAKA_BUTTON_RELEASED,
+                                       .home = NTHAKA_BUTTON_RELEASED,
+                                       .capture = NTHAKA_BUTTON_RELEASED,
+                                       .hat = NTHAKA_HAT_NEUTRAL,
+                                       .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                       .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                       .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    nthaka_gamepad_state_t actual;
 
     buf->clear(buf);
 
@@ -186,7 +186,7 @@ static bool _test_clear(void)
     buf->append(buf, 0, NULL);
     bool ret = buf->append(buf, 0, &actual);
 
-    if (!ret || !nxamf_gamepad_state_equals(&expected, &actual))
+    if (!ret || !nthaka_gamepad_state_equals(&expected, &actual))
     {
         fprintf(stderr, "[_test_clear] Test failed.\n");
         return false;

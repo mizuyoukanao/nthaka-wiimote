@@ -1,13 +1,13 @@
-#include "nxamf/nxmc2.h"
+#include "nthaka/nxmc2.h"
 
 #include <assert.h>
 
 static const uint8_t _HEADER = 0xAB;
 static const uint8_t _HAT_VALUE_MAX = 8;
 
-static nxamf_gamepad_state_t _;
+static nthaka_gamepad_state_t _;
 
-static bool _deserialize(nxmc2_buffer_t *buf, nxamf_gamepad_state_t *out)
+static bool _deserialize(nxmc2_buffer_t *buf, nthaka_gamepad_state_t *out)
 {
     assert(buf != NULL);
 
@@ -63,7 +63,7 @@ static bool _deserialize(nxmc2_buffer_t *buf, nxamf_gamepad_state_t *out)
     return true;
 }
 
-static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
+static bool _append(nthaka_buffer_interface_t *parent, uint8_t d, nthaka_gamepad_state_t *out)
 {
     nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
 
@@ -81,7 +81,7 @@ static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_s
     return _deserialize(buf, out);
 }
 
-static void _clear(nxamf_buffer_interface_t *parent)
+static void _clear(nthaka_buffer_interface_t *parent)
 {
     nxmc2_buffer_t *buf = (nxmc2_buffer_t *)parent;
     assert(buf != NULL);

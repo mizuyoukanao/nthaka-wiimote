@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-static nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
+static nthaka_buffer_state_t _update(nthaka_protocol_handler_t *parent, uint8_t d)
 {
     mock_protocol_t *ph = (mock_protocol_t *)parent;
     switch (ph->s)
@@ -11,7 +11,7 @@ static nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
         if (d == 0)
         {
             ph->s = MOCK_STATE_0;
-            return NXAMF_BUFFER_PENDING;
+            return NTHAKA_BUFFER_PENDING;
         }
         break;
 
@@ -19,7 +19,7 @@ static nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
         if (d == 1)
         {
             ph->s = MOCK_STATE_1;
-            return NXAMF_BUFFER_PENDING;
+            return NTHAKA_BUFFER_PENDING;
         }
         break;
 
@@ -27,7 +27,7 @@ static nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
         if (d == 2)
         {
             ph->s = MOCK_STATE_FINAL;
-            return NXAMF_BUFFER_ACCEPTED;
+            return NTHAKA_BUFFER_ACCEPTED;
         }
         break;
 
@@ -35,9 +35,9 @@ static nxamf_buffer_state_t _update(nxamf_protocol_handler_t *parent, uint8_t d)
     default:
         break;
     }
-    return NXAMF_BUFFER_REJECTED;
+    return NTHAKA_BUFFER_REJECTED;
 }
-static bool _deserialize(nxamf_protocol_handler_t *parent, uint8_t buf[], size_t size, nxamf_gamepad_state_t *out)
+static bool _deserialize(nthaka_protocol_handler_t *parent, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out)
 {
     assert(buf[0] == 0);
     assert(buf[1] == 1);
@@ -46,14 +46,14 @@ static bool _deserialize(nxamf_protocol_handler_t *parent, uint8_t buf[], size_t
 
     if (out != NULL)
     {
-        nxamf_gamepad_state_copy(out, &NXAMF_GAMEPAD_STATE_NEUTRAL);
+        nthaka_gamepad_state_copy(out, &NTHAKA_GAMEPAD_STATE_NEUTRAL);
         out->extension[0] = buf[0];
         out->extension[1] = buf[1];
         out->extension[2] = buf[2];
     }
     return true;
 }
-static void _reset(nxamf_protocol_handler_t *parent)
+static void _reset(nthaka_protocol_handler_t *parent)
 {
     mock_protocol_t *ph = (mock_protocol_t *)parent;
     ph->s = MOCK_STATE_INITIAL;

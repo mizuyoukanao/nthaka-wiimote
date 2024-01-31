@@ -1,4 +1,4 @@
-#include "nxamf/pokecon.h"
+#include "nthaka/pokecon.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -1244,7 +1244,7 @@ static pokecon_buffer_state_t _next(pokecon_buffer_state_t s, char c)
     }
 }
 
-static void _clear(nxamf_buffer_interface_t *parent)
+static void _clear(nthaka_buffer_interface_t *parent)
 {
     pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
     assert(buf != NULL);
@@ -1256,7 +1256,7 @@ static void _clear(nxamf_buffer_interface_t *parent)
 static const int _MIN_VALID_LENGTH = 4;
 static const int _MAX_VALID_LENGTH = 30;
 
-static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
+static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state_t *out)
 {
     pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
     assert(buf != NULL);
@@ -1270,7 +1270,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
 
     if (buf->cached)
     {
-        nxamf_gamepad_state_copy(out, &buf->cache);
+        nthaka_gamepad_state_copy(out, &buf->cache);
         return true;
     }
 
@@ -1283,7 +1283,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     str[buf->len] = '\0';
 
     uint16_t btns = 0b0000000000000000U;
-    uint8_t hat = NXAMF_HAT_NEUTRAL;
+    uint8_t hat = NTHAKA_HAT_NEUTRAL;
     // sscanf doesn't care whether the "0x" prefix is present or not
     sscanf(str, "%hx %hhx", &btns, &hat);
 
@@ -1305,32 +1305,32 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     switch (hat)
     {
     case 0:
-        out->hat = NXAMF_HAT_UP;
+        out->hat = NTHAKA_HAT_UP;
         break;
     case 1:
-        out->hat = NXAMF_HAT_UPRIGHT;
+        out->hat = NTHAKA_HAT_UPRIGHT;
         break;
     case 2:
-        out->hat = NXAMF_HAT_RIGHT;
+        out->hat = NTHAKA_HAT_RIGHT;
         break;
     case 3:
-        out->hat = NXAMF_HAT_DOWNRIGHT;
+        out->hat = NTHAKA_HAT_DOWNRIGHT;
         break;
     case 4:
-        out->hat = NXAMF_HAT_DOWN;
+        out->hat = NTHAKA_HAT_DOWN;
         break;
     case 5:
-        out->hat = NXAMF_HAT_DOWNLEFT;
+        out->hat = NTHAKA_HAT_DOWNLEFT;
         break;
     case 6:
-        out->hat = NXAMF_HAT_LEFT;
+        out->hat = NTHAKA_HAT_LEFT;
         break;
     case 7:
-        out->hat = NXAMF_HAT_UPLEFT;
+        out->hat = NTHAKA_HAT_UPLEFT;
         break;
     case 8:
     default:
-        out->hat = NXAMF_HAT_NEUTRAL;
+        out->hat = NTHAKA_HAT_NEUTRAL;
         break;
     }
 
@@ -1339,10 +1339,10 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
 
     if (update_ls && update_rs)
     {
-        uint8_t lx = NXAMF_STICK_NEUTRAL;
-        uint8_t ly = NXAMF_STICK_NEUTRAL;
-        uint8_t rx = NXAMF_STICK_NEUTRAL;
-        uint8_t ry = NXAMF_STICK_NEUTRAL;
+        uint8_t lx = NTHAKA_STICK_NEUTRAL;
+        uint8_t ly = NTHAKA_STICK_NEUTRAL;
+        uint8_t rx = NTHAKA_STICK_NEUTRAL;
+        uint8_t ry = NTHAKA_STICK_NEUTRAL;
         sscanf(str, "%*hx %*hhx %hhx %hhx %hhx %hhx", &lx, &ly, &rx, &ry);
 
         out->l_stick.x = lx;
@@ -1357,8 +1357,8 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     }
     else if (update_ls || update_rs)
     {
-        uint8_t x = NXAMF_STICK_NEUTRAL;
-        uint8_t y = NXAMF_STICK_NEUTRAL;
+        uint8_t x = NTHAKA_STICK_NEUTRAL;
+        uint8_t y = NTHAKA_STICK_NEUTRAL;
         sscanf(str, "%*hx %*hhx %hhx %hhx", &x, &y);
 
         if (update_ls)
@@ -1400,7 +1400,7 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     return true;
 }
 
-static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
+static bool _append(nthaka_buffer_interface_t *parent, uint8_t d, nthaka_gamepad_state_t *out)
 {
     pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
     assert(buf != NULL);
@@ -1443,10 +1443,10 @@ void pokecon_buffer_init(pokecon_buffer_t *buf)
     buf->len = 0;
     buf->s = POKECON_BUFFER_STATE_INITIAL;
 
-    buf->prev_l.x = NXAMF_STICK_NEUTRAL;
-    buf->prev_l.y = NXAMF_STICK_NEUTRAL;
-    buf->prev_r.x = NXAMF_STICK_NEUTRAL;
-    buf->prev_r.y = NXAMF_STICK_NEUTRAL;
+    buf->prev_l.x = NTHAKA_STICK_NEUTRAL;
+    buf->prev_l.y = NTHAKA_STICK_NEUTRAL;
+    buf->prev_r.x = NTHAKA_STICK_NEUTRAL;
+    buf->prev_r.y = NTHAKA_STICK_NEUTRAL;
 
     buf->cached = false;
 }
