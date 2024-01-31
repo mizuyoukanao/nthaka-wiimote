@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "mock_protocol.h"
+#include "mock_format.h"
 #include "util.h"
 
 static int test_init(void)
@@ -86,8 +86,8 @@ static int test_append(void)
     {
         test_case_t case_ = cases[i];
 
-        mock_protocol_t fmt;
-        mock_protocol_init(&fmt);
+        mock_format_t fmt;
+        mock_format_init(&fmt);
         nthaka_buffer_t buf;
         assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
         nthaka_gamepad_state_t actual_out;
@@ -122,8 +122,8 @@ static int test_clear(void)
 {
     int ret = 0;
 
-    mock_protocol_t fmt;
-    mock_protocol_init(&fmt);
+    mock_format_t fmt;
+    mock_format_init(&fmt);
     nthaka_buffer_t buf;
     assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
 

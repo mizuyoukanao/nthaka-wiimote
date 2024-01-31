@@ -1,5 +1,5 @@
-#ifndef TEST_MOCK_PROTOCOL_H_
-#define TEST_MOCK_PROTOCOL_H_
+#ifndef TEST_MOCK_FORMAT_H_
+#define TEST_MOCK_FORMAT_H_
 
 #include "nthaka.h"
 
@@ -14,12 +14,12 @@ typedef enum mock_state_t
 /**
  * It accepts only {0, 1, 2}.
  */
-typedef struct mock_protocol_t
+typedef struct mock_format_t
 {
     nthaka_format_t parent;
     mock_state_t s;
-} mock_protocol_t;
+} mock_format_t;
 
-void mock_protocol_init(mock_protocol_t *fmt);
+void mock_format_init(mock_format_t *fmt);
 
-#endif // TEST_MOCK_PROTOCOL_H_
+#endif // TEST_MOCK_FORMAT_H_

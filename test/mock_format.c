@@ -1,10 +1,10 @@
-#include "mock_protocol.h"
+#include "mock_format.h"
 
 #include <assert.h>
 
 static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
-    mock_protocol_t *fmt = (mock_protocol_t *)parent;
+    mock_format_t *fmt = (mock_format_t *)parent;
     switch (fmt->s)
     {
     case MOCK_STATE_INITIAL:
@@ -55,11 +55,11 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t buf[], size_t size, nt
 }
 static void _reset(nthaka_format_t *parent)
 {
-    mock_protocol_t *fmt = (mock_protocol_t *)parent;
+    mock_format_t *fmt = (mock_format_t *)parent;
     fmt->s = MOCK_STATE_INITIAL;
 }
 
-void mock_protocol_init(mock_protocol_t *fmt)
+void mock_format_init(mock_format_t *fmt)
 {
     fmt->parent.update = _update;
     fmt->parent.deserialize = _deserialize;

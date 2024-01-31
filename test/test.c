@@ -14,8 +14,8 @@ int main(void)
 {
     int ret = 0;
 
-    test_t tests[] = {{.name = "test_buffer", .test = test_buffer},
-                      {.name = "test_nxmc2", .test = test_nxmc2}};
+    test_t tests[] = {TEST(test_buffer),
+                      TEST(test_nxmc2)};
 
     for (size_t i = 0; i < SIZE_OF(tests); i++)
     {
