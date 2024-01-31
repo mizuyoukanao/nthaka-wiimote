@@ -1,10 +1,10 @@
-#include "nxamf.h"
+#include "nthaka.h"
 
 #include <assert.h>
 
-static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_state_t *out)
+static bool _append(nthaka_buffer_interface_t *parent, uint8_t d, nthaka_gamepad_state_t *out)
 {
-    nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
+    nthaka_multi_buffer_manager_t *buf = (nthaka_multi_buffer_manager_t *)parent;
     assert(buf != NULL);
 
     for (size_t i = 0; i < buf->len; i++)
@@ -15,14 +15,14 @@ static bool _append(nxamf_buffer_interface_t *parent, uint8_t d, nxamf_gamepad_s
     return true;
 }
 
-static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t *out)
+static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state_t *out)
 {
-    nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
+    nthaka_multi_buffer_manager_t *buf = (nthaka_multi_buffer_manager_t *)parent;
     assert(buf != NULL);
 
     for (size_t i = 0; i < buf->len; i++)
     {
-        if (false/*buf->bufs[i]->deserialize(buf->bufs[i], out)*/)
+        if (false /*buf->bufs[i]->deserialize(buf->bufs[i], out)*/)
         {
             // Clear other buffers
             for (size_t j = 0; j < buf->len; j++)
@@ -42,9 +42,9 @@ static bool _deserialize(nxamf_buffer_interface_t *parent, nxamf_gamepad_state_t
     return false;
 }
 
-static void _clear(nxamf_buffer_interface_t *parent)
+static void _clear(nthaka_buffer_interface_t *parent)
 {
-    nxamf_multi_buffer_manager_t *buf = (nxamf_multi_buffer_manager_t *)parent;
+    nthaka_multi_buffer_manager_t *buf = (nthaka_multi_buffer_manager_t *)parent;
     assert(buf != NULL);
 
     for (size_t i = 0; i < buf->len; i++)
@@ -53,7 +53,7 @@ static void _clear(nxamf_buffer_interface_t *parent)
     }
 }
 
-void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_buffer_interface_t **bufs, size_t len)
+void nthaka_multi_buffer_manager_init(nthaka_multi_buffer_manager_t *buf, nthaka_buffer_interface_t **bufs, size_t len)
 {
     assert(buf != NULL);
     assert(bufs != NULL);
@@ -72,7 +72,7 @@ void nxamf_multi_buffer_manager_init(nxamf_multi_buffer_manager_t *buf, nxamf_bu
     buf->last_deserialized_index = SIZE_MAX;
 }
 
-size_t nxamf_multi_buffer_manager_get_last_deserialized_index(nxamf_multi_buffer_manager_t *buf)
+size_t nthaka_multi_buffer_manager_get_last_deserialized_index(nthaka_multi_buffer_manager_t *buf)
 {
     assert(buf != NULL);
     return buf->last_deserialized_index;

@@ -1,12 +1,12 @@
-#ifndef NXAMF_POKECON_H_
-#define NXAMF_POKECON_H_
+#ifndef NTHAKA_POKECON_H_
+#define NTHAKA_POKECON_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-#include "../nxamf.h"
+#include "../nthaka.h"
 
     typedef enum pokecon_buffer_state_t
     {
@@ -78,17 +78,17 @@ extern "C"
 
     typedef struct pokecon_buffer_t
     {
-        nxamf_buffer_interface_t parent;
+        nthaka_buffer_interface_t parent;
 
         uint8_t buf[POKECON_BUFFER_LENGTH_MAX];
         size_t len;
         pokecon_buffer_state_t s;
 
-        nxamf_stick_t prev_l;
-        nxamf_stick_t prev_r;
+        nthaka_stick_t prev_l;
+        nthaka_stick_t prev_r;
 
         bool cached;
-        nxamf_gamepad_state_t cache;
+        nthaka_gamepad_state_t cache;
     } pokecon_buffer_t;
 
     void pokecon_buffer_init(pokecon_buffer_t *buf);
@@ -97,4 +97,4 @@ extern "C"
 }
 #endif
 
-#endif // NXAMF_POKECON_H_
+#endif // NTHAKA_POKECON_H_

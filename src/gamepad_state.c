@@ -1,8 +1,8 @@
-#include "nxamf.h"
+#include "nthaka.h"
 
 #include <stdio.h>
 
-void nxamf_gamepad_state_copy(nxamf_gamepad_state_t *dst, nxamf_gamepad_state_t *src)
+void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state_t *src)
 {
     dst->y = src->y;
     dst->b = src->b;
@@ -31,47 +31,47 @@ void nxamf_gamepad_state_copy(nxamf_gamepad_state_t *dst, nxamf_gamepad_state_t 
     }
 }
 
-static const char *_btn(nxamf_button_t btn)
+static const char *_btn(nthaka_button_t btn)
 {
     switch (btn)
     {
-    case NXAMF_BUTTON_RELEASED:
-        return "NXAMF_BUTTON_RELEASED";
-    case NXAMF_BUTTON_PRESSED:
-        return "NXAMF_BUTTON_PRESSED";
+    case NTHAKA_BUTTON_RELEASED:
+        return "NTHAKA_BUTTON_RELEASED";
+    case NTHAKA_BUTTON_PRESSED:
+        return "NTHAKA_BUTTON_PRESSED";
     default:
         return "UNKNOWN";
     }
 }
 
-static const char *_hat(nxamf_hat_t hat)
+static const char *_hat(nthaka_hat_t hat)
 {
     switch (hat)
     {
-    case NXAMF_HAT_UP:
-        return "NXAMF_HAT_UP";
-    case NXAMF_HAT_UPRIGHT:
-        return "NXAMF_HAT_UPRIGHT";
-    case NXAMF_HAT_RIGHT:
-        return "NXAMF_HAT_RIGHT";
-    case NXAMF_HAT_DOWNRIGHT:
-        return "NXAMF_HAT_DOWNRIGHT";
-    case NXAMF_HAT_DOWN:
-        return "NXAMF_HAT_DOWN";
-    case NXAMF_HAT_DOWNLEFT:
-        return "NXAMF_HAT_DOWNLEFT";
-    case NXAMF_HAT_LEFT:
-        return "NXAMF_HAT_LEFT";
-    case NXAMF_HAT_UPLEFT:
-        return "NXAMF_HAT_UPLEFT";
-    case NXAMF_HAT_NEUTRAL:
-        return "NXAMF_HAT_NEUTRAL";
+    case NTHAKA_HAT_UP:
+        return "NTHAKA_HAT_UP";
+    case NTHAKA_HAT_UPRIGHT:
+        return "NTHAKA_HAT_UPRIGHT";
+    case NTHAKA_HAT_RIGHT:
+        return "NTHAKA_HAT_RIGHT";
+    case NTHAKA_HAT_DOWNRIGHT:
+        return "NTHAKA_HAT_DOWNRIGHT";
+    case NTHAKA_HAT_DOWN:
+        return "NTHAKA_HAT_DOWN";
+    case NTHAKA_HAT_DOWNLEFT:
+        return "NTHAKA_HAT_DOWNLEFT";
+    case NTHAKA_HAT_LEFT:
+        return "NTHAKA_HAT_LEFT";
+    case NTHAKA_HAT_UPLEFT:
+        return "NTHAKA_HAT_UPLEFT";
+    case NTHAKA_HAT_NEUTRAL:
+        return "NTHAKA_HAT_NEUTRAL";
     default:
         return "UNKNOWN";
     }
 }
 
-void nxamf_gamepad_state_stringify(nxamf_gamepad_state_t *s, char *out, size_t len)
+void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t len)
 {
     snprintf(out, len, "{.y = %s, "
                        ".b = %s, "

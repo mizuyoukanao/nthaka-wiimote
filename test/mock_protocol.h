@@ -1,7 +1,7 @@
 #ifndef TEST_MOCK_PROTOCOL_H_
 #define TEST_MOCK_PROTOCOL_H_
 
-#include "nxamf.h"
+#include "nthaka.h"
 
 typedef enum mock_state_t
 {
@@ -16,7 +16,7 @@ typedef enum mock_state_t
  */
 typedef struct mock_protocol_t
 {
-    nxamf_protocol_handler_t parent;
+    nthaka_protocol_handler_t parent;
     mock_state_t s;
 } mock_protocol_t;
 
