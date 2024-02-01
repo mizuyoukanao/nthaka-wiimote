@@ -4,8 +4,6 @@
 
 #include "util.h"
 
-// #include "nxmc2_buffer.h"
-// #include "orca_buffer.h"
 // #include "pokecon_buffer.h"
 // #include "multi_buffer_manager.h"
 
