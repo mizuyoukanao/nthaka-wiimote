@@ -1,7 +1,7 @@
 #include "nthaka/nxmc2.h"
 #include "../internal.h"
 
-nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
+static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
     nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
     if (fmt == NULL)
@@ -50,7 +50,7 @@ nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
     return NTHAKA_BUFFER_REJECTED;
 }
 
-void _reset(nthaka_format_t *parent)
+static void _reset(nthaka_format_t *parent)
 {
     nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
     if (fmt == NULL)
@@ -61,7 +61,7 @@ void _reset(nthaka_format_t *parent)
     fmt->_s = NXMC2_FORMAT_INITIAL;
 }
 
-bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
+static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
     if (fmt == NULL || fmt->_s != NXMC2_FORMAT_FINAL)

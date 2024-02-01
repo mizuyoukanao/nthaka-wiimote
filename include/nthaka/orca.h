@@ -22,6 +22,24 @@ extern "C"
 
     void orca_buffer_init(orca_buffer_t *buf);
 
+    typedef enum orca_format_state_t
+    {
+        ORCA_FORMAT_INITIAL,
+        ORCA_FORMAT_0x80,
+        ORCA_FORMAT_0x80_0x00,
+        ORCA_FORMAT_FINAL
+    } orca_format_state_t;
+
+    typedef struct orca_format_t
+    {
+        nthaka_format_t parent;
+
+        orca_format_state_t _s;
+        nthaka_gamepad_state_t _prev;
+    } orca_format_t;
+
+    bool orca_format_init(orca_format_t *fmt);
+
 #ifdef __cplusplus
 }
 #endif

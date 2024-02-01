@@ -1,5 +1,6 @@
 #include "buffer.h"
 #include "nxmc2.h"
+#include "orca.h"
 
 #include "util.h"
 
@@ -15,15 +16,13 @@ int main(void)
     int ret = 0;
 
     test_t tests[] = {TEST(test_buffer),
-                      TEST(test_nxmc2)};
+                      TEST(test_nxmc2),
+                      TEST(test_orca)};
 
     for (size_t i = 0; i < SIZE_OF(tests); i++)
     {
         printf("%s:\n", tests[i].name);
-        if (tests[i].test() != 0)
-        {
-            ret++;
-        }
+        ret += tests[i].test();
         printf("\n");
     }
 
