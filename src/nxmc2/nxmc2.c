@@ -1,6 +1,10 @@
 #include "nthaka/nxmc2.h"
 #include "../internal.h"
 
+static const uint8_t _HEADER = 0xAB;
+static const uint8_t _HAT_MAX = 8;
+static const uint8_t _BTNS_MSB_MAX = 0x3F;
+
 static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
     nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
@@ -12,19 +16,19 @@ static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
     switch (fmt->_s)
     {
     case NXMC2_FORMAT_INITIAL:
-        if (d != 0xAB)
+        if (d != _HEADER)
             break;
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_FORMAT_0xAB_0x00:
-        if (0x3F < d)
+        if (_BTNS_MSB_MAX < d)
             break;
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
 
     case NXMC2_FORMAT_0xAB_0x00_0x00:
-        if (0x08 < d)
+        if (_HAT_MAX < d)
             break;
         fmt->_s++;
         return NTHAKA_BUFFER_PENDING;
