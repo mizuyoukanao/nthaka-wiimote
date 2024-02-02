@@ -8,7 +8,7 @@ extern "C"
 
 #include "../nthaka.h"
 
-    typedef enum pokecon_buffer_state_t
+    typedef enum pokecon_format_state_t
     {
         POKECON_BUFFER_STATE_INITIAL,
         POKECON_BUFFER_STATE_0,
@@ -72,7 +72,9 @@ extern "C"
         POKECON_BUFFER_STATE_3_0_0_0x,
         POKECON_BUFFER_STATE_0_0CR,
         POKECON_BUFFER_STATE_FINAL,
-    } pokecon_buffer_state_t;
+    } pokecon_format_state_t;
+
+    pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char c);
 
 #define POKECON_BUFFER_LENGTH_MAX 30
 
@@ -82,7 +84,7 @@ extern "C"
 
         uint8_t buf[POKECON_BUFFER_LENGTH_MAX];
         size_t len;
-        pokecon_buffer_state_t s;
+        pokecon_format_state_t s;
 
         nthaka_stick_t prev_l;
         nthaka_stick_t prev_r;
@@ -92,6 +94,17 @@ extern "C"
     } pokecon_buffer_t;
 
     void pokecon_buffer_init(pokecon_buffer_t *buf);
+
+    typedef struct pokecon_format_t
+    {
+        nthaka_format_t parent;
+
+        pokecon_format_state_t _s;
+        nthaka_stick_t _prev_l;
+        nthaka_stick_t _prev_r;
+    } pokecon_format_t;
+
+    bool pokecon_format_init(pokecon_format_t *fmt);
 
 #ifdef __cplusplus
 }

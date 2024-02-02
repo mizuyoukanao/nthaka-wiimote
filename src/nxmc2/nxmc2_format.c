@@ -68,7 +68,7 @@ static void _reset(nthaka_format_t *parent)
 static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
-    if (fmt == NULL || fmt->_s != NXMC2_FORMAT_FINAL)
+    if (fmt == NULL || buf == NULL || fmt->_s != NXMC2_FORMAT_FINAL)
     {
         return false;
     }

@@ -72,7 +72,7 @@ static nthaka_gamepad_state_t _;
 static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     orca_format_t *fmt = (orca_format_t *)parent;
-    if (fmt == NULL || fmt->_s != ORCA_FORMAT_FINAL)
+    if (fmt == NULL || buf == NULL || fmt->_s != ORCA_FORMAT_FINAL)
     {
         return false;
     }

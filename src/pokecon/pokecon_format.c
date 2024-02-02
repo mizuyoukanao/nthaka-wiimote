@@ -1,9 +1,10 @@
 #include "nthaka/pokecon.h"
+#include "../internal.h"
 
 #include <assert.h>
 #include <stdio.h>
 
-static pokecon_buffer_state_t _next(pokecon_buffer_state_t s, char c)
+pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char c)
 {
     switch (s)
     {
@@ -1244,63 +1245,54 @@ static pokecon_buffer_state_t _next(pokecon_buffer_state_t s, char c)
     }
 }
 
-static void _clear(nthaka_buffer_interface_t *parent)
+static const int _VALID_LENGTH_MIN = 4;
+static const int _VALID_LENGTH_MAX = 30;
+
+static nthaka_gamepad_state_t _;
+
+static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
-    pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
-    assert(buf != NULL);
-
-    buf->len = 0;
-    buf->s = POKECON_BUFFER_STATE_INITIAL;
-}
-
-static const int _MIN_VALID_LENGTH = 4;
-static const int _MAX_VALID_LENGTH = 30;
-
-static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state_t *out)
-{
-    pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
-    assert(buf != NULL);
-    assert(out != NULL);
-
-    if (buf->s != POKECON_BUFFER_STATE_FINAL)
+    pokecon_format_t *fmt = (pokecon_format_t *)parent;
+    if (fmt == NULL || buf == NULL || fmt->_s != POKECON_BUFFER_STATE_FINAL)
     {
         return false;
     }
-    assert(_MIN_VALID_LENGTH <= buf->len && buf->len <= _MAX_VALID_LENGTH);
+    assert(_VALID_LENGTH_MIN <= size && size <= _VALID_LENGTH_MAX);
 
-    if (buf->cached)
+    if (out == NULL)
     {
-        nthaka_gamepad_state_copy(out, &buf->cache);
-        return true;
+        out = &_;
     }
 
     // Copy buf into a new char[]
-    char str[buf->len + 1];
-    for (size_t i = 0; i < buf->len; i++)
+    char str[size + 1];
+    for (size_t i = 0; i < size; i++)
     {
-        str[i] = (char)buf->buf[i];
+        str[i] = (char)buf[i];
     }
-    str[buf->len] = '\0';
+    str[size] = '\0';
 
-    uint16_t btns = 0b0000000000000000U;
+    uint16_t btns = 0x0000;
     uint8_t hat = NTHAKA_HAT_NEUTRAL;
     // sscanf doesn't care whether the "0x" prefix is present or not
     sscanf(str, "%hx %hhx", &btns, &hat);
 
-    out->y = (btns & 0b0000000000000100U) >> 2;
-    out->b = (btns & 0b0000000000001000U) >> 3;
-    out->a = (btns & 0b0000000000010000U) >> 4;
-    out->x = (btns & 0b0000000000100000U) >> 5;
-    out->l = (btns & 0b0000000001000000U) >> 6;
-    out->r = (btns & 0b0000000010000000U) >> 7;
-    out->zl = (btns & 0b0000000100000000U) >> 8;
-    out->zr = (btns & 0b0000001000000000U) >> 9;
-    out->minus = (btns & 0b0000010000000000U) >> 10;
-    out->plus = (btns & 0b0000100000000000U) >> 11;
-    out->l_click = (btns & 0b0001000000000000U) >> 12;
-    out->r_click = (btns & 0b0010000000000000U) >> 13;
-    out->home = (btns & 0b0100000000000000U) >> 14;
-    out->capture = (btns & 0b1000000000000000U) >> 15;
+    bool update_rs = nthaka_internal_bit(btns, 0) == 1;
+    bool update_ls = nthaka_internal_bit(btns, 1) == 1;
+    out->y = nthaka_internal_bit(btns, 2);
+    out->b = nthaka_internal_bit(btns, 3);
+    out->a = nthaka_internal_bit(btns, 4);
+    out->x = nthaka_internal_bit(btns, 5);
+    out->l = nthaka_internal_bit(btns, 6);
+    out->r = nthaka_internal_bit(btns, 7);
+    out->zl = nthaka_internal_bit(btns, 8);
+    out->zr = nthaka_internal_bit(btns, 9);
+    out->minus = nthaka_internal_bit(btns, 10);
+    out->plus = nthaka_internal_bit(btns, 11);
+    out->l_click = nthaka_internal_bit(btns, 12);
+    out->r_click = nthaka_internal_bit(btns, 13);
+    out->home = nthaka_internal_bit(btns, 14);
+    out->capture = nthaka_internal_bit(btns, 15);
 
     switch (hat)
     {
@@ -1334,9 +1326,6 @@ static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state
         break;
     }
 
-    bool update_ls = ((btns & 0b0000000000000010U) >> 1) == 1;
-    bool update_rs = (btns & 0b0000000000000001U) == 1;
-
     if (update_ls && update_rs)
     {
         uint8_t lx = NTHAKA_STICK_NEUTRAL;
@@ -1347,13 +1336,13 @@ static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state
 
         out->l_stick.x = lx;
         out->l_stick.y = ly;
-        buf->prev_l.x = out->l_stick.x;
-        buf->prev_l.y = out->l_stick.y;
+        fmt->_prev_l.x = out->l_stick.x;
+        fmt->_prev_l.y = out->l_stick.y;
 
         out->r_stick.x = rx;
         out->r_stick.y = ry;
-        buf->prev_r.x = out->r_stick.x;
-        buf->prev_r.y = out->r_stick.y;
+        fmt->_prev_r.x = out->r_stick.x;
+        fmt->_prev_r.y = out->r_stick.y;
     }
     else if (update_ls || update_rs)
     {
@@ -1365,30 +1354,30 @@ static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state
         {
             out->l_stick.x = x;
             out->l_stick.y = y;
-            buf->prev_l.x = out->l_stick.x;
-            buf->prev_l.y = out->l_stick.y;
+            fmt->_prev_l.x = out->l_stick.x;
+            fmt->_prev_l.y = out->l_stick.y;
 
-            out->r_stick.x = buf->prev_r.x;
-            out->r_stick.y = buf->prev_r.y;
+            out->r_stick.x = fmt->_prev_r.x;
+            out->r_stick.y = fmt->_prev_r.y;
         }
         else
         {
-            out->l_stick.x = buf->prev_l.x;
-            out->l_stick.y = buf->prev_l.y;
+            out->l_stick.x = fmt->_prev_l.x;
+            out->l_stick.y = fmt->_prev_l.y;
 
             out->r_stick.x = x;
             out->r_stick.y = y;
-            buf->prev_r.x = out->r_stick.x;
-            buf->prev_r.y = out->r_stick.y;
+            fmt->_prev_r.x = out->r_stick.x;
+            fmt->_prev_r.y = out->r_stick.y;
         }
     }
     else
     {
-        out->l_stick.x = buf->prev_l.x;
-        out->l_stick.y = buf->prev_l.y;
+        out->l_stick.x = fmt->_prev_l.x;
+        out->l_stick.y = fmt->_prev_l.y;
 
-        out->r_stick.x = buf->prev_r.x;
-        out->r_stick.y = buf->prev_r.y;
+        out->r_stick.x = fmt->_prev_r.x;
+        out->r_stick.y = fmt->_prev_r.y;
     }
 
     size_t length = sizeof(out->extension) / sizeof(uint8_t);
@@ -1400,53 +1389,48 @@ static bool _deserialize(nthaka_buffer_interface_t *parent, nthaka_gamepad_state
     return true;
 }
 
-static bool _append(nthaka_buffer_interface_t *parent, uint8_t d, nthaka_gamepad_state_t *out)
+static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
 {
-    pokecon_buffer_t *buf = (pokecon_buffer_t *)parent;
-    assert(buf != NULL);
-
-    buf->cached = false;
-
-    buf->s = _next(buf->s, (char)d);
-    if (buf->s == POKECON_BUFFER_STATE_INITIAL)
+    pokecon_format_t *fmt = (pokecon_format_t *)parent;
+    if (fmt == NULL)
     {
-        // Rejected
-        if (buf->len != 0)
-        {
-            parent->clear(parent);
-            parent->append(parent, d, NULL);
-        }
+        return NTHAKA_BUFFER_REJECTED;
+    }
+
+    fmt->_s = pokecon_format_state_next(fmt->_s, (char)d);
+    return fmt->_s == POKECON_BUFFER_STATE_INITIAL ? NTHAKA_BUFFER_REJECTED
+                                                   : (fmt->_s == POKECON_BUFFER_STATE_FINAL ? NTHAKA_BUFFER_ACCEPTED
+                                                                                            : NTHAKA_BUFFER_PENDING);
+}
+
+static void _reset(nthaka_format_t *parent)
+{
+    pokecon_format_t *fmt = (pokecon_format_t *)parent;
+    if (fmt == NULL)
+    {
         return;
     }
 
-    buf->buf[buf->len] = d;
-    buf->len++;
-
-    // 例："0x0002 8 81 81\r\n0x0000 8\r\n"
-    // 使わなくてもデシリアライズして、0x81をprev_l.x, prev_l.yに入れる必要がある。
-    if (buf->s == POKECON_BUFFER_STATE_FINAL)
-    {
-        // parent->deserialize(parent, &buf->cache);
-        buf->cached = true;
-    }
-
-    return true;
+    fmt->_s = POKECON_BUFFER_STATE_INITIAL;
 }
 
-void pokecon_buffer_init(pokecon_buffer_t *buf)
+bool pokecon_format_init(pokecon_format_t *fmt)
 {
-    assert(buf != NULL);
+    if (fmt == NULL)
+    {
+        return false;
+    }
 
-    buf->parent.append = _append;
-    buf->parent.clear = _clear;
+    fmt->parent.deserialize = _deserialize;
+    fmt->parent.reset = _reset;
+    fmt->parent.update = _update;
 
-    buf->len = 0;
-    buf->s = POKECON_BUFFER_STATE_INITIAL;
+    fmt->_s = POKECON_BUFFER_STATE_INITIAL;
 
-    buf->prev_l.x = NTHAKA_STICK_NEUTRAL;
-    buf->prev_l.y = NTHAKA_STICK_NEUTRAL;
-    buf->prev_r.x = NTHAKA_STICK_NEUTRAL;
-    buf->prev_r.y = NTHAKA_STICK_NEUTRAL;
+    fmt->_prev_l.x = NTHAKA_STICK_NEUTRAL;
+    fmt->_prev_l.y = NTHAKA_STICK_NEUTRAL;
+    fmt->_prev_r.x = NTHAKA_STICK_NEUTRAL;
+    fmt->_prev_r.y = NTHAKA_STICK_NEUTRAL;
 
-    buf->cached = false;
+    return true;
 }
