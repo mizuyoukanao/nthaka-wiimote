@@ -302,7 +302,7 @@ static int test_reset(void)
 
     nthaka_format_reset(fmt);
 
-    assert(nthaka_format_update(fmt, 0x80) == NTHAKA_BUFFER_ACCEPTED);
+    assert(nthaka_format_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
 
     return ret;
 }
@@ -314,5 +314,5 @@ int test_orca(void)
                                 TEST(test_deserialize),
                                 TEST(test_hold_previous_state),
                                 TEST(test_reset)},
-                     4);
+                     5);
 }

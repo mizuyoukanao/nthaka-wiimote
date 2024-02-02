@@ -8,11 +8,11 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
 {
     switch (s)
     {
-    case POKECON_BUFFER_STATE_INITIAL:
+    case POKECON_FORMAT_STATE_INITIAL:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_0;
+            return POKECON_FORMAT_STATE_0;
         case '1':
         case '2':
         case '5':
@@ -21,42 +21,40 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_1;
+            return POKECON_FORMAT_STATE_1;
         case '3':
-            return POKECON_BUFFER_STATE_3;
+            return POKECON_FORMAT_STATE_3;
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_4;
+            return POKECON_FORMAT_STATE_4;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_7;
+            return POKECON_FORMAT_STATE_7;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0:
+    case POKECON_FORMAT_STATE_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_0_;
+            return POKECON_FORMAT_STATE_0_;
         case 'x':
-            return POKECON_BUFFER_STATE_0x;
+            return POKECON_FORMAT_STATE_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1:
+    case POKECON_FORMAT_STATE_1:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_;
+            return POKECON_FORMAT_STATE_1_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_10;
+            return POKECON_FORMAT_STATE_10;
         case '1':
         case '2':
         case '5':
@@ -65,27 +63,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_11;
+            return POKECON_FORMAT_STATE_11;
         case '3':
-            return POKECON_BUFFER_STATE_13;
+            return POKECON_FORMAT_STATE_13;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_17;
+            return POKECON_FORMAT_STATE_17;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_10:
+    case POKECON_FORMAT_STATE_10:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_0_;
+            return POKECON_FORMAT_STATE_0_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_100;
+            return POKECON_FORMAT_STATE_100;
         case '1':
         case '2':
         case '5':
@@ -94,27 +91,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_101;
+            return POKECON_FORMAT_STATE_101;
         case '3':
-            return POKECON_BUFFER_STATE_103;
+            return POKECON_FORMAT_STATE_103;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_107;
+            return POKECON_FORMAT_STATE_107;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_100:
+    case POKECON_FORMAT_STATE_100:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_0_;
+            return POKECON_FORMAT_STATE_0_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_1000;
+            return POKECON_FORMAT_STATE_1000;
         case '1':
         case '2':
         case '5':
@@ -123,63 +119,58 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_1001;
+            return POKECON_FORMAT_STATE_1001;
         case '3':
-            return POKECON_BUFFER_STATE_1003;
+            return POKECON_FORMAT_STATE_1003;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_1007;
+            return POKECON_FORMAT_STATE_1007;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1000:
+    case POKECON_FORMAT_STATE_1000:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_0_;
+            return POKECON_FORMAT_STATE_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1001:
+    case POKECON_FORMAT_STATE_1001:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_;
+            return POKECON_FORMAT_STATE_1_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1003:
+    case POKECON_FORMAT_STATE_1003:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_;
+            return POKECON_FORMAT_STATE_3_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1007:
+    case POKECON_FORMAT_STATE_1007:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_;
+            return POKECON_FORMAT_STATE_7_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_101:
+    case POKECON_FORMAT_STATE_101:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_;
+            return POKECON_FORMAT_STATE_1_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_1000;
+            return POKECON_FORMAT_STATE_1000;
         case '1':
         case '2':
         case '5':
@@ -188,27 +179,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_1001;
+            return POKECON_FORMAT_STATE_1001;
         case '3':
-            return POKECON_BUFFER_STATE_1003;
+            return POKECON_FORMAT_STATE_1003;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_1007;
+            return POKECON_FORMAT_STATE_1007;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_103:
+    case POKECON_FORMAT_STATE_103:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_;
+            return POKECON_FORMAT_STATE_3_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_1000;
+            return POKECON_FORMAT_STATE_1000;
         case '1':
         case '2':
         case '5':
@@ -217,27 +207,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_1001;
+            return POKECON_FORMAT_STATE_1001;
         case '3':
-            return POKECON_BUFFER_STATE_1003;
+            return POKECON_FORMAT_STATE_1003;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_1007;
+            return POKECON_FORMAT_STATE_1007;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_107:
+    case POKECON_FORMAT_STATE_107:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_;
+            return POKECON_FORMAT_STATE_7_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_1000;
+            return POKECON_FORMAT_STATE_1000;
         case '1':
         case '2':
         case '5':
@@ -246,27 +235,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_1001;
+            return POKECON_FORMAT_STATE_1001;
         case '3':
-            return POKECON_BUFFER_STATE_1003;
+            return POKECON_FORMAT_STATE_1003;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_1007;
+            return POKECON_FORMAT_STATE_1007;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_11:
+    case POKECON_FORMAT_STATE_11:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_;
+            return POKECON_FORMAT_STATE_1_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_100;
+            return POKECON_FORMAT_STATE_100;
         case '1':
         case '2':
         case '5':
@@ -275,27 +263,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_101;
+            return POKECON_FORMAT_STATE_101;
         case '3':
-            return POKECON_BUFFER_STATE_103;
+            return POKECON_FORMAT_STATE_103;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_107;
+            return POKECON_FORMAT_STATE_107;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_13:
+    case POKECON_FORMAT_STATE_13:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_;
+            return POKECON_FORMAT_STATE_3_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_100;
+            return POKECON_FORMAT_STATE_100;
         case '1':
         case '2':
         case '5':
@@ -304,27 +291,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_101;
+            return POKECON_FORMAT_STATE_101;
         case '3':
-            return POKECON_BUFFER_STATE_103;
+            return POKECON_FORMAT_STATE_103;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_107;
+            return POKECON_FORMAT_STATE_107;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_17:
+    case POKECON_FORMAT_STATE_17:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_;
+            return POKECON_FORMAT_STATE_7_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_100;
+            return POKECON_FORMAT_STATE_100;
         case '1':
         case '2':
         case '5':
@@ -333,27 +319,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_101;
+            return POKECON_FORMAT_STATE_101;
         case '3':
-            return POKECON_BUFFER_STATE_103;
+            return POKECON_FORMAT_STATE_103;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_107;
+            return POKECON_FORMAT_STATE_107;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3:
+    case POKECON_FORMAT_STATE_3:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_;
+            return POKECON_FORMAT_STATE_3_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_10;
+            return POKECON_FORMAT_STATE_10;
         case '1':
         case '2':
         case '5':
@@ -362,27 +347,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_11;
+            return POKECON_FORMAT_STATE_11;
         case '3':
-            return POKECON_BUFFER_STATE_13;
+            return POKECON_FORMAT_STATE_13;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_17;
+            return POKECON_FORMAT_STATE_17;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_4:
+    case POKECON_FORMAT_STATE_4:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_0_;
+            return POKECON_FORMAT_STATE_0_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_10;
+            return POKECON_FORMAT_STATE_10;
         case '1':
         case '2':
         case '5':
@@ -391,27 +375,26 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_11;
+            return POKECON_FORMAT_STATE_11;
         case '3':
-            return POKECON_BUFFER_STATE_13;
+            return POKECON_FORMAT_STATE_13;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_17;
+            return POKECON_FORMAT_STATE_17;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7:
+    case POKECON_FORMAT_STATE_7:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_;
+            return POKECON_FORMAT_STATE_7_;
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_10;
+            return POKECON_FORMAT_STATE_10;
         case '1':
         case '2':
         case '5':
@@ -420,18 +403,17 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_11;
+            return POKECON_FORMAT_STATE_11;
         case '3':
-            return POKECON_BUFFER_STATE_13;
+            return POKECON_FORMAT_STATE_13;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_17;
+            return POKECON_FORMAT_STATE_17;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0x:
+    case POKECON_FORMAT_STATE_0x:
         switch (c)
         {
         case '0':
@@ -450,12 +432,11 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_0x0;
+            return POKECON_FORMAT_STATE_0x0;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0x0:
+    case POKECON_FORMAT_STATE_0x0:
         switch (c)
         {
         case '0':
@@ -474,12 +455,11 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_0x00;
+            return POKECON_FORMAT_STATE_0x00;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0x00:
+    case POKECON_FORMAT_STATE_0x00:
         switch (c)
         {
         case '0':
@@ -498,19 +478,18 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_0x000;
+            return POKECON_FORMAT_STATE_0x000;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0x000:
+    case POKECON_FORMAT_STATE_0x000:
         switch (c)
         {
         case '0':
         case '4':
         case '8':
         case 'c':
-            return POKECON_BUFFER_STATE_1000;
+            return POKECON_FORMAT_STATE_1000;
         case '1':
         case '2':
         case '5':
@@ -519,18 +498,17 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'a':
         case 'd':
         case 'e':
-            return POKECON_BUFFER_STATE_1001;
+            return POKECON_FORMAT_STATE_1001;
         case '3':
-            return POKECON_BUFFER_STATE_1003;
+            return POKECON_FORMAT_STATE_1003;
         case '7':
         case 'b':
         case 'f':
-            return POKECON_BUFFER_STATE_1007;
+            return POKECON_FORMAT_STATE_1007;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0_:
+    case POKECON_FORMAT_STATE_0_:
         switch (c)
         {
         case '0':
@@ -542,23 +520,21 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case '6':
         case '7':
         case '8':
-            return POKECON_BUFFER_STATE_0_0;
+            return POKECON_FORMAT_STATE_0_0;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0_0:
+    case POKECON_FORMAT_STATE_0_0:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_:
+    case POKECON_FORMAT_STATE_1_:
         switch (c)
         {
         case '0':
@@ -570,21 +546,19 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case '6':
         case '7':
         case '8':
-            return POKECON_BUFFER_STATE_1_0;
+            return POKECON_FORMAT_STATE_1_0;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0:
+    case POKECON_FORMAT_STATE_1_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_:
+    case POKECON_FORMAT_STATE_3_:
         switch (c)
         {
         case '0':
@@ -596,21 +570,19 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case '6':
         case '7':
         case '8':
-            return POKECON_BUFFER_STATE_3_0;
+            return POKECON_FORMAT_STATE_3_0;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0:
+    case POKECON_FORMAT_STATE_3_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_0_;
+            return POKECON_FORMAT_STATE_3_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_:
+    case POKECON_FORMAT_STATE_7_:
         switch (c)
         {
         case '0':
@@ -622,25 +594,23 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case '6':
         case '7':
         case '8':
-            return POKECON_BUFFER_STATE_7_0;
+            return POKECON_FORMAT_STATE_7_0;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0:
+    case POKECON_FORMAT_STATE_7_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_0_;
+            return POKECON_FORMAT_STATE_7_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_:
+    case POKECON_FORMAT_STATE_1_0_:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_1_0_0;
+            return POKECON_FORMAT_STATE_1_0_0;
         case '1':
         case '2':
         case '3':
@@ -656,27 +626,25 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_1_0_1;
+            return POKECON_FORMAT_STATE_1_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0:
+    case POKECON_FORMAT_STATE_1_0_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_0_;
+            return POKECON_FORMAT_STATE_1_0_0_;
         case 'x':
-            return POKECON_BUFFER_STATE_1_0_0x;
+            return POKECON_FORMAT_STATE_1_0_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_1:
+    case POKECON_FORMAT_STATE_1_0_1:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_0_;
+            return POKECON_FORMAT_STATE_1_0_0_;
         case '0':
         case '1':
         case '2':
@@ -693,25 +661,23 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_1_0_10;
+            return POKECON_FORMAT_STATE_1_0_10;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_10:
+    case POKECON_FORMAT_STATE_1_0_10:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_0_;
+            return POKECON_FORMAT_STATE_1_0_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0x:
+    case POKECON_FORMAT_STATE_1_0_0x:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_1_0_10;
+            return POKECON_FORMAT_STATE_1_0_10;
         case '1':
         case '2':
         case '3':
@@ -727,16 +693,15 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_1_0_1;
+            return POKECON_FORMAT_STATE_1_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0_:
+    case POKECON_FORMAT_STATE_1_0_0_:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_1_0_0_0;
+            return POKECON_FORMAT_STATE_1_0_0_0;
         case '1':
         case '2':
         case '3':
@@ -752,31 +717,29 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_1_0_0_1;
+            return POKECON_FORMAT_STATE_1_0_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0_0:
+    case POKECON_FORMAT_STATE_1_0_0_0:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         case 'x':
-            return POKECON_BUFFER_STATE_1_0_0_0x;
+            return POKECON_FORMAT_STATE_1_0_0_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0_1:
+    case POKECON_FORMAT_STATE_1_0_0_1:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         case '0':
         case '1':
         case '2':
@@ -793,27 +756,25 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_1_0_0_10;
+            return POKECON_FORMAT_STATE_1_0_0_10;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0_10:
+    case POKECON_FORMAT_STATE_1_0_0_10:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_1_0_0_0x:
+    case POKECON_FORMAT_STATE_1_0_0_0x:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_1_0_0_10;
+            return POKECON_FORMAT_STATE_1_0_0_10;
         case '1':
         case '2':
         case '3':
@@ -829,16 +790,15 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_1_0_0_1;
+            return POKECON_FORMAT_STATE_1_0_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_:
+    case POKECON_FORMAT_STATE_7_0_:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_7_0_0;
+            return POKECON_FORMAT_STATE_7_0_0;
         case '1':
         case '2':
         case '3':
@@ -854,27 +814,25 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_7_0_1;
+            return POKECON_FORMAT_STATE_7_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0:
+    case POKECON_FORMAT_STATE_7_0_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_0_0_;
+            return POKECON_FORMAT_STATE_7_0_0_;
         case 'x':
-            return POKECON_BUFFER_STATE_7_0_0x;
+            return POKECON_FORMAT_STATE_7_0_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_1:
+    case POKECON_FORMAT_STATE_7_0_1:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_0_0_;
+            return POKECON_FORMAT_STATE_7_0_0_;
         case '0':
         case '1':
         case '2':
@@ -891,25 +849,23 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_7_0_10;
+            return POKECON_FORMAT_STATE_7_0_10;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_10:
+    case POKECON_FORMAT_STATE_7_0_10:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_7_0_0_;
+            return POKECON_FORMAT_STATE_7_0_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0x:
+    case POKECON_FORMAT_STATE_7_0_0x:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_7_0_10;
+            return POKECON_FORMAT_STATE_7_0_10;
         case '1':
         case '2':
         case '3':
@@ -925,16 +881,15 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_7_0_1;
+            return POKECON_FORMAT_STATE_7_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0_:
+    case POKECON_FORMAT_STATE_7_0_0_:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_7_0_0_0;
+            return POKECON_FORMAT_STATE_7_0_0_0;
         case '1':
         case '2':
         case '3':
@@ -950,27 +905,25 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_7_0_0_1;
+            return POKECON_FORMAT_STATE_7_0_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0_0:
+    case POKECON_FORMAT_STATE_7_0_0_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         case 'x':
-            return POKECON_BUFFER_STATE_7_0_0_0x;
+            return POKECON_FORMAT_STATE_7_0_0_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0_1:
+    case POKECON_FORMAT_STATE_7_0_0_1:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         case '0':
         case '1':
         case '2':
@@ -987,25 +940,23 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_7_0_0_10;
+            return POKECON_FORMAT_STATE_7_0_0_10;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0_10:
+    case POKECON_FORMAT_STATE_7_0_0_10:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_7_0_0_0x:
+    case POKECON_FORMAT_STATE_7_0_0_0x:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_7_0_0_10;
+            return POKECON_FORMAT_STATE_7_0_0_10;
         case '1':
         case '2':
         case '3':
@@ -1021,16 +972,15 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_7_0_0_1;
+            return POKECON_FORMAT_STATE_7_0_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_:
+    case POKECON_FORMAT_STATE_3_0_:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_3_0_0;
+            return POKECON_FORMAT_STATE_3_0_0;
         case '1':
         case '2':
         case '3':
@@ -1046,27 +996,25 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_3_0_1;
+            return POKECON_FORMAT_STATE_3_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0:
+    case POKECON_FORMAT_STATE_3_0_0:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_0_0_;
+            return POKECON_FORMAT_STATE_3_0_0_;
         case 'x':
-            return POKECON_BUFFER_STATE_3_0_0x;
+            return POKECON_FORMAT_STATE_3_0_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_1:
+    case POKECON_FORMAT_STATE_3_0_1:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_0_0_;
+            return POKECON_FORMAT_STATE_3_0_0_;
         case '0':
         case '1':
         case '2':
@@ -1083,25 +1031,23 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_3_0_10;
+            return POKECON_FORMAT_STATE_3_0_10;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_10:
+    case POKECON_FORMAT_STATE_3_0_10:
         switch (c)
         {
         case ' ':
-            return POKECON_BUFFER_STATE_3_0_0_;
+            return POKECON_FORMAT_STATE_3_0_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0x:
+    case POKECON_FORMAT_STATE_3_0_0x:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_3_0_10;
+            return POKECON_FORMAT_STATE_3_0_10;
         case '1':
         case '2':
         case '3':
@@ -1117,16 +1063,15 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_3_0_1;
+            return POKECON_FORMAT_STATE_3_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0_:
+    case POKECON_FORMAT_STATE_3_0_0_:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_3_0_0_0;
+            return POKECON_FORMAT_STATE_3_0_0_0;
         case '1':
         case '2':
         case '3':
@@ -1142,35 +1087,33 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_3_0_0_1;
+            return POKECON_FORMAT_STATE_3_0_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0_0:
+    case POKECON_FORMAT_STATE_3_0_0_0:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         case 'x':
-            return POKECON_BUFFER_STATE_3_0_0_0x;
+            return POKECON_FORMAT_STATE_3_0_0_0x;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0_1:
+    case POKECON_FORMAT_STATE_3_0_0_1:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         case '0':
         case '1':
         case '2':
@@ -1187,29 +1130,27 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_3_0_0_10;
+            return POKECON_FORMAT_STATE_3_0_0_10;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0_10:
+    case POKECON_FORMAT_STATE_3_0_0_10:
         switch (c)
         {
         case '\r':
-            return POKECON_BUFFER_STATE_0_0CR;
+            return POKECON_FORMAT_STATE_0_0CR;
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         case ' ':
-            return POKECON_BUFFER_STATE_1_0_;
+            return POKECON_FORMAT_STATE_1_0_;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_3_0_0_0x:
+    case POKECON_FORMAT_STATE_3_0_0_0x:
         switch (c)
         {
         case '0':
-            return POKECON_BUFFER_STATE_3_0_0_10;
+            return POKECON_FORMAT_STATE_3_0_0_10;
         case '1':
         case '2':
         case '3':
@@ -1225,23 +1166,21 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case 'd':
         case 'e':
         case 'f':
-            return POKECON_BUFFER_STATE_3_0_0_1;
+            return POKECON_FORMAT_STATE_3_0_0_1;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_0_0CR:
+    case POKECON_FORMAT_STATE_0_0CR:
         switch (c)
         {
         case '\n':
-            return POKECON_BUFFER_STATE_FINAL;
+            return POKECON_FORMAT_STATE_ACCEPTED;
         default:
-            return POKECON_BUFFER_STATE_INITIAL;
+            return POKECON_FORMAT_STATE_REJECTED;
         }
-        break;
-    case POKECON_BUFFER_STATE_FINAL:
+    case POKECON_FORMAT_STATE_ACCEPTED:
     default:
-        return POKECON_BUFFER_STATE_INITIAL;
+        return POKECON_FORMAT_STATE_REJECTED;
     }
 }
 
@@ -1253,7 +1192,7 @@ static nthaka_gamepad_state_t _;
 static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     pokecon_format_t *fmt = (pokecon_format_t *)parent;
-    if (fmt == NULL || buf == NULL || fmt->_s != POKECON_BUFFER_STATE_FINAL)
+    if (fmt == NULL || buf == NULL || fmt->_s != POKECON_FORMAT_STATE_ACCEPTED)
     {
         return false;
     }
@@ -1398,9 +1337,9 @@ static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
     }
 
     fmt->_s = pokecon_format_state_next(fmt->_s, (char)d);
-    return fmt->_s == POKECON_BUFFER_STATE_INITIAL ? NTHAKA_BUFFER_REJECTED
-                                                   : (fmt->_s == POKECON_BUFFER_STATE_FINAL ? NTHAKA_BUFFER_ACCEPTED
-                                                                                            : NTHAKA_BUFFER_PENDING);
+    return fmt->_s == POKECON_FORMAT_STATE_REJECTED ? NTHAKA_BUFFER_REJECTED
+                                                    : (fmt->_s == POKECON_FORMAT_STATE_ACCEPTED ? NTHAKA_BUFFER_ACCEPTED
+                                                                                                : NTHAKA_BUFFER_PENDING);
 }
 
 static void _reset(nthaka_format_t *parent)
@@ -1411,7 +1350,7 @@ static void _reset(nthaka_format_t *parent)
         return;
     }
 
-    fmt->_s = POKECON_BUFFER_STATE_INITIAL;
+    fmt->_s = POKECON_FORMAT_STATE_INITIAL;
 }
 
 bool pokecon_format_init(pokecon_format_t *fmt)
@@ -1425,7 +1364,7 @@ bool pokecon_format_init(pokecon_format_t *fmt)
     fmt->parent.reset = _reset;
     fmt->parent.update = _update;
 
-    fmt->_s = POKECON_BUFFER_STATE_INITIAL;
+    fmt->_s = POKECON_FORMAT_STATE_INITIAL;
 
     fmt->_prev_l.x = NTHAKA_STICK_NEUTRAL;
     fmt->_prev_l.y = NTHAKA_STICK_NEUTRAL;

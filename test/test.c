@@ -1,10 +1,10 @@
 #include "buffer.h"
 #include "nxmc2.h"
 #include "orca.h"
+#include "pokecon.h"
 
 #include "util.h"
 
-// #include "pokecon_buffer.h"
 // #include "multi_buffer_manager.h"
 
 #include <stdio.h>
@@ -15,7 +15,8 @@ int main(void)
 
     test_t tests[] = {TEST(test_buffer),
                       TEST(test_nxmc2),
-                      TEST(test_orca)};
+                      TEST(test_orca),
+                      TEST(test_pokecon)};
 
     for (size_t i = 0; i < SIZE_OF(tests); i++)
     {
