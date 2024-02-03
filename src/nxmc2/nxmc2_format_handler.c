@@ -7,7 +7,7 @@ static const uint8_t _BTNS_MSB_MAX = 0x3F;
 
 static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 {
-    nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
+    nxmc2_format_handler_t *fmt = (nxmc2_format_handler_t *)parent;
     if (fmt == NULL)
     {
         return NTHAKA_BUFFER_REJECTED;
@@ -56,7 +56,7 @@ static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 
 static void _reset(nthaka_format_handler_t *parent)
 {
-    nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
+    nxmc2_format_handler_t *fmt = (nxmc2_format_handler_t *)parent;
     if (fmt == NULL)
     {
         return;
@@ -67,7 +67,7 @@ static void _reset(nthaka_format_handler_t *parent)
 
 static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
-    nxmc2_format_t *fmt = (nxmc2_format_t *)parent;
+    nxmc2_format_handler_t *fmt = (nxmc2_format_handler_t *)parent;
     if (fmt == NULL || buf == NULL || fmt->_s != NXMC2_FORMAT_FINAL)
     {
         return false;
@@ -117,7 +117,7 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
     return true;
 }
 
-bool nxmc2_format_init(nxmc2_format_t *fmt)
+bool nxmc2_format_handler_init(nxmc2_format_handler_t *fmt)
 {
     if (fmt == NULL)
     {

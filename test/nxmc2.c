@@ -11,12 +11,12 @@ static int test_init(void)
 
     typedef struct test_case_t
     {
-        nxmc2_format_t *arg0;
+        nxmc2_format_handler_t *arg0;
 
         bool expected;
     } test_case_t;
 
-    nxmc2_format_t nxmc2;
+    nxmc2_format_handler_t nxmc2;
 
     test_case_t cases[] = {
         {.arg0 = NULL, .expected = false},
@@ -27,7 +27,7 @@ static int test_init(void)
     {
         test_case_t case_ = cases[i];
 
-        bool actual = nxmc2_format_init(case_.arg0);
+        bool actual = nxmc2_format_handler_init(case_.arg0);
         if (actual != case_.expected)
         {
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, bool_(case_.expected), bool_(actual));
@@ -78,8 +78,8 @@ static int test_update(void)
     {
         test_case_t case_ = cases[i];
 
-        nxmc2_format_t nxmc2;
-        assert(nxmc2_format_init(&nxmc2));
+        nxmc2_format_handler_t nxmc2;
+        assert(nxmc2_format_handler_init(&nxmc2));
         nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&nxmc2;
 
         for (size_t j = 0; j < case_.size; j++)
@@ -133,8 +133,8 @@ static int test_deserialize(void)
     {
         test_case_t case_ = cases[i];
 
-        nxmc2_format_t nxmc2;
-        assert(nxmc2_format_init(&nxmc2));
+        nxmc2_format_handler_t nxmc2;
+        assert(nxmc2_format_handler_init(&nxmc2));
         nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&nxmc2;
 
         for (size_t j = 0; j < 10; j++)
@@ -164,8 +164,8 @@ static int test_reset(void)
 {
     int ret = 0;
 
-    nxmc2_format_t nxmc2;
-    assert(nxmc2_format_init(&nxmc2));
+    nxmc2_format_handler_t nxmc2;
+    assert(nxmc2_format_handler_init(&nxmc2));
     nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&nxmc2;
 
     assert(nthaka_format_handler_update(fmt, 0xAB) == NTHAKA_BUFFER_PENDING);
