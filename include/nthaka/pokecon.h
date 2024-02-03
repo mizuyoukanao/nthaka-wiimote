@@ -82,8 +82,8 @@ extern "C"
         nthaka_format_t parent;
 
         pokecon_format_state_t _s;
-        nthaka_stick_t _prev_l;
-        nthaka_stick_t _prev_r;
+        nthaka_stick_state_t _prev_l;
+        nthaka_stick_state_t _prev_r;
     } pokecon_format_t;
 
     bool pokecon_format_init(pokecon_format_t *fmt);

@@ -117,8 +117,8 @@ static int test_deserialize(void)
                                                           .home = NTHAKA_BUTTON_STATE_PRESSED,
                                                           .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                           .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                                          .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                                          .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                          .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                                                          .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                           .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = (uint8_t[]){0x80, /*0b00010101*/ 21, 21}, .size = 3, .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
                                                                                   .b = NTHAKA_BUTTON_STATE_RELEASED,
@@ -135,8 +135,8 @@ static int test_deserialize(void)
                                                                                   .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                   .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                   .hat = NTHAKA_HAT_STATE_UPLEFT,
-                                                                                  .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                                                                  .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                                  .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                                                                                  .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                                                   .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = (uint8_t[]){0x80, 0xFF, /* 0b00101010 */ 42, 0xFF, 0xFF, 42}, .size = 6, .expected = {.y = NTHAKA_BUTTON_STATE_PRESSED, //
                                                                                                       .b = NTHAKA_BUTTON_STATE_PRESSED,
@@ -153,8 +153,8 @@ static int test_deserialize(void)
                                                                                                       .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                                       .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                                       .hat = NTHAKA_HAT_STATE_DOWNRIGHT,
-                                                                                                      .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                                                                                      .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                                                      .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                                                                                                      .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                                                                       .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
@@ -222,8 +222,8 @@ static int test_hold_previous_state(void)
                                          .home = NTHAKA_BUTTON_STATE_PRESSED,
                                          .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                          .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                         .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                         .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                         .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                                         .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                          .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
                            {.prev = (uint8_t[]){'@'}, //
                             .prev_size = 1,
@@ -244,8 +244,8 @@ static int test_hold_previous_state(void)
                                          .home = NTHAKA_BUTTON_STATE_RELEASED,
                                          .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                          .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                         .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                         .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                         .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                                         .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                          .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)

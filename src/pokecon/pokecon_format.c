@@ -1267,10 +1267,10 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
 
     if (update_ls && update_rs)
     {
-        uint8_t lx = NTHAKA_STICK_NEUTRAL;
-        uint8_t ly = NTHAKA_STICK_NEUTRAL;
-        uint8_t rx = NTHAKA_STICK_NEUTRAL;
-        uint8_t ry = NTHAKA_STICK_NEUTRAL;
+        uint8_t lx = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+        uint8_t ly = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+        uint8_t rx = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+        uint8_t ry = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
         sscanf(str, "%*hx %*hhx %hhx %hhx %hhx %hhx", &lx, &ly, &rx, &ry);
 
         out->l_stick.x = lx;
@@ -1285,8 +1285,8 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
     }
     else if (update_ls || update_rs)
     {
-        uint8_t x = NTHAKA_STICK_NEUTRAL;
-        uint8_t y = NTHAKA_STICK_NEUTRAL;
+        uint8_t x = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+        uint8_t y = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
         sscanf(str, "%*hx %*hhx %hhx %hhx", &x, &y);
 
         if (update_ls)
@@ -1366,10 +1366,10 @@ bool pokecon_format_init(pokecon_format_t *fmt)
 
     fmt->_s = POKECON_FORMAT_STATE_INITIAL;
 
-    fmt->_prev_l.x = NTHAKA_STICK_NEUTRAL;
-    fmt->_prev_l.y = NTHAKA_STICK_NEUTRAL;
-    fmt->_prev_r.x = NTHAKA_STICK_NEUTRAL;
-    fmt->_prev_r.y = NTHAKA_STICK_NEUTRAL;
+    fmt->_prev_l.x = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    fmt->_prev_l.y = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    fmt->_prev_r.x = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    fmt->_prev_r.y = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
 
     return true;
 }

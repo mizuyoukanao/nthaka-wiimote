@@ -132,8 +132,8 @@ static int test_deserialize(void)
                                                          .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                          .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                          .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                                         .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
-                                                         .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                         .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                                                         .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                          .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = "0x0002 8 26 da\r\n", .size = 16, .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
                                                                .b = NTHAKA_BUTTON_STATE_RELEASED,
@@ -151,7 +151,7 @@ static int test_deserialize(void)
                                                                .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                                .hat = NTHAKA_HAT_STATE_NEUTRAL,
                                                                .l_stick = {.x = 0x26, .y = 0xda},
-                                                               .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                               .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                                .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = "0x0001 8 26 26\r\n", .size = 16, .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
                                                                .b = NTHAKA_BUTTON_STATE_RELEASED,
@@ -168,7 +168,7 @@ static int test_deserialize(void)
                                                                .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                                .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                                .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                                               .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                               .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                                .r_stick = {.x = 0x26, .y = 0x26},
                                                                .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = "3 8 0x5a 0x6 80 80\r\n", .size = 20, .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
@@ -187,7 +187,7 @@ static int test_deserialize(void)
                                                                    .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                                    .hat = NTHAKA_HAT_STATE_NEUTRAL,
                                                                    .l_stick = {.x = 0x5a, .y = 0x6},
-                                                                   .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                   .r_stick = {.x = 0x80, .y = 0x80},
                                                                    .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = "3 8 80 80 0xd 0x48\r\n", .size = 20, .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
                                                                    .b = NTHAKA_BUTTON_STATE_RELEASED,
@@ -204,7 +204,7 @@ static int test_deserialize(void)
                                                                    .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                                    .capture = NTHAKA_BUTTON_STATE_RELEASED,
                                                                    .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                                                   .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
+                                                                   .l_stick = {.x = 0x80, .y = 0x80},
                                                                    .r_stick = {.x = 0xd, .y = 0x48},
                                                                    .extension = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = "3 8 80 80\r\n", .size = 11, .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL}};
