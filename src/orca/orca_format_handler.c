@@ -51,6 +51,7 @@ static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 
     case ORCA_FORMAT_ACCEPTED:
     default:
+        break;
     }
     fmt->_s = ORCA_FORMAT_REJECTED;
     return NTHAKA_BUFFER_REJECTED;

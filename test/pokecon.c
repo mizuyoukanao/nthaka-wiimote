@@ -117,7 +117,7 @@ static int test_deserialize(void)
 
     test_case_t cases[] = {
         {.buf = "0x0000 8\r\n", .size = 10, .expected = NTHAKA_GAMEPAD_NEUTRAL},
-        {.buf = "0x0004 8\r\n", .size = 10, .expected = {.y = NTHAKA_BUTTON_PRESSED, //
+        {.buf = "0x0004 0\r\n", .size = 10, .expected = {.y = NTHAKA_BUTTON_PRESSED, //
                                                          .b = NTHAKA_BUTTON_RELEASED,
                                                          .a = NTHAKA_BUTTON_RELEASED,
                                                          .x = NTHAKA_BUTTON_RELEASED,
@@ -131,10 +131,28 @@ static int test_deserialize(void)
                                                          .r_click = NTHAKA_BUTTON_RELEASED,
                                                          .home = NTHAKA_BUTTON_RELEASED,
                                                          .capture = NTHAKA_BUTTON_RELEASED,
-                                                         .hat = NTHAKA_HAT_NEUTRAL,
+                                                         .hat = NTHAKA_HAT_UP,
                                                          .l_stick = NTHAKA_STICK_NEUTRAL,
                                                          .r_stick = NTHAKA_STICK_NEUTRAL,
                                                          .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+        {.buf = (char[]){48, 120, 48, 48, 48, 48, 32, 48, 13, 10}, .size = 10, .expected = {.y = NTHAKA_BUTTON_RELEASED, //
+                                                                                            .b = NTHAKA_BUTTON_RELEASED,
+                                                                                            .a = NTHAKA_BUTTON_RELEASED,
+                                                                                            .x = NTHAKA_BUTTON_RELEASED,
+                                                                                            .l = NTHAKA_BUTTON_RELEASED,
+                                                                                            .r = NTHAKA_BUTTON_RELEASED,
+                                                                                            .zl = NTHAKA_BUTTON_RELEASED,
+                                                                                            .zr = NTHAKA_BUTTON_RELEASED,
+                                                                                            .minus = NTHAKA_BUTTON_RELEASED,
+                                                                                            .plus = NTHAKA_BUTTON_RELEASED,
+                                                                                            .l_click = NTHAKA_BUTTON_RELEASED,
+                                                                                            .r_click = NTHAKA_BUTTON_RELEASED,
+                                                                                            .home = NTHAKA_BUTTON_RELEASED,
+                                                                                            .capture = NTHAKA_BUTTON_RELEASED,
+                                                                                            .hat = NTHAKA_HAT_UP,
+                                                                                            .l_stick = NTHAKA_STICK_NEUTRAL,
+                                                                                            .r_stick = NTHAKA_STICK_NEUTRAL,
+                                                                                            .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
         {.buf = "0x0002 8 26 da\r\n", .size = 16, .expected = {.y = NTHAKA_BUTTON_RELEASED, //
                                                                .b = NTHAKA_BUTTON_RELEASED,
                                                                .a = NTHAKA_BUTTON_RELEASED,

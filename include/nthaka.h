@@ -199,6 +199,7 @@ extern "C"
     } nthaka_multi_format_handler_t;
 
     bool nthaka_multi_format_handler_init(nthaka_multi_format_handler_t *fmt, nthaka_format_handler_t *fmts[], size_t size);
+    size_t *nthaka_multi_format_handler_get_last_deserialized_index(nthaka_multi_format_handler_t *fmt);
 
 #ifndef NTHAKA_BUFFER_SIZE
 #define NTHAKA_BUFFER_SIZE (size_t)(64)

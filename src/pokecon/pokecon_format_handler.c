@@ -2,7 +2,9 @@
 #include "../internal.h"
 
 #include <assert.h>
+#include <memory.h>
 #include <stdio.h>
+#include <string.h>
 
 pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char c)
 {
@@ -1189,6 +1191,15 @@ static const int _VALID_LENGTH_MAX = 30;
 
 static nthaka_gamepad_state_t _;
 
+static void _remove_prefix_0x(char *str)
+{
+    char *p = str;
+    while ((p = strstr(p, "0x")) != NULL)
+    {
+        memmove(p, p + 2, strlen(p + 2) + 1); // Remove "0x" by moving the rest of the string over it
+    }
+}
+
 static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     pokecon_format_handler_t *fmt = (pokecon_format_handler_t *)parent;
@@ -1205,20 +1216,57 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
 
     // Copy buf into a new char[]
     char str[size + 1];
+    size_t size_ = 0;
+    int cnt = 0;
     for (size_t i = 0; i < size; i++)
     {
-        str[i] = (char)buf[i];
+        switch (buf[i])
+        {
+        case '\r':
+        case '\n':
+            break;
+
+        case ' ':
+            cnt++;
+        default:
+            size_++;
+            str[i] = buf[i];
+            break;
+        }
     }
-    str[size] = '\0';
+    str[size_] = '\0';
+    // 0x" must be removed. Maybe this is another Newlib-nano restriction.
+    _remove_prefix_0x(str);
 
     uint16_t btns = 0x0000;
-    uint8_t hat = NTHAKA_HAT_NEUTRAL;
-    uint8_t x_0 = NTHAKA_STICK_AXIS_NEUTRAL;
-    uint8_t y_0 = NTHAKA_STICK_AXIS_NEUTRAL;
-    uint8_t x_1 = NTHAKA_STICK_AXIS_NEUTRAL;
-    uint8_t y_1 = NTHAKA_STICK_AXIS_NEUTRAL;
-    // sscanf doesn't care whether the "0x" prefix is present or not
-    sscanf(str, "%hx %hhx %hhx %hhx %hhx %hhx", &btns, &hat, &x_0, &y_0, &x_1, &y_1);
+    // Use uint16_t and "%hx" instead of uint8_t and "%hhx", as Newlib-nano do not support C99 notation.
+    // https://ja-support.renesas.com/knowledgeBase/20441082
+    uint16_t hat = NTHAKA_HAT_NEUTRAL;
+    uint16_t x_0 = NTHAKA_STICK_AXIS_NEUTRAL;
+    uint16_t y_0 = NTHAKA_STICK_AXIS_NEUTRAL;
+    uint16_t x_1 = NTHAKA_STICK_AXIS_NEUTRAL;
+    uint16_t y_1 = NTHAKA_STICK_AXIS_NEUTRAL;
+
+    switch (cnt)
+    {
+    case 1:
+        sscanf(str, "%hx %hx", &btns, &hat);
+        break;
+    case 3:
+        sscanf(str, "%hx %hx %hx %hx", &btns, &hat, &x_0, &y_0);
+        break;
+    case 5:
+        sscanf(str, "%hx %hx %hx %hx %hx %hx", &btns, &hat, &x_0, &y_0, &x_1, &y_1);
+        break;
+
+    default:
+        assert(false);
+        break;
+    }
+    assert(x_0 <= 0xFF &&
+           y_0 <= 0xFF &&
+           x_1 <= 0xFF &&
+           y_1 <= 0xFF);
 
     bool update_rs = nthaka_internal_bit(btns, 0) == 1;
     bool update_ls = nthaka_internal_bit(btns, 1) == 1;
@@ -1264,27 +1312,29 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
         out->hat = NTHAKA_HAT_UPLEFT;
         break;
     case 8:
-    default:
         out->hat = NTHAKA_HAT_NEUTRAL;
+        break;
+    default:
+        assert(false);
         break;
     }
 
     if (update_ls && update_rs)
     {
-        out->l_stick.x = x_0;
-        out->l_stick.y = y_0;
+        out->l_stick.x = (uint8_t)x_0;
+        out->l_stick.y = (uint8_t)y_0;
         fmt->_prev_l.x = out->l_stick.x;
         fmt->_prev_l.y = out->l_stick.y;
 
-        out->r_stick.x = x_1;
-        out->r_stick.y = y_1;
+        out->r_stick.x = (uint8_t)x_1;
+        out->r_stick.y = (uint8_t)y_1;
         fmt->_prev_r.x = out->r_stick.x;
         fmt->_prev_r.y = out->r_stick.y;
     }
     else if (update_ls)
     {
-        out->l_stick.x = x_0;
-        out->l_stick.y = y_0;
+        out->l_stick.x = (uint8_t)x_0;
+        out->l_stick.y = (uint8_t)y_0;
         fmt->_prev_l.x = out->l_stick.x;
         fmt->_prev_l.y = out->l_stick.y;
 
@@ -1296,8 +1346,8 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
         out->l_stick.x = fmt->_prev_l.x;
         out->l_stick.y = fmt->_prev_l.y;
 
-        out->r_stick.x = x_0;
-        out->r_stick.y = y_0;
+        out->r_stick.x = (uint8_t)x_0;
+        out->r_stick.y = (uint8_t)y_0;
         fmt->_prev_r.x = out->r_stick.x;
         fmt->_prev_r.y = out->r_stick.y;
     }

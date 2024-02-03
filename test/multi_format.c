@@ -128,12 +128,32 @@ static int test_deserialize(void)
         size_t size;
 
         nthaka_gamepad_state_t expected;
+        size_t expected_index;
     } test_case_t;
 
     test_case_t cases[] = {
-        {.buf = "0x0000 8\r\n", .size = 10, .expected = NTHAKA_GAMEPAD_NEUTRAL},
-        {.buf = (uint8_t[]){0x80, 0, 0}, .size = 3, .expected = NTHAKA_GAMEPAD_NEUTRAL},
-        {.buf = (uint8_t[]){0xAB, 0x00, 0x00, 0x08, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00}, .size = 11, .expected = NTHAKA_GAMEPAD_NEUTRAL}};
+        {.buf = "0x0000 8\r\n", .size = 10, .expected = NTHAKA_GAMEPAD_NEUTRAL, .expected_index = 2},
+        {.buf = (uint8_t[]){0x80, 0, 0}, .size = 3, .expected = NTHAKA_GAMEPAD_NEUTRAL, .expected_index = 1},
+        {.buf = (uint8_t[]){0xAB, 0x00, 0x00, 0x08, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00}, .size = 11, .expected = NTHAKA_GAMEPAD_NEUTRAL, .expected_index = 0},
+        {.buf = (char[]){48, 120, 48, 48, 48, 48, 32, 48, 13, 10}, .size = 10, .expected = {.y = NTHAKA_BUTTON_RELEASED, //
+                                                                                            .b = NTHAKA_BUTTON_RELEASED,
+                                                                                            .a = NTHAKA_BUTTON_RELEASED,
+                                                                                            .x = NTHAKA_BUTTON_RELEASED,
+                                                                                            .l = NTHAKA_BUTTON_RELEASED,
+                                                                                            .r = NTHAKA_BUTTON_RELEASED,
+                                                                                            .zl = NTHAKA_BUTTON_RELEASED,
+                                                                                            .zr = NTHAKA_BUTTON_RELEASED,
+                                                                                            .minus = NTHAKA_BUTTON_RELEASED,
+                                                                                            .plus = NTHAKA_BUTTON_RELEASED,
+                                                                                            .l_click = NTHAKA_BUTTON_RELEASED,
+                                                                                            .r_click = NTHAKA_BUTTON_RELEASED,
+                                                                                            .home = NTHAKA_BUTTON_RELEASED,
+                                                                                            .capture = NTHAKA_BUTTON_RELEASED,
+                                                                                            .hat = NTHAKA_HAT_UP,
+                                                                                            .l_stick = NTHAKA_STICK_NEUTRAL,
+                                                                                            .r_stick = NTHAKA_STICK_NEUTRAL,
+                                                                                            .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+         .expected_index = 2}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {
@@ -160,6 +180,7 @@ static int test_deserialize(void)
         assert(nthaka_format_handler_update(fmt, case_.buf[case_.size - 1]) == NTHAKA_BUFFER_ACCEPTED);
 
         nthaka_gamepad_state_t actual_out;
+        size_t *actual_index;
         assert(nthaka_format_handler_deserialize(fmt, case_.buf, case_.size, &actual_out));
         if (!nthaka_gamepad_state_equals(&case_.expected, &actual_out))
         {
@@ -169,6 +190,18 @@ static int test_deserialize(void)
             nthaka_gamepad_state_stringify(&actual_out, str1, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
 
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, str0, str1);
+            ret++;
+        }
+        else if (actual_index = nthaka_multi_format_handler_get_last_deserialized_index(&multi), actual_index == NULL || case_.expected_index != *actual_index)
+        {
+            if (actual_index == NULL)
+            {
+                fprintf(stderr, "index: %d, expected_index: %d, actual_index: NULL\n", i, case_.expected_index);
+            }
+            else
+            {
+                fprintf(stderr, "index: %d, expected_index: %d, actual_index: %d\n", i, case_.expected_index, *actual_index);
+            }
             ret++;
         }
     }

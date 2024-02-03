@@ -2,22 +2,22 @@
 
 #include "hardware/timer.h"
 
-#include "nxamf.h"
-#include "nxamf/nxmc2.h"
-#include "nxamf/orca.h"
-#include "nxamf/pokecon.h"
+#include "nthaka.h"
+#include "nthaka/nxmc2.h"
+#include "nthaka/orca.h"
+#include "nthaka/pokecon.h"
 
-static nxmc2_buffer_t nxmc2;
-static orca_buffer_t orca;
-static pokecon_buffer_t pokecon;
-static nxamf_buffer_interface_t *bufs[] = {(nxamf_buffer_interface_t *)&nxmc2,
-                                           (nxamf_buffer_interface_t *)&orca,
-                                           (nxamf_buffer_interface_t *)&pokecon};
-static nxamf_multi_buffer_manager_t mgr;
-static nxamf_buffer_interface_t *buf = (nxamf_buffer_interface_t *)&mgr;
-static nxamf_gamepad_state_t out;
+static nxmc2_format_handler_t nxmc2;
+static orca_format_handler_t orca;
+static pokecon_format_handler_t pokecon;
+static nthaka_format_handler_t *fmts[] = {(nthaka_format_handler_t *)&nxmc2, //
+                                          (nthaka_format_handler_t *)&orca,  //
+                                          (nthaka_format_handler_t *)&pokecon};
+static nthaka_multi_format_handler_t fmt;
+static nthaka_buffer_t buf;
 
-static char _[NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX];
+static nthaka_gamepad_state_t out;
+static char str[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
 
 static int64_t _led_off(alarm_id_t id, void *user_data)
 {
@@ -31,21 +31,22 @@ static inline void async_led_on(uint32_t dur_ms)
     add_alarm_in_ms(dur_ms, _led_off, NULL, false);
 }
 
-static void reflect()
+static void update()
 {
     async_led_on(100);
 
     Serial1.println("--------------------");
 
-    size_t i = nxamf_multi_buffer_manager_get_last_deserialized_index(&mgr);
-    sprintf(_, "index: %s", i == 0   ? "NXMC2" //
-                            : i == 1 ? "ORCA"
-                            : i == 2 ? "PokeCon"
-                                     : "UNKNOWN");
-    Serial1.println(_);
+    size_t *i = nthaka_multi_format_handler_get_last_deserialized_index(&fmt);
+    sprintf(str, "index: %s", i == NULL ? "unknown" //
+                              : *i == 0 ? "NXMC2"
+                              : *i == 1 ? "ORCA"
+                              : *i == 2 ? "PokeCon"
+                                        : "unknown");
+    Serial1.println(str);
 
-    nxamf_gamepad_state_stringify(&out, _, NXAMF_GAMEPAD_STATE_STRING_LENGTH_MAX);
-    Serial1.println(_);
+    nthaka_gamepad_state_stringify(&out, str, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
+    Serial1.println(str);
 }
 
 void setup()
@@ -60,10 +61,16 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
 
-    nxmc2_buffer_init(&nxmc2);
-    orca_buffer_init(&orca);
-    pokecon_buffer_init(&pokecon);
-    nxamf_multi_buffer_manager_init(&mgr, bufs, 3);
+    if (!(nxmc2_format_handler_init(&nxmc2) &&
+          orca_format_handler_init(&orca) &&
+          pokecon_format_handler_init(&pokecon) &&
+          nthaka_multi_format_handler_init(&fmt, fmts, 3) &&
+          nthaka_buffer_init(&buf, (nthaka_format_handler_t *)&fmt)))
+    {
+        digitalWrite(LED_BUILTIN, HIGH);
+        while (true)
+            ;
+    }
 }
 
 void loop()
@@ -71,15 +78,22 @@ void loop()
     uint8_t d;
     if (Serial.readBytes(&d, 1) != 1)
     {
-        buf->clear(buf);
+        nthaka_buffer_clear(&buf);
         return;
     }
 
-    buf->append(buf, d);
-    if (!buf->deserialize(buf, &out))
+    switch (nthaka_buffer_append(&buf, d, &out))
     {
+    case NTHAKA_BUFFER_ACCEPTED:
+        break;
+    case NTHAKA_BUFFER_REJECTED:
+        nthaka_buffer_clear(&buf);
+    case NTHAKA_BUFFER_PENDING:
+    default:
         return;
     }
 
-    reflect();
+    update();
+    
+    nthaka_buffer_clear(&buf);
 }

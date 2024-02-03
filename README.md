@@ -40,7 +40,7 @@ classDiagram
   
   class nthaka_buffer_t
   nthaka_buffer_t : -nthaka_format_handler_t fmt
-  nthaka_buffer_t : +append(uint8_t d, nthaka_gamepad_state_t *out) bool
+  nthaka_buffer_t : +append(uint8_t d, nthaka_gamepad_state_t *out) nthaka_buffer_state_t
   nthaka_buffer_t : +clear() void
 
   nthaka_buffer_t <.. nthaka_format_handler_t
