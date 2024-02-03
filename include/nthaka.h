@@ -13,37 +13,37 @@ extern "C"
 
     typedef enum nthaka_button_state_t
     {
-        NTHAKA_BUTTON_STATE_RELEASED,
-        NTHAKA_BUTTON_STATE_PRESSED
+        NTHAKA_BUTTON_RELEASED,
+        NTHAKA_BUTTON_PRESSED
     } nthaka_button_state_t;
 
-#define nthaka_button_state_stringify(btn) ((btn) == NTHAKA_BUTTON_STATE_RELEASED  ? "RELEASED" \
-                                            : (btn) == NTHAKA_BUTTON_STATE_PRESSED ? "PRESSED"  \
-                                                                                   : "unknown")
+#define nthaka_button_state_stringify(btn) ((btn) == NTHAKA_BUTTON_RELEASED  ? "RELEASED" \
+                                            : (btn) == NTHAKA_BUTTON_PRESSED ? "PRESSED"  \
+                                                                             : "unknown")
 
     typedef enum nthaka_hat_state_t
     {
-        NTHAKA_HAT_STATE_UP,
-        NTHAKA_HAT_STATE_UPRIGHT,
-        NTHAKA_HAT_STATE_RIGHT,
-        NTHAKA_HAT_STATE_DOWNRIGHT,
-        NTHAKA_HAT_STATE_DOWN,
-        NTHAKA_HAT_STATE_DOWNLEFT,
-        NTHAKA_HAT_STATE_LEFT,
-        NTHAKA_HAT_STATE_UPLEFT,
-        NTHAKA_HAT_STATE_NEUTRAL
+        NTHAKA_HAT_UP,
+        NTHAKA_HAT_UPRIGHT,
+        NTHAKA_HAT_RIGHT,
+        NTHAKA_HAT_DOWNRIGHT,
+        NTHAKA_HAT_DOWN,
+        NTHAKA_HAT_DOWNLEFT,
+        NTHAKA_HAT_LEFT,
+        NTHAKA_HAT_UPLEFT,
+        NTHAKA_HAT_NEUTRAL
     } nthaka_hat_state_t;
 
-#define nthaka_hat_state_stringify(hat) ((hat) == NTHAKA_HAT_STATE_UP          ? "UP"        \
-                                         : (hat) == NTHAKA_HAT_STATE_UPRIGHT   ? "UPRIGHT"   \
-                                         : (hat) == NTHAKA_HAT_STATE_RIGHT     ? "RIGHT"     \
-                                         : (hat) == NTHAKA_HAT_STATE_DOWNRIGHT ? "DOWNRIGHT" \
-                                         : (hat) == NTHAKA_HAT_STATE_DOWN      ? "DOWN"      \
-                                         : (hat) == NTHAKA_HAT_STATE_DOWNLEFT  ? "DOWNLEFT"  \
-                                         : (hat) == NTHAKA_HAT_STATE_LEFT      ? "LEFT"      \
-                                         : (hat) == NTHAKA_HAT_STATE_UPLEFT    ? "UPLEFT"    \
-                                         : (hat) == NTHAKA_HAT_STATE_NEUTRAL   ? "NEUTRAL"   \
-                                                                               : "unknown")
+#define nthaka_hat_state_stringify(hat) ((hat) == NTHAKA_HAT_UP          ? "UP"        \
+                                         : (hat) == NTHAKA_HAT_UPRIGHT   ? "UPRIGHT"   \
+                                         : (hat) == NTHAKA_HAT_RIGHT     ? "RIGHT"     \
+                                         : (hat) == NTHAKA_HAT_DOWNRIGHT ? "DOWNRIGHT" \
+                                         : (hat) == NTHAKA_HAT_DOWN      ? "DOWN"      \
+                                         : (hat) == NTHAKA_HAT_DOWNLEFT  ? "DOWNLEFT"  \
+                                         : (hat) == NTHAKA_HAT_LEFT      ? "LEFT"      \
+                                         : (hat) == NTHAKA_HAT_UPLEFT    ? "UPLEFT"    \
+                                         : (hat) == NTHAKA_HAT_NEUTRAL   ? "NEUTRAL"   \
+                                                                         : "unknown")
 
     typedef struct nthaka_stick_state_t
     {
@@ -51,9 +51,9 @@ extern "C"
         uint8_t y;
     } nthaka_stick_state_t;
 
-#define NTHAKA_STICK_STATE_AXIS_NEUTRAL 128U
-#define NTHAKA_STICK_STATE_NEUTRAL ((nthaka_stick_state_t){.x = NTHAKA_STICK_STATE_AXIS_NEUTRAL, \
-                                                           .y = NTHAKA_STICK_STATE_AXIS_NEUTRAL})
+#define NTHAKA_STICK_AXIS_NEUTRAL 128U
+#define NTHAKA_STICK_NEUTRAL ((nthaka_stick_state_t){.x = NTHAKA_STICK_AXIS_NEUTRAL, \
+                                                     .y = NTHAKA_STICK_AXIS_NEUTRAL})
 
     typedef struct nthaka_gamepad_state_t
     {
@@ -80,24 +80,24 @@ extern "C"
         uint8_t ext[16];
     } nthaka_gamepad_state_t;
 
-#define NTHAKA_GAMEPAD_STATE_NEUTRAL ((nthaka_gamepad_state_t){.y = NTHAKA_BUTTON_STATE_RELEASED,       \
-                                                               .b = NTHAKA_BUTTON_STATE_RELEASED,       \
-                                                               .a = NTHAKA_BUTTON_STATE_RELEASED,       \
-                                                               .x = NTHAKA_BUTTON_STATE_RELEASED,       \
-                                                               .l = NTHAKA_BUTTON_STATE_RELEASED,       \
-                                                               .r = NTHAKA_BUTTON_STATE_RELEASED,       \
-                                                               .zl = NTHAKA_BUTTON_STATE_RELEASED,      \
-                                                               .zr = NTHAKA_BUTTON_STATE_RELEASED,      \
-                                                               .minus = NTHAKA_BUTTON_STATE_RELEASED,   \
-                                                               .plus = NTHAKA_BUTTON_STATE_RELEASED,    \
-                                                               .l_click = NTHAKA_BUTTON_STATE_RELEASED, \
-                                                               .r_click = NTHAKA_BUTTON_STATE_RELEASED, \
-                                                               .home = NTHAKA_BUTTON_STATE_RELEASED,    \
-                                                               .capture = NTHAKA_BUTTON_STATE_RELEASED, \
-                                                               .hat = NTHAKA_HAT_STATE_NEUTRAL,         \
-                                                               .l_stick = NTHAKA_STICK_STATE_NEUTRAL,   \
-                                                               .r_stick = NTHAKA_STICK_STATE_NEUTRAL,   \
-                                                               .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}})
+#define NTHAKA_GAMEPAD_NEUTRAL ((nthaka_gamepad_state_t){.y = NTHAKA_BUTTON_RELEASED,       \
+                                                         .b = NTHAKA_BUTTON_RELEASED,       \
+                                                         .a = NTHAKA_BUTTON_RELEASED,       \
+                                                         .x = NTHAKA_BUTTON_RELEASED,       \
+                                                         .l = NTHAKA_BUTTON_RELEASED,       \
+                                                         .r = NTHAKA_BUTTON_RELEASED,       \
+                                                         .zl = NTHAKA_BUTTON_RELEASED,      \
+                                                         .zr = NTHAKA_BUTTON_RELEASED,      \
+                                                         .minus = NTHAKA_BUTTON_RELEASED,   \
+                                                         .plus = NTHAKA_BUTTON_RELEASED,    \
+                                                         .l_click = NTHAKA_BUTTON_RELEASED, \
+                                                         .r_click = NTHAKA_BUTTON_RELEASED, \
+                                                         .home = NTHAKA_BUTTON_RELEASED,    \
+                                                         .capture = NTHAKA_BUTTON_RELEASED, \
+                                                         .hat = NTHAKA_HAT_NEUTRAL,         \
+                                                         .l_stick = NTHAKA_STICK_NEUTRAL,   \
+                                                         .r_stick = NTHAKA_STICK_NEUTRAL,   \
+                                                         .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}})
 
     void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state_t *src);
 

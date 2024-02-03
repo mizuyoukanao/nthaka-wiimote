@@ -46,7 +46,7 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t buf[], size_t 
 
     if (out != NULL)
     {
-        nthaka_gamepad_state_copy(out, &NTHAKA_GAMEPAD_STATE_NEUTRAL);
+        nthaka_gamepad_state_copy(out, &NTHAKA_GAMEPAD_NEUTRAL);
         out->ext[0] = buf[0];
         out->ext[1] = buf[1];
         out->ext[2] = buf[2];

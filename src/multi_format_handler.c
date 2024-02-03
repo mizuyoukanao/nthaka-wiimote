@@ -116,7 +116,7 @@ bool nthaka_multi_format_handler_init(nthaka_multi_format_handler_t *fmt, nthaka
     for (size_t i = 0; i < size; i++)
     {
         fmt->_fmts[i] = fmts[i];
-        nthaka_gamepad_state_copy(&(fmt->_out[i]), &NTHAKA_GAMEPAD_STATE_NEUTRAL);
+        nthaka_gamepad_state_copy(&(fmt->_out[i]), &NTHAKA_GAMEPAD_NEUTRAL);
     }
     fmt->_size = size;
 

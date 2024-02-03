@@ -1212,11 +1212,11 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
     str[size] = '\0';
 
     uint16_t btns = 0x0000;
-    uint8_t hat = NTHAKA_HAT_STATE_NEUTRAL;
-    uint8_t x_0 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-    uint8_t y_0 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-    uint8_t x_1 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-    uint8_t y_1 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    uint8_t hat = NTHAKA_HAT_NEUTRAL;
+    uint8_t x_0 = NTHAKA_STICK_AXIS_NEUTRAL;
+    uint8_t y_0 = NTHAKA_STICK_AXIS_NEUTRAL;
+    uint8_t x_1 = NTHAKA_STICK_AXIS_NEUTRAL;
+    uint8_t y_1 = NTHAKA_STICK_AXIS_NEUTRAL;
     // sscanf doesn't care whether the "0x" prefix is present or not
     sscanf(str, "%hx %hhx %hhx %hhx %hhx %hhx", &btns, &hat, &x_0, &y_0, &x_1, &y_1);
 
@@ -1240,32 +1240,32 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
     switch (hat)
     {
     case 0:
-        out->hat = NTHAKA_HAT_STATE_UP;
+        out->hat = NTHAKA_HAT_UP;
         break;
     case 1:
-        out->hat = NTHAKA_HAT_STATE_UPRIGHT;
+        out->hat = NTHAKA_HAT_UPRIGHT;
         break;
     case 2:
-        out->hat = NTHAKA_HAT_STATE_RIGHT;
+        out->hat = NTHAKA_HAT_RIGHT;
         break;
     case 3:
-        out->hat = NTHAKA_HAT_STATE_DOWNRIGHT;
+        out->hat = NTHAKA_HAT_DOWNRIGHT;
         break;
     case 4:
-        out->hat = NTHAKA_HAT_STATE_DOWN;
+        out->hat = NTHAKA_HAT_DOWN;
         break;
     case 5:
-        out->hat = NTHAKA_HAT_STATE_DOWNLEFT;
+        out->hat = NTHAKA_HAT_DOWNLEFT;
         break;
     case 6:
-        out->hat = NTHAKA_HAT_STATE_LEFT;
+        out->hat = NTHAKA_HAT_LEFT;
         break;
     case 7:
-        out->hat = NTHAKA_HAT_STATE_UPLEFT;
+        out->hat = NTHAKA_HAT_UPLEFT;
         break;
     case 8:
     default:
-        out->hat = NTHAKA_HAT_STATE_NEUTRAL;
+        out->hat = NTHAKA_HAT_NEUTRAL;
         break;
     }
 
@@ -1356,10 +1356,10 @@ bool pokecon_format_handler_init(pokecon_format_handler_t *fmt)
 
     fmt->_s = POKECON_FORMAT_STATE_INITIAL;
 
-    fmt->_prev_l.x = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-    fmt->_prev_l.y = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-    fmt->_prev_r.x = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-    fmt->_prev_r.y = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    fmt->_prev_l.x = NTHAKA_STICK_AXIS_NEUTRAL;
+    fmt->_prev_l.y = NTHAKA_STICK_AXIS_NEUTRAL;
+    fmt->_prev_r.x = NTHAKA_STICK_AXIS_NEUTRAL;
+    fmt->_prev_r.y = NTHAKA_STICK_AXIS_NEUTRAL;
 
     return true;
 }

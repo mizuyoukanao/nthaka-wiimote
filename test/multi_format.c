@@ -131,9 +131,9 @@ static int test_deserialize(void)
     } test_case_t;
 
     test_case_t cases[] = {
-        {.buf = "0x0000 8\r\n", .size = 10, .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL},
-        {.buf = (uint8_t[]){0x80, 0, 0}, .size = 3, .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL},
-        {.buf = (uint8_t[]){0xAB, 0x00, 0x00, 0x08, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00}, .size = 11, .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL}};
+        {.buf = "0x0000 8\r\n", .size = 10, .expected = NTHAKA_GAMEPAD_NEUTRAL},
+        {.buf = (uint8_t[]){0x80, 0, 0}, .size = 3, .expected = NTHAKA_GAMEPAD_NEUTRAL},
+        {.buf = (uint8_t[]){0xAB, 0x00, 0x00, 0x08, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00}, .size = 11, .expected = NTHAKA_GAMEPAD_NEUTRAL}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {
@@ -195,43 +195,43 @@ static int test_hold_previous_state(void)
                             .prev_size = 3,
                             .buf = (uint8_t[]){'@'},
                             .size = 1,
-                            .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
-                                         .b = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .a = NTHAKA_BUTTON_STATE_PRESSED,
-                                         .x = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .l = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .r = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .zl = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .zr = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .minus = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .plus = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .l_click = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .r_click = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .home = NTHAKA_BUTTON_STATE_PRESSED,
-                                         .capture = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .hat = NTHAKA_HAT_STATE_NEUTRAL,
-                                         .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
-                                         .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
+                            .expected = {.y = NTHAKA_BUTTON_RELEASED, //
+                                         .b = NTHAKA_BUTTON_RELEASED,
+                                         .a = NTHAKA_BUTTON_PRESSED,
+                                         .x = NTHAKA_BUTTON_RELEASED,
+                                         .l = NTHAKA_BUTTON_RELEASED,
+                                         .r = NTHAKA_BUTTON_RELEASED,
+                                         .zl = NTHAKA_BUTTON_RELEASED,
+                                         .zr = NTHAKA_BUTTON_RELEASED,
+                                         .minus = NTHAKA_BUTTON_RELEASED,
+                                         .plus = NTHAKA_BUTTON_RELEASED,
+                                         .l_click = NTHAKA_BUTTON_RELEASED,
+                                         .r_click = NTHAKA_BUTTON_RELEASED,
+                                         .home = NTHAKA_BUTTON_PRESSED,
+                                         .capture = NTHAKA_BUTTON_RELEASED,
+                                         .hat = NTHAKA_HAT_NEUTRAL,
+                                         .l_stick = NTHAKA_STICK_NEUTRAL,
+                                         .r_stick = NTHAKA_STICK_NEUTRAL,
                                          .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
                            {.prev = "0x0001 8 80 ff\r\n", //
                             .prev_size = 16,
                             .buf = "0x0002 8 ff 80\r\n",
                             .size = 16,
-                            .expected = {.y = NTHAKA_BUTTON_STATE_RELEASED, //
-                                         .b = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .a = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .x = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .l = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .r = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .zl = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .zr = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .minus = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .plus = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .l_click = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .r_click = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .home = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .capture = NTHAKA_BUTTON_STATE_RELEASED,
-                                         .hat = NTHAKA_HAT_STATE_NEUTRAL,
+                            .expected = {.y = NTHAKA_BUTTON_RELEASED, //
+                                         .b = NTHAKA_BUTTON_RELEASED,
+                                         .a = NTHAKA_BUTTON_RELEASED,
+                                         .x = NTHAKA_BUTTON_RELEASED,
+                                         .l = NTHAKA_BUTTON_RELEASED,
+                                         .r = NTHAKA_BUTTON_RELEASED,
+                                         .zl = NTHAKA_BUTTON_RELEASED,
+                                         .zr = NTHAKA_BUTTON_RELEASED,
+                                         .minus = NTHAKA_BUTTON_RELEASED,
+                                         .plus = NTHAKA_BUTTON_RELEASED,
+                                         .l_click = NTHAKA_BUTTON_RELEASED,
+                                         .r_click = NTHAKA_BUTTON_RELEASED,
+                                         .home = NTHAKA_BUTTON_RELEASED,
+                                         .capture = NTHAKA_BUTTON_RELEASED,
+                                         .hat = NTHAKA_HAT_NEUTRAL,
                                          .l_stick = {.x = 0xFF, .y = 0x80},
                                          .r_stick = {.x = 0x80, .y = 0xFF},
                                          .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
@@ -239,7 +239,7 @@ static int test_hold_previous_state(void)
                             .prev_size = 22,
                             .buf = "3 8 80 80\r\n",
                             .size = 11,
-                            .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL}};
+                            .expected = NTHAKA_GAMEPAD_NEUTRAL}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {

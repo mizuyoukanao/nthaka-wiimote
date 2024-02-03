@@ -88,7 +88,7 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
     {
         assert(buf[0] == _SERVO);
 
-        out->home = NTHAKA_BUTTON_STATE_PRESSED;
+        out->home = NTHAKA_BUTTON_PRESSED;
     }
     else
     {
@@ -103,17 +103,17 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
             }
         }
 
-        out->home = NTHAKA_BUTTON_STATE_RELEASED;
+        out->home = NTHAKA_BUTTON_RELEASED;
 
         uint8_t btns0 = buf_[1];
         if (btns0 == _RELEASE_ALL)
         {
-            out->a = NTHAKA_BUTTON_STATE_RELEASED;
-            out->b = NTHAKA_BUTTON_STATE_RELEASED;
-            out->x = NTHAKA_BUTTON_STATE_RELEASED;
-            out->y = NTHAKA_BUTTON_STATE_RELEASED;
-            out->l = NTHAKA_BUTTON_STATE_RELEASED;
-            out->r = NTHAKA_BUTTON_STATE_RELEASED;
+            out->a = NTHAKA_BUTTON_RELEASED;
+            out->b = NTHAKA_BUTTON_RELEASED;
+            out->x = NTHAKA_BUTTON_RELEASED;
+            out->y = NTHAKA_BUTTON_RELEASED;
+            out->l = NTHAKA_BUTTON_RELEASED;
+            out->r = NTHAKA_BUTTON_RELEASED;
         }
         else
         {
@@ -133,8 +133,8 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
         uint8_t btns1 = buf_[2];
         if (btns1 == _RELEASE_ALL)
         {
-            out->zr = NTHAKA_BUTTON_STATE_RELEASED;
-            out->plus = NTHAKA_BUTTON_STATE_RELEASED;
+            out->zr = NTHAKA_BUTTON_RELEASED;
+            out->plus = NTHAKA_BUTTON_RELEASED;
             dleft = 0;
             dright = 0;
             dup = 0;
@@ -153,31 +153,31 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
         switch (dup << 3 | dright << 2 | ddown << 1 | dleft)
         {
         case 0b1000:
-            out->hat = NTHAKA_HAT_STATE_UP;
+            out->hat = NTHAKA_HAT_UP;
             break;
         case 0b1100:
-            out->hat = NTHAKA_HAT_STATE_UPRIGHT;
+            out->hat = NTHAKA_HAT_UPRIGHT;
             break;
         case 0b0100:
-            out->hat = NTHAKA_HAT_STATE_RIGHT;
+            out->hat = NTHAKA_HAT_RIGHT;
             break;
         case 0b0110:
-            out->hat = NTHAKA_HAT_STATE_DOWNRIGHT;
+            out->hat = NTHAKA_HAT_DOWNRIGHT;
             break;
         case 0b0010:
-            out->hat = NTHAKA_HAT_STATE_DOWN;
+            out->hat = NTHAKA_HAT_DOWN;
             break;
         case 0b0011:
-            out->hat = NTHAKA_HAT_STATE_DOWNLEFT;
+            out->hat = NTHAKA_HAT_DOWNLEFT;
             break;
         case 0b0001:
-            out->hat = NTHAKA_HAT_STATE_LEFT;
+            out->hat = NTHAKA_HAT_LEFT;
             break;
         case 0b1001:
-            out->hat = NTHAKA_HAT_STATE_UPLEFT;
+            out->hat = NTHAKA_HAT_UPLEFT;
             break;
         default:
-            out->hat = NTHAKA_HAT_STATE_NEUTRAL;
+            out->hat = NTHAKA_HAT_NEUTRAL;
             break;
         }
     }
@@ -199,7 +199,7 @@ bool orca_format_handler_init(orca_format_handler_t *fmt)
     fmt->parent.update = _update;
 
     fmt->_s = ORCA_FORMAT_INITIAL;
-    nthaka_gamepad_state_copy(&(fmt->_prev), &NTHAKA_GAMEPAD_STATE_NEUTRAL);
+    nthaka_gamepad_state_copy(&(fmt->_prev), &NTHAKA_GAMEPAD_NEUTRAL);
 
     return true;
 }

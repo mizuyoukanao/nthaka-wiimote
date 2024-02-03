@@ -109,22 +109,22 @@ static int test_deserialize(void)
     } test_case_t;
 
     test_case_t cases[] = {
-        {.buf = (uint8_t[]){0xAB, 0, 0, 8, 128, 128, 128, 128, 0, 0, 0}, .expected = NTHAKA_GAMEPAD_STATE_NEUTRAL},
-        {.buf = (uint8_t[]){0xAB, 1, 1, 8, 129, 127, 127, 129, 1, 2, 3}, .expected = {.y = NTHAKA_BUTTON_STATE_PRESSED, //
-                                                                                      .b = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .a = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .x = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .l = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .r = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .zl = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .zr = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .minus = NTHAKA_BUTTON_STATE_PRESSED,
-                                                                                      .plus = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .l_click = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .r_click = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .home = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .capture = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .hat = NTHAKA_HAT_STATE_NEUTRAL,
+        {.buf = (uint8_t[]){0xAB, 0, 0, 8, 128, 128, 128, 128, 0, 0, 0}, .expected = NTHAKA_GAMEPAD_NEUTRAL},
+        {.buf = (uint8_t[]){0xAB, 1, 1, 8, 129, 127, 127, 129, 1, 2, 3}, .expected = {.y = NTHAKA_BUTTON_PRESSED, //
+                                                                                      .b = NTHAKA_BUTTON_RELEASED,
+                                                                                      .a = NTHAKA_BUTTON_RELEASED,
+                                                                                      .x = NTHAKA_BUTTON_RELEASED,
+                                                                                      .l = NTHAKA_BUTTON_RELEASED,
+                                                                                      .r = NTHAKA_BUTTON_RELEASED,
+                                                                                      .zl = NTHAKA_BUTTON_RELEASED,
+                                                                                      .zr = NTHAKA_BUTTON_RELEASED,
+                                                                                      .minus = NTHAKA_BUTTON_PRESSED,
+                                                                                      .plus = NTHAKA_BUTTON_RELEASED,
+                                                                                      .l_click = NTHAKA_BUTTON_RELEASED,
+                                                                                      .r_click = NTHAKA_BUTTON_RELEASED,
+                                                                                      .home = NTHAKA_BUTTON_RELEASED,
+                                                                                      .capture = NTHAKA_BUTTON_RELEASED,
+                                                                                      .hat = NTHAKA_HAT_NEUTRAL,
                                                                                       .l_stick = {.x = 129, .y = 127},
                                                                                       .r_stick = {.x = 127, .y = 129},
                                                                                       .ext = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
