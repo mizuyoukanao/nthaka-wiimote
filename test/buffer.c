@@ -78,7 +78,7 @@ static int test_append(void)
                                                                                                                                    .hat = NTHAKA_HAT_STATE_NEUTRAL,
                                                                                                                                    .l_stick = NTHAKA_STICK_STATE_NEUTRAL,
                                                                                                                                    .r_stick = NTHAKA_STICK_STATE_NEUTRAL,
-                                                                                                                                   .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
+                                                                                                                                   .ext = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
                            {.prev = (uint8_t[]){0, 1}, .size = 2, .d = 3, .expected_ret = NTHAKA_BUFFER_REJECTED},
                            {.prev = (uint8_t[]){0, 1, 2}, .size = 3, .d = 0, .expected_ret = NTHAKA_BUFFER_REJECTED}};
 

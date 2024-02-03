@@ -24,10 +24,10 @@ void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state
     dst->r_stick.x = src->r_stick.x;
     dst->r_stick.y = src->r_stick.y;
 
-    size_t size = sizeof(dst->extension) / sizeof(uint8_t);
+    size_t size = sizeof(dst->ext) / sizeof(uint8_t);
     for (size_t i = 0; i < size; i++)
     {
-        dst->extension[i] = src->extension[i];
+        dst->ext[i] = src->ext[i];
     }
 }
 
@@ -92,7 +92,7 @@ void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t
                         ".y = %d}, "
                         ".r_stick = {.x = %d, "
                         ".y = %d}, "
-                        ".extension = {%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d}}",
+                        ".ext = {%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d}}",
              _btn(s->y),
              _btn(s->b),
              _btn(s->a),
@@ -112,20 +112,20 @@ void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t
              s->l_stick.y,
              s->r_stick.x,
              s->r_stick.y,
-             s->extension[0],
-             s->extension[1],
-             s->extension[2],
-             s->extension[3],
-             s->extension[4],
-             s->extension[5],
-             s->extension[6],
-             s->extension[7],
-             s->extension[8],
-             s->extension[9],
-             s->extension[10],
-             s->extension[11],
-             s->extension[12],
-             s->extension[13],
-             s->extension[14],
-             s->extension[15]);
+             s->ext[0],
+             s->ext[1],
+             s->ext[2],
+             s->ext[3],
+             s->ext[4],
+             s->ext[5],
+             s->ext[6],
+             s->ext[7],
+             s->ext[8],
+             s->ext[9],
+             s->ext[10],
+             s->ext[11],
+             s->ext[12],
+             s->ext[13],
+             s->ext[14],
+             s->ext[15]);
 }

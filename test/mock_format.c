@@ -47,9 +47,9 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t buf[], size_t size, nt
     if (out != NULL)
     {
         nthaka_gamepad_state_copy(out, &NTHAKA_GAMEPAD_STATE_NEUTRAL);
-        out->extension[0] = buf[0];
-        out->extension[1] = buf[1];
-        out->extension[2] = buf[2];
+        out->ext[0] = buf[0];
+        out->ext[1] = buf[1];
+        out->ext[2] = buf[2];
     }
     return true;
 }

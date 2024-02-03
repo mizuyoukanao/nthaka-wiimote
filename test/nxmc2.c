@@ -127,7 +127,7 @@ static int test_deserialize(void)
                                                                                       .hat = NTHAKA_HAT_STATE_NEUTRAL,
                                                                                       .l_stick = {.x = 129, .y = 127},
                                                                                       .r_stick = {.x = 127, .y = 129},
-                                                                                      .extension = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
+                                                                                      .ext = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {

@@ -43,20 +43,20 @@ int run_tests(test_t tests[], size_t size);
                                              (s1)->l_stick.y == (s2)->l_stick.y &&         \
                                              (s1)->r_stick.x == (s2)->r_stick.x &&         \
                                              (s1)->r_stick.y == (s2)->r_stick.y &&         \
-                                             (s1)->extension[0] == (s2)->extension[0] &&   \
-                                             (s1)->extension[1] == (s2)->extension[1] &&   \
-                                             (s1)->extension[2] == (s2)->extension[2] &&   \
-                                             (s1)->extension[3] == (s2)->extension[3] &&   \
-                                             (s1)->extension[4] == (s2)->extension[4] &&   \
-                                             (s1)->extension[5] == (s2)->extension[5] &&   \
-                                             (s1)->extension[6] == (s2)->extension[6] &&   \
-                                             (s1)->extension[7] == (s2)->extension[7] &&   \
-                                             (s1)->extension[8] == (s2)->extension[8] &&   \
-                                             (s1)->extension[9] == (s2)->extension[9] &&   \
-                                             (s1)->extension[10] == (s2)->extension[10] && \
-                                             (s1)->extension[11] == (s2)->extension[11] && \
-                                             (s1)->extension[12] == (s2)->extension[12] && \
-                                             (s1)->extension[13] == (s2)->extension[13] && \
-                                             (s1)->extension[14] == (s2)->extension[14] && \
-                                             (s1)->extension[15] == (s2)->extension[15])
+                                             (s1)->ext[0] == (s2)->ext[0] &&   \
+                                             (s1)->ext[1] == (s2)->ext[1] &&   \
+                                             (s1)->ext[2] == (s2)->ext[2] &&   \
+                                             (s1)->ext[3] == (s2)->ext[3] &&   \
+                                             (s1)->ext[4] == (s2)->ext[4] &&   \
+                                             (s1)->ext[5] == (s2)->ext[5] &&   \
+                                             (s1)->ext[6] == (s2)->ext[6] &&   \
+                                             (s1)->ext[7] == (s2)->ext[7] &&   \
+                                             (s1)->ext[8] == (s2)->ext[8] &&   \
+                                             (s1)->ext[9] == (s2)->ext[9] &&   \
+                                             (s1)->ext[10] == (s2)->ext[10] && \
+                                             (s1)->ext[11] == (s2)->ext[11] && \
+                                             (s1)->ext[12] == (s2)->ext[12] && \
+                                             (s1)->ext[13] == (s2)->ext[13] && \
+                                             (s1)->ext[14] == (s2)->ext[14] && \
+                                             (s1)->ext[15] == (s2)->ext[15])
 #endif // TEST_UTIL_H_

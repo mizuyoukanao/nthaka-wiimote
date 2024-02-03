@@ -105,14 +105,14 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
     out->r_stick.x = buf[NXMC2_BUFFER_INDEX_RX];
     out->r_stick.y = buf[NXMC2_BUFFER_INDEX_RY];
 
-    out->extension[0] = buf[NXMC2_BUFFER_INDEX_EXTENSION_0];
-    out->extension[1] = buf[NXMC2_BUFFER_INDEX_EXTENSION_1];
-    out->extension[2] = buf[NXMC2_BUFFER_INDEX_EXTENSION_2];
+    out->ext[0] = buf[NXMC2_BUFFER_INDEX_EXTENSION_0];
+    out->ext[1] = buf[NXMC2_BUFFER_INDEX_EXTENSION_1];
+    out->ext[2] = buf[NXMC2_BUFFER_INDEX_EXTENSION_2];
 
-    size_t size_ = sizeof(out->extension) / sizeof(uint8_t);
+    size_t size_ = sizeof(out->ext) / sizeof(uint8_t);
     for (size_t i = 3; i < size_; i++)
     {
-        out->extension[i] = 0;
+        out->ext[i] = 0;
     }
 
     return true;
