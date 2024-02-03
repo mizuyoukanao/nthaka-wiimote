@@ -77,16 +77,16 @@ extern "C"
 
     pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char c);
 
-    typedef struct pokecon_format_t
+    typedef struct pokecon_format_handler_t
     {
         nthaka_format_handler_t parent;
 
         pokecon_format_state_t _s;
         nthaka_stick_state_t _prev_l;
         nthaka_stick_state_t _prev_r;
-    } pokecon_format_t;
+    } pokecon_format_handler_t;
 
-    bool pokecon_format_init(pokecon_format_t *fmt);
+    bool pokecon_format_handler_init(pokecon_format_handler_t *fmt);
 
 #ifdef __cplusplus
 }

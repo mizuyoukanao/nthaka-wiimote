@@ -11,12 +11,12 @@ static int test_init(void)
 
     typedef struct test_case_t
     {
-        pokecon_format_t *arg0;
+        pokecon_format_handler_t *arg0;
 
         bool expected;
     } test_case_t;
 
-    pokecon_format_t pokecon;
+    pokecon_format_handler_t pokecon;
 
     test_case_t cases[] = {
         {.arg0 = NULL, .expected = false},
@@ -27,7 +27,7 @@ static int test_init(void)
     {
         test_case_t case_ = cases[i];
 
-        bool actual = pokecon_format_init(case_.arg0);
+        bool actual = pokecon_format_handler_init(case_.arg0);
         if (actual != case_.expected)
         {
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, bool_(case_.expected), bool_(actual));
@@ -84,8 +84,8 @@ static int test_update(void)
     {
         test_case_t case_ = cases[i];
 
-        pokecon_format_t pokecon;
-        assert(pokecon_format_init(&pokecon));
+        pokecon_format_handler_t pokecon;
+        assert(pokecon_format_handler_init(&pokecon));
         nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&pokecon;
 
         for (size_t j = 0; j < case_.size; j++)
@@ -213,8 +213,8 @@ static int test_deserialize(void)
     {
         test_case_t case_ = cases[i];
 
-        pokecon_format_t pokecon;
-        assert(pokecon_format_init(&pokecon));
+        pokecon_format_handler_t pokecon;
+        assert(pokecon_format_handler_init(&pokecon));
         nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&pokecon;
 
         for (size_t j = 0; j < case_.size - 1; j++)
@@ -309,8 +309,8 @@ static int test_hold_previous_state(void)
     {
         test_case_t case_ = cases[i];
 
-        pokecon_format_t pokecon;
-        assert(pokecon_format_init(&pokecon));
+        pokecon_format_handler_t pokecon;
+        assert(pokecon_format_handler_init(&pokecon));
         nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&pokecon;
 
         for (size_t j = 0; j < case_.prev_size - 1; j++)
@@ -349,8 +349,8 @@ static int test_reset(void)
 {
     int ret = 0;
 
-    pokecon_format_t pokecon;
-    assert(pokecon_format_init(&pokecon));
+    pokecon_format_handler_t pokecon;
+    assert(pokecon_format_handler_init(&pokecon));
     nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&pokecon;
 
     assert(nthaka_format_handler_update(fmt, '0') == NTHAKA_BUFFER_PENDING);
