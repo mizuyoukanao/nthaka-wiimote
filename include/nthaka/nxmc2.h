@@ -41,7 +41,7 @@ extern "C"
 
     typedef struct nxmc2_format_t
     {
-        nthaka_format_t parent;
+        nthaka_format_handler_t parent;
 
         nxmc2_format_state_t _s;
     } nxmc2_format_t;

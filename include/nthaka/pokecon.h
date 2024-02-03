@@ -79,7 +79,7 @@ extern "C"
 
     typedef struct pokecon_format_t
     {
-        nthaka_format_t parent;
+        nthaka_format_handler_t parent;
 
         pokecon_format_state_t _s;
         nthaka_stick_state_t _prev_l;

@@ -13,13 +13,13 @@ static int test_init(void)
     typedef struct test_case_t
     {
         nthaka_buffer_t *arg0;
-        nthaka_format_t *arg1;
+        nthaka_format_handler_t *arg1;
 
         bool expected;
     } test_case_t;
 
     nthaka_buffer_t buf;
-    nthaka_format_t fmt;
+    nthaka_format_handler_t fmt;
 
     test_case_t cases[] = {
         {.arg0 = NULL, .arg1 = NULL, .expected = false},
@@ -89,7 +89,7 @@ static int test_append(void)
         mock_format_t fmt;
         mock_format_init(&fmt);
         nthaka_buffer_t buf;
-        assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
+        assert(nthaka_buffer_init(&buf, (nthaka_format_handler_t *)&fmt));
         nthaka_gamepad_state_t actual_out;
 
         for (size_t j = 0; j < case_.size; j++)
@@ -125,7 +125,7 @@ static int test_clear(void)
     mock_format_t fmt;
     mock_format_init(&fmt);
     nthaka_buffer_t buf;
-    assert(nthaka_buffer_init(&buf, (nthaka_format_t *)&fmt));
+    assert(nthaka_buffer_init(&buf, (nthaka_format_handler_t *)&fmt));
 
     nthaka_buffer_append(&buf, 0, NULL);
     nthaka_buffer_append(&buf, 1, NULL);

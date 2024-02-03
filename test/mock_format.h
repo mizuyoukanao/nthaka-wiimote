@@ -16,7 +16,7 @@ typedef enum mock_state_t
  */
 typedef struct mock_format_t
 {
-    nthaka_format_t parent;
+    nthaka_format_handler_t parent;
     mock_state_t s;
 } mock_format_t;
 

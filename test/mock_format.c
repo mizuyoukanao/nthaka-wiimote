@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
+static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 {
     mock_format_t *fmt = (mock_format_t *)parent;
     switch (fmt->s)
@@ -37,7 +37,7 @@ static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
     }
     return NTHAKA_BUFFER_REJECTED;
 }
-static bool _deserialize(nthaka_format_t *parent, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out)
+static bool _deserialize(nthaka_format_handler_t *parent, uint8_t buf[], size_t size, nthaka_gamepad_state_t *out)
 {
     assert(buf[0] == 0);
     assert(buf[1] == 1);
@@ -53,7 +53,7 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t buf[], size_t size, nt
     }
     return true;
 }
-static void _reset(nthaka_format_t *parent)
+static void _reset(nthaka_format_handler_t *parent)
 {
     mock_format_t *fmt = (mock_format_t *)parent;
     fmt->s = MOCK_STATE_INITIAL;

@@ -18,7 +18,7 @@ extern "C"
 
     typedef struct orca_format_t
     {
-        nthaka_format_t parent;
+        nthaka_format_handler_t parent;
 
         orca_format_state_t _s;
         nthaka_gamepad_state_t _prev;

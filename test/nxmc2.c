@@ -80,11 +80,11 @@ static int test_update(void)
 
         nxmc2_format_t nxmc2;
         assert(nxmc2_format_init(&nxmc2));
-        nthaka_format_t *fmt = (nthaka_format_t *)&nxmc2;
+        nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&nxmc2;
 
         for (size_t j = 0; j < case_.size; j++)
         {
-            nthaka_buffer_state_t actual = nthaka_format_update(fmt, case_.seq[j]);
+            nthaka_buffer_state_t actual = nthaka_format_handler_update(fmt, case_.seq[j]);
             if (actual != case_.expected[j])
             {
                 fprintf(stderr, "index: %d, %d, expected: %s, actual: %s\n", i, j, nthaka_buffer_state_t_(case_.expected[j]), nthaka_buffer_state_t_(actual));
@@ -135,16 +135,16 @@ static int test_deserialize(void)
 
         nxmc2_format_t nxmc2;
         assert(nxmc2_format_init(&nxmc2));
-        nthaka_format_t *fmt = (nthaka_format_t *)&nxmc2;
+        nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&nxmc2;
 
         for (size_t j = 0; j < 10; j++)
         {
-            assert(nthaka_format_update(fmt, case_.buf[j]) == NTHAKA_BUFFER_PENDING);
+            assert(nthaka_format_handler_update(fmt, case_.buf[j]) == NTHAKA_BUFFER_PENDING);
         }
-        assert(nthaka_format_update(fmt, case_.buf[10]) == NTHAKA_BUFFER_ACCEPTED);
+        assert(nthaka_format_handler_update(fmt, case_.buf[10]) == NTHAKA_BUFFER_ACCEPTED);
 
         nthaka_gamepad_state_t actual_out;
-        assert(nthaka_format_deserialize(fmt, case_.buf, 11, &actual_out));
+        assert(nthaka_format_handler_deserialize(fmt, case_.buf, 11, &actual_out));
         if (!nthaka_gamepad_state_equals(&case_.expected, &actual_out))
         {
             char str0[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
@@ -166,23 +166,23 @@ static int test_reset(void)
 
     nxmc2_format_t nxmc2;
     assert(nxmc2_format_init(&nxmc2));
-    nthaka_format_t *fmt = (nthaka_format_t *)&nxmc2;
+    nthaka_format_handler_t *fmt = (nthaka_format_handler_t *)&nxmc2;
 
-    assert(nthaka_format_update(fmt, 0xAB) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0x3F) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 8) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 0) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 1) == NTHAKA_BUFFER_PENDING);
-    assert(nthaka_format_update(fmt, 2) == NTHAKA_BUFFER_ACCEPTED);
+    assert(nthaka_format_handler_update(fmt, 0xAB) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0x3F) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 8) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0x80) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 1) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 2) == NTHAKA_BUFFER_ACCEPTED);
 
-    nthaka_format_reset(fmt);
+    nthaka_format_handler_reset(fmt);
 
-    assert(nthaka_format_update(fmt, 0xAB) == NTHAKA_BUFFER_PENDING);
+    assert(nthaka_format_handler_update(fmt, 0xAB) == NTHAKA_BUFFER_PENDING);
 
     return ret;
 }

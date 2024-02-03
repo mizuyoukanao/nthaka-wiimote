@@ -1189,7 +1189,7 @@ static const int _VALID_LENGTH_MAX = 30;
 
 static nthaka_gamepad_state_t _;
 
-static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
+static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     pokecon_format_t *fmt = (pokecon_format_t *)parent;
     if (fmt == NULL || buf == NULL || fmt->_s != POKECON_FORMAT_STATE_ACCEPTED)
@@ -1318,7 +1318,7 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
     return true;
 }
 
-static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
+static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 {
     pokecon_format_t *fmt = (pokecon_format_t *)parent;
     if (fmt == NULL)
@@ -1332,7 +1332,7 @@ static nthaka_buffer_state_t _update(nthaka_format_t *parent, uint8_t d)
                                                                                                 : NTHAKA_BUFFER_PENDING);
 }
 
-static void _reset(nthaka_format_t *parent)
+static void _reset(nthaka_format_handler_t *parent)
 {
     pokecon_format_t *fmt = (pokecon_format_t *)parent;
     if (fmt == NULL)
