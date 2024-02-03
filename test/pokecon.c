@@ -78,7 +78,10 @@ static int test_update(void)
                             .expected = (nthaka_buffer_state_t[]){NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_ACCEPTED}},
                            {.seq = "3 8 80 80\r\n", //
                             .size = 11,
-                            .expected = (nthaka_buffer_state_t[]){NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_ACCEPTED}}};
+                            .expected = (nthaka_buffer_state_t[]){NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_ACCEPTED}},
+                           {.seq = "end\r\n", //
+                            .size = 5,
+                            .expected = (nthaka_buffer_state_t[]){NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_PENDING, NTHAKA_BUFFER_ACCEPTED}}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {
@@ -225,7 +228,8 @@ static int test_deserialize(void)
                                                                    .l_stick = {.x = 0x80, .y = 0x80},
                                                                    .r_stick = {.x = 0xd, .y = 0x48},
                                                                    .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},
-        {.buf = "3 8 80 80\r\n", .size = 11, .expected = NTHAKA_GAMEPAD_NEUTRAL}};
+        {.buf = "3 8 80 80\r\n", .size = 11, .expected = NTHAKA_GAMEPAD_NEUTRAL},
+        {.buf = "end\r\n", .size = 5, .expected = NTHAKA_GAMEPAD_NEUTRAL}};
 
     for (size_t i = 0; i < SIZE_OF(cases); i++)
     {

@@ -22,8 +22,9 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
         case '9':
         case 'a':
         case 'd':
-        case 'e':
             return POKECON_FORMAT_STATE_1;
+        case 'e':
+            return POKECON_FORMAT_STATE_e;
         case '3':
             return POKECON_FORMAT_STATE_3;
         case '4':
@@ -46,6 +47,19 @@ pokecon_format_state_t pokecon_format_state_next(pokecon_format_state_t s, char 
             return POKECON_FORMAT_STATE_0x;
         default:
             return POKECON_FORMAT_STATE_REJECTED;
+        }
+    case POKECON_FORMAT_STATE_en:
+        switch (c)
+        {
+        case 'd':
+            return POKECON_FORMAT_STATE_0_0;
+        default:
+            return POKECON_FORMAT_STATE_REJECTED;
+        }
+    case POKECON_FORMAT_STATE_e:
+        if (c == 'n')
+        {
+            return POKECON_FORMAT_STATE_en;
         }
     case POKECON_FORMAT_STATE_1:
         switch (c)
@@ -1212,6 +1226,16 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
     if (out == NULL)
     {
         out = &_;
+    }
+
+    if (buf[0] == 'e' && buf[1] == 'n' && buf[2] == 'd')
+    {
+        nthaka_gamepad_state_copy(out, &NTHAKA_GAMEPAD_NEUTRAL);
+        fmt->_prev_l.x = out->l_stick.x;
+        fmt->_prev_l.y = out->l_stick.y;
+        fmt->_prev_r.x = out->r_stick.x;
+        fmt->_prev_r.y = out->r_stick.y;
+        return true;
     }
 
     // Copy buf into a new char[]

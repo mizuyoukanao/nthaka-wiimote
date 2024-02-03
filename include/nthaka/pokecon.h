@@ -71,6 +71,8 @@ extern "C"
         POKECON_FORMAT_STATE_3_0_0_10,
         POKECON_FORMAT_STATE_3_0_0_0x,
         POKECON_FORMAT_STATE_0_0CR,
+        POKECON_FORMAT_STATE_e,
+        POKECON_FORMAT_STATE_en,
         POKECON_FORMAT_STATE_ACCEPTED,
         POKECON_FORMAT_STATE_REJECTED,
     } pokecon_format_state_t;

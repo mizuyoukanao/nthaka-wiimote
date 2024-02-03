@@ -76,24 +76,18 @@ void setup()
 void loop()
 {
     uint8_t d;
-    if (Serial.readBytes(&d, 1) != 1)
+    nthaka_buffer_state_t s;
+    if (Serial.readBytes(&d, 1) != 1 ||
+        (s = nthaka_buffer_append(&buf, d, &out)) == NTHAKA_BUFFER_REJECTED)
     {
         nthaka_buffer_clear(&buf);
         return;
     }
-
-    switch (nthaka_buffer_append(&buf, d, &out))
+    else if (s == NTHAKA_BUFFER_PENDING)
     {
-    case NTHAKA_BUFFER_ACCEPTED:
-        break;
-    case NTHAKA_BUFFER_REJECTED:
-        nthaka_buffer_clear(&buf);
-    case NTHAKA_BUFFER_PENDING:
-    default:
         return;
     }
 
     update();
-    
     nthaka_buffer_clear(&buf);
 }
