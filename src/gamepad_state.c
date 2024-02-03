@@ -1,4 +1,5 @@
 #include "nthaka.h"
+#include "internal.h"
 
 #include <stdio.h>
 
@@ -24,8 +25,7 @@ void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state
     dst->r_stick.x = src->r_stick.x;
     dst->r_stick.y = src->r_stick.y;
 
-    size_t size = sizeof(dst->ext) / sizeof(uint8_t);
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 0; i < nthaka_internal_size(dst->ext); i++)
     {
         dst->ext[i] = src->ext[i];
     }

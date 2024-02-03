@@ -1310,8 +1310,7 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
         out->r_stick.y = fmt->_prev_r.y;
     }
 
-    size_t length = sizeof(out->ext) / sizeof(uint8_t);
-    for (size_t i = 0; i < length; i++)
+    for (size_t i = 0; i < nthaka_internal_size(out->ext); i++)
     {
         out->ext[i] = 0;
     }
