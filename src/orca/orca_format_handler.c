@@ -10,7 +10,7 @@ static const uint8_t _IGNORE = 0xFF;
 
 static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 {
-    orca_format_t *fmt = (orca_format_t *)parent;
+    orca_format_handler_t *fmt = (orca_format_handler_t *)parent;
     if (fmt == NULL)
     {
         return NTHAKA_BUFFER_REJECTED;
@@ -58,7 +58,7 @@ static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
 
 static void _reset(nthaka_format_handler_t *parent)
 {
-    orca_format_t *fmt = (orca_format_t *)parent;
+    orca_format_handler_t *fmt = (orca_format_handler_t *)parent;
     if (fmt == NULL)
     {
         return;
@@ -71,7 +71,7 @@ static nthaka_gamepad_state_t _;
 
 static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
-    orca_format_t *fmt = (orca_format_t *)parent;
+    orca_format_handler_t *fmt = (orca_format_handler_t *)parent;
     if (fmt == NULL || buf == NULL || fmt->_s != ORCA_FORMAT_FINAL)
     {
         return false;
@@ -187,7 +187,7 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
     return true;
 }
 
-bool orca_format_init(orca_format_t *fmt)
+bool orca_format_handler_init(orca_format_handler_t *fmt)
 {
     if (fmt == NULL)
     {
