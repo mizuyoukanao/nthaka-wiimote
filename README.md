@@ -45,7 +45,3 @@ classDiagram
 
   nthaka_buffer_t <.. nthaka_format_handler_t
 ```
-
-## Dependency
-
-- [kokke/tiny-regex-c](https://github.com/kokke/tiny-regex-c) included (public domain).
