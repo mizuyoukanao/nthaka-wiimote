@@ -1212,7 +1212,7 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
     str[size] = '\0';
 
     uint16_t btns = 0x0000;
-    uint8_t hat = NTHAKA_HAT_NEUTRAL;
+    uint8_t hat = NTHAKA_HAT_STATE_NEUTRAL;
     // sscanf doesn't care whether the "0x" prefix is present or not
     sscanf(str, "%hx %hhx", &btns, &hat);
 
@@ -1236,32 +1236,32 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
     switch (hat)
     {
     case 0:
-        out->hat = NTHAKA_HAT_UP;
+        out->hat = NTHAKA_HAT_STATE_UP;
         break;
     case 1:
-        out->hat = NTHAKA_HAT_UPRIGHT;
+        out->hat = NTHAKA_HAT_STATE_UPRIGHT;
         break;
     case 2:
-        out->hat = NTHAKA_HAT_RIGHT;
+        out->hat = NTHAKA_HAT_STATE_RIGHT;
         break;
     case 3:
-        out->hat = NTHAKA_HAT_DOWNRIGHT;
+        out->hat = NTHAKA_HAT_STATE_DOWNRIGHT;
         break;
     case 4:
-        out->hat = NTHAKA_HAT_DOWN;
+        out->hat = NTHAKA_HAT_STATE_DOWN;
         break;
     case 5:
-        out->hat = NTHAKA_HAT_DOWNLEFT;
+        out->hat = NTHAKA_HAT_STATE_DOWNLEFT;
         break;
     case 6:
-        out->hat = NTHAKA_HAT_LEFT;
+        out->hat = NTHAKA_HAT_STATE_LEFT;
         break;
     case 7:
-        out->hat = NTHAKA_HAT_UPLEFT;
+        out->hat = NTHAKA_HAT_STATE_UPLEFT;
         break;
     case 8:
     default:
-        out->hat = NTHAKA_HAT_NEUTRAL;
+        out->hat = NTHAKA_HAT_STATE_NEUTRAL;
         break;
     }
 

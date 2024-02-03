@@ -124,7 +124,7 @@ static int test_deserialize(void)
                                                                                       .r_click = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                       .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                       .capture = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                      .hat = NTHAKA_HAT_NEUTRAL,
+                                                                                      .hat = NTHAKA_HAT_STATE_NEUTRAL,
                                                                                       .l_stick = {.x = 129, .y = 127},
                                                                                       .r_stick = {.x = 127, .y = 129},
                                                                                       .extension = {1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}}};

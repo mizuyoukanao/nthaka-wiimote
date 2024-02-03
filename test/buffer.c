@@ -75,7 +75,7 @@ static int test_append(void)
                                                                                                                                    .r_click = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                                                                    .home = NTHAKA_BUTTON_STATE_RELEASED,
                                                                                                                                    .capture = NTHAKA_BUTTON_STATE_RELEASED,
-                                                                                                                                   .hat = NTHAKA_HAT_NEUTRAL,
+                                                                                                                                   .hat = NTHAKA_HAT_STATE_NEUTRAL,
                                                                                                                                    .l_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
                                                                                                                                    .r_stick = {.x = NTHAKA_STICK_NEUTRAL, .y = NTHAKA_STICK_NEUTRAL},
                                                                                                                                    .extension = {/**/ 0, 1, 2, /**/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}},

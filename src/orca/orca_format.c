@@ -153,31 +153,31 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
         switch (dup << 3 | dright << 2 | ddown << 1 | dleft)
         {
         case 0b1000:
-            out->hat = NTHAKA_HAT_UP;
+            out->hat = NTHAKA_HAT_STATE_UP;
             break;
         case 0b1100:
-            out->hat = NTHAKA_HAT_UPRIGHT;
+            out->hat = NTHAKA_HAT_STATE_UPRIGHT;
             break;
         case 0b0100:
-            out->hat = NTHAKA_HAT_RIGHT;
+            out->hat = NTHAKA_HAT_STATE_RIGHT;
             break;
         case 0b0110:
-            out->hat = NTHAKA_HAT_DOWNRIGHT;
+            out->hat = NTHAKA_HAT_STATE_DOWNRIGHT;
             break;
         case 0b0010:
-            out->hat = NTHAKA_HAT_DOWN;
+            out->hat = NTHAKA_HAT_STATE_DOWN;
             break;
         case 0b0011:
-            out->hat = NTHAKA_HAT_DOWNLEFT;
+            out->hat = NTHAKA_HAT_STATE_DOWNLEFT;
             break;
         case 0b0001:
-            out->hat = NTHAKA_HAT_LEFT;
+            out->hat = NTHAKA_HAT_STATE_LEFT;
             break;
         case 0b1001:
-            out->hat = NTHAKA_HAT_UPLEFT;
+            out->hat = NTHAKA_HAT_STATE_UPLEFT;
             break;
         default:
-            out->hat = NTHAKA_HAT_NEUTRAL;
+            out->hat = NTHAKA_HAT_STATE_NEUTRAL;
             break;
         }
     }

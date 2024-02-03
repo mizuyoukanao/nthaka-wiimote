@@ -44,28 +44,28 @@ static const char *_btn(nthaka_button_state_t btn)
     }
 }
 
-static const char *_hat(nthaka_hat_t hat)
+static const char *_hat(nthaka_hat_state_t hat)
 {
     switch (hat)
     {
-    case NTHAKA_HAT_UP:
-        return "NTHAKA_HAT_UP";
-    case NTHAKA_HAT_UPRIGHT:
-        return "NTHAKA_HAT_UPRIGHT";
-    case NTHAKA_HAT_RIGHT:
-        return "NTHAKA_HAT_RIGHT";
-    case NTHAKA_HAT_DOWNRIGHT:
-        return "NTHAKA_HAT_DOWNRIGHT";
-    case NTHAKA_HAT_DOWN:
-        return "NTHAKA_HAT_DOWN";
-    case NTHAKA_HAT_DOWNLEFT:
-        return "NTHAKA_HAT_DOWNLEFT";
-    case NTHAKA_HAT_LEFT:
-        return "NTHAKA_HAT_LEFT";
-    case NTHAKA_HAT_UPLEFT:
-        return "NTHAKA_HAT_UPLEFT";
-    case NTHAKA_HAT_NEUTRAL:
-        return "NTHAKA_HAT_NEUTRAL";
+    case NTHAKA_HAT_STATE_UP:
+        return "NTHAKA_HAT_STATE_UP";
+    case NTHAKA_HAT_STATE_UPRIGHT:
+        return "NTHAKA_HAT_STATE_UPRIGHT";
+    case NTHAKA_HAT_STATE_RIGHT:
+        return "NTHAKA_HAT_STATE_RIGHT";
+    case NTHAKA_HAT_STATE_DOWNRIGHT:
+        return "NTHAKA_HAT_STATE_DOWNRIGHT";
+    case NTHAKA_HAT_STATE_DOWN:
+        return "NTHAKA_HAT_STATE_DOWN";
+    case NTHAKA_HAT_STATE_DOWNLEFT:
+        return "NTHAKA_HAT_STATE_DOWNLEFT";
+    case NTHAKA_HAT_STATE_LEFT:
+        return "NTHAKA_HAT_STATE_LEFT";
+    case NTHAKA_HAT_STATE_UPLEFT:
+        return "NTHAKA_HAT_STATE_UPLEFT";
+    case NTHAKA_HAT_STATE_NEUTRAL:
+        return "NTHAKA_HAT_STATE_NEUTRAL";
     default:
         return "UNKNOWN";
     }
