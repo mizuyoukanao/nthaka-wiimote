@@ -175,10 +175,10 @@ static int test_deserialize(void)
         assert(nthaka_format_deserialize(fmt, case_.buf, case_.size, &actual_out));
         if (!nthaka_gamepad_state_equals(&case_.expected, &actual_out))
         {
-            char str0[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
-            char str1[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
-            nthaka_gamepad_state_stringify(&(case_.expected), str0, NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX);
-            nthaka_gamepad_state_stringify(&actual_out, str1, NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX);
+            char str0[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
+            char str1[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
+            nthaka_gamepad_state_stringify(&(case_.expected), str0, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
+            nthaka_gamepad_state_stringify(&actual_out, str1, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
 
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, str0, str1);
             ret++;
@@ -275,10 +275,10 @@ static int test_hold_previous_state(void)
 
         if (!nthaka_gamepad_state_equals(&case_.expected, &actual))
         {
-            char str0[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
-            char str1[NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX];
-            nthaka_gamepad_state_stringify(&(case_.expected), str0, NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX);
-            nthaka_gamepad_state_stringify(&actual, str1, NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX);
+            char str0[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
+            char str1[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
+            nthaka_gamepad_state_stringify(&(case_.expected), str0, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
+            nthaka_gamepad_state_stringify(&actual, str1, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
 
             fprintf(stderr, "index: %d, expected: %s, actual: %s\n", i, str0, str1);
             ret++;
