@@ -110,7 +110,7 @@ extern "C"
                                                 : (void)0)
 
 #ifndef NTHAKA_BUFFER_SIZE
-#define NTHAKA_BUFFER_SIZE (size_t)(256)
+#define NTHAKA_BUFFER_SIZE (size_t)(64)
 #endif
 
     typedef struct nthaka_buffer_t
@@ -119,19 +119,18 @@ extern "C"
         size_t _size;
         nthaka_format_t *_fmt;
 
-        nthaka_buffer_state_t _tmp;
+        nthaka_buffer_state_t _;
     } nthaka_buffer_t;
 
-#define nthaka_buffer_init(buf, fmt) ((buf) != NULL &&           \
-                                      (fmt) != NULL &&           \
-                                      ((buf)->_size = 0) == 0 && \
-                                      ((buf)->_fmt = (fmt)) == (fmt))
-#define nthaka_buffer_append(buf, d, out) ((buf) != NULL && ((buf)->_tmp = nthaka_format_update((buf)->_fmt, (d))) != NTHAKA_BUFFER_REJECTED ? (((buf)->_buf[(buf)->_size++] = (d)) == (d) && (buf)->_tmp == NTHAKA_BUFFER_ACCEPTED ? (nthaka_format_deserialize((buf)->_fmt, (buf)->_buf, (buf)->_size, (out)) ? NTHAKA_BUFFER_ACCEPTED  \
-                                                                                                                                                                                                                                                                                                                : NTHAKA_BUFFER_REJECTED) \
-                                                                                                                                                                                                                                    : NTHAKA_BUFFER_PENDING)                                                                              \
-                                                                                                                                             : NTHAKA_BUFFER_REJECTED)
-#define nthaka_buffer_clear(buf) ((buf) != NULL && ((buf)->_size = 0) == 0 ? nthaka_format_reset((buf)->_fmt) \
-                                                                           : (void)0)
+#define nthaka_buffer_init(buf, fmt) ((buf) != NULL && \
+                                      (fmt) != NULL && \
+                                      ((buf)->_size = 0, (buf)->_fmt = (fmt), true))
+#define nthaka_buffer_append(buf, d, out) ((buf) != NULL && ((buf)->_ = nthaka_format_update((buf)->_fmt, (d))) != NTHAKA_BUFFER_REJECTED ? (((buf)->_buf[(buf)->_size] = (d), (buf)->_size++, (buf)->_ == NTHAKA_BUFFER_ACCEPTED) ? (nthaka_format_deserialize((buf)->_fmt, (buf)->_buf, (buf)->_size, (out)) ? NTHAKA_BUFFER_ACCEPTED  \
+                                                                                                                                                                                                                                                                                                               : NTHAKA_BUFFER_REJECTED) \
+                                                                                                                                                                                                                                   : NTHAKA_BUFFER_PENDING)                                                                              \
+                                                                                                                                          : NTHAKA_BUFFER_REJECTED)
+#define nthaka_buffer_clear(buf) ((buf) != NULL ? ((buf)->_size = 0, nthaka_format_reset((buf)->_fmt)) \
+                                                : (void)0)
 
 #ifdef __cplusplus
 }
