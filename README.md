@@ -1,50 +1,49 @@
-# NX Automation Meta Firmware Library
+# Nthaka
 
 Meta firmware for NX automation.
 
 ## Overview
 
-With the Nintendo Switch (codename: NX) now equipped with the widely-used USB interface, several automated operation solutions using MCU have come to light. Presently, the prevalent method involves two wiring paths: `PC->MCU->NX` and `NX->HDMI Video Capture->PC`. Through these, video feedback is obtained, processed on the PC side, and then operations are transmitted accordingly.
+With the Nintendo Switch (codename: NX) now equipped with the widely-used USB interface, several automated operation solutions using MCUs have come to light. The prevalent method currently involves two wiring paths: PC->MCU->NX and NX->HDMI Video Capture->PC. Through these paths, video feedback is obtained and processed on the PC side, after which operations are transmitted accordingly.
 
-This library primarily focuses on the MCU aspect mentioned above. Regardless of the microcontroller or protocol used, its firmware would be abstracted to "receive byte arrays through communication, convert it into a data structure representing the next state of the gamepad, and reflect it to the NX."
+This library primarily focuses on the MCU aspect mentioned above. Regardless of the microcontroller or protocol used, its firmware will be abstracted to: receive byte arrays through communication, convert them into a data structure representing the next state of the gamepad, and reflect this to the NX.
 
 ## Usage
 
-What this library offers is only an interface to represent the communication protocol, a structure to represent the state of the gamepad, and a buffer structure to accept/reject each packet according to the given protocol and extract the state. Users must combine these to define a specific communication protocol and create functions to reflect the extracted state to the NX.
+By implementing `nthaka_format_handler_t`, a specific communication format is defined. Implementations for [NX Macro Controller v2](https://blog.bzl-web.com/entry/2020/01/20/165719), [Poke-Controller Modified](https://github.com/Moi-poke/Poke-Controller-Modified) and [Orca-GC-Controller](https://github.com/yatsuna827/Orca-GC-Controller) are included as examples.
 
-By implementing each method of `NxamfBytesProtocolInterface`, a specific communication protocol is defined. Implementations for the [NX Macro Controller v2](https://blog.bzl-web.com/entry/2020/01/20/165719) and [Poke-Controller Modified](https://github.com/Moi-poke/Poke-Controller-Modified) are included as examples.
-
-`NxamfBytesBuffer` holds a protocol as a member and provides `append` function for packets. The protocol determines acceptance or rejection. If ready, it provides a pointer to NxamfGamepadState (note that the state must be freed using delete), otherwise it returns NULL. You can also explicitly reset the buffer using `clear`.
-
-Below is a conceptual class diagram in a Java-like notation.
+Below is a conceptual class diagram.
 
 ```mermaid
 classDiagram
-  class NxamfBytesProtocolInterface
-  <<interface>>NxamfBytesProtocolInterface
-  NxamfBytesProtocolInterface : +is_acceptable(uint8_t packet, uint8_t buffer[], size_t length) bool
-  NxamfBytesProtocolInterface : +is_ready(uint8_t buffer[], size_t length) bool
-  NxamfBytesProtocolInterface : +convert(uint8_t buffer[], size_t length, NxamfGamepadState *state)
+  class nthaka_format_handler_t
+  <<interface>> nthaka_format_handler_t
+  nthaka_format_handler_t : +update(uint8_t d) nthaka_buffer_state_t
+  nthaka_format_handler_t : +deserialize(uint8_t buf[], size_t size, nthaka_gamepad_state_t *out) bool
+  nthaka_format_handler_t : +reset() void
 
-  class PokeConProtocol
-  PokeConProtocol ..|> NxamfBytesProtocolInterface
+  class nxmc2_format_handler_t
+  nxmc2_format_handler_t ..|> nthaka_format_handler_t
 
-  class Nxmc2Protocol
-  Nxmc2Protocol ..|> NxamfBytesProtocolInterface
+  class pokecon_format_handler_t
+  pokecon_format_handler_t ..|> nthaka_format_handler_t
 
-  class NxamfProtocolMultiplexer
-  NxamfProtocolMultiplexer : -NxamfBytesProtocolInterface protocols[]
-  NxamfProtocolMultiplexer : +size_t ready_index
+  class orca_format_handler_t
+  orca_format_handler_t ..|> nthaka_format_handler_t
 
-  NxamfProtocolMultiplexer ..|> NxamfBytesProtocolInterface
-  NxamfBytesProtocolInterface --* NxamfProtocolMultiplexer
+  class nthaka_multi_format_handler_t
+  nthaka_multi_format_handler_t ..|> nthaka_format_handler_t
+  nthaka_multi_format_handler_t : -nthaka_format_handler_t fmts[]
+  nthaka_multi_format_handler_t : +get_last_deserialized_index() size_t
 
-  class NxamfBytesBuffer
-  NxamfBytesBuffer : -NxamfBytesProtocolInterface *protocol
-  NxamfBytesBuffer : +append(uint8_t packet) NxamfGamepadState *
-  NxamfBytesBuffer : +clear()
+  nthaka_format_handler_t ..* nthaka_multi_format_handler_t
+  
+  class nthaka_buffer_t
+  nthaka_buffer_t : -nthaka_format_handler_t fmt
+  nthaka_buffer_t : +append(uint8_t d, nthaka_gamepad_state_t *out) nthaka_buffer_state_t
+  nthaka_buffer_t : +clear() void
 
-  NxamfBytesBuffer ..> NxamfBytesProtocolInterface
+  nthaka_buffer_t <.. nthaka_format_handler_t
 ```
 
 ## Dependency

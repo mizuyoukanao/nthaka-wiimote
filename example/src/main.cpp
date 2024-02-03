@@ -1,131 +1,57 @@
 #include <Arduino.h>
 
-#include "pico/stdlib.h"
 #include "hardware/timer.h"
 
-#include "nxamf.h"
-#include "nxamf/nxmc2.h"
-#include "nxamf/pokecon.h"
+#include "nthaka.h"
+#include "nthaka/nxmc2.h"
+#include "nthaka/orca.h"
+#include "nthaka/pokecon.h"
 
-static const int SERIAL_INACTIVE_TIMEOUT = 100;
-static int inactive_count = 0;
+static nxmc2_format_handler_t nxmc2;
+static orca_format_handler_t orca;
+static pokecon_format_handler_t pokecon;
+static nthaka_format_handler_t *fmts[] = {(nthaka_format_handler_t *)&nxmc2, //
+                                          (nthaka_format_handler_t *)&orca,  //
+                                          (nthaka_format_handler_t *)&pokecon};
+static nthaka_multi_format_handler_t fmt;
+static nthaka_buffer_t buf;
 
-static Nxmc2Protocol *nxmc2;
-static PokeConProtocol *pokecon;
-static NxamfBytesProtocolInterface *protocols[2];
-static NxamfProtocolMultiplexer *mux;
-static NxamfBytesBuffer *buffer;
+static nthaka_gamepad_state_t out;
+static char str[NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX];
 
-static int64_t led_off(alarm_id_t id, void *user_data)
+static int64_t _led_off(alarm_id_t id, void *user_data)
 {
-    digitalWrite(LED_BUILTIN, LOW);
-    return false;
+    digitalWriteFast(LED_BUILTIN, LOW);
+    return 0;
 }
 
-static void async_led_on_for_100ms()
+static inline void async_led_on(uint32_t dur_ms)
 {
-    digitalWrite(LED_BUILTIN, HIGH);
-    alarm_id_t alarm_id = add_alarm_in_ms(100, led_off, NULL, false);
+    digitalWriteFast(LED_BUILTIN, HIGH);
+    add_alarm_in_ms(dur_ms, _led_off, NULL, false);
 }
 
-static char buf[256];
-
-static void print_button_state(const char *name, NxamfButtonState state)
+static void update()
 {
-    sprintf(buf, "%s\t%s", name, state == NXAMF_BUTTON_STATE_PRESSED ? "Pressed" : "Released");
-    Serial1.println(buf);
-}
-
-static void print_hat_state(NxamfHatState state)
-{
-    const char *tmp;
-    switch (state)
-    {
-    case NXAMF_HAT_STATE_UP:
-        tmp = "Up";
-        break;
-    case NXAMF_HAT_STATE_UPRIGHT:
-        tmp = "UpRight";
-        break;
-    case NXAMF_HAT_STATE_RIGHT:
-        tmp = "Right";
-        break;
-    case NXAMF_HAT_STATE_DOWNRIGHT:
-        tmp = "DownRight";
-        break;
-    case NXAMF_HAT_STATE_DOWN:
-        tmp = "Down";
-        break;
-    case NXAMF_HAT_STATE_DOWNLEFT:
-        tmp = "DownLeft";
-        break;
-    case NXAMF_HAT_STATE_LEFT:
-        tmp = "Left";
-        break;
-    case NXAMF_HAT_STATE_UPLEFT:
-        tmp = "UpLeft";
-        break;
-    case NXAMF_HAT_STATE_NEUTRAL:
-        tmp = "Neurtal";
-        break;
-    default:
-        tmp = "[Error]";
-        break;
-    }
-    sprintf(buf, "Hat\t%s", tmp);
-    Serial1.println(buf);
-}
-
-static void print_stick_state(const char *name, NxamfStickState *state)
-{
-    sprintf(buf, "%s\tx:%d,y:%d", name, state->x, state->y);
-    Serial1.println(buf);
-}
-
-static void print_extension(uint8_t extension[])
-{
-    sprintf(buf, "Extension\t%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", extension[0], extension[1], extension[2], extension[3], extension[4], extension[5], extension[6], extension[7], extension[8], extension[9], extension[10], extension[11], extension[12], extension[13], extension[14], extension[15]);
-    Serial1.println(buf);
-}
-
-static void reflect_state(NxamfGamepadState *state)
-{
-    if (state == NULL)
-    {
-        return;
-    }
-
-    async_led_on_for_100ms();
+    async_led_on(100);
 
     Serial1.println("--------------------");
-    sprintf(buf, "Mode\t%s", mux->ready_index == 0 ? "NXMC2" : "PokeCon");
-    Serial1.println(buf);
 
-    print_button_state("Y", state->y);
-    print_button_state("B", state->b);
-    print_button_state("A", state->a);
-    print_button_state("X", state->x);
-    print_button_state("L", state->l);
-    print_button_state("R", state->r);
-    print_button_state("ZL", state->zl);
-    print_button_state("ZR", state->zr);
-    print_button_state("Minus", state->minus);
-    print_button_state("Plus", state->plus);
-    print_button_state("L Click", state->l_click);
-    print_button_state("R Click", state->r_click);
-    print_button_state("Home", state->home);
-    print_button_state("Capture", state->capture);
+    size_t *i = nthaka_multi_format_handler_get_last_deserialized_index(&fmt);
+    sprintf(str, "index: %s", i == NULL ? "unknown" //
+                              : *i == 0 ? "NXMC2"
+                              : *i == 1 ? "ORCA"
+                              : *i == 2 ? "PokeCon"
+                                        : "unknown");
+    Serial1.println(str);
 
-    print_hat_state(state->hat);
-
-    print_stick_state("L Stick", &state->l_stick);
-    print_stick_state("R Stick", &state->r_stick);
-
-    print_extension(state->extension);
+    nthaka_gamepad_state_stringify(&out, str, NTHAKA_GAMEPAD_STATE_STRING_SIZE_MAX);
+    Serial1.println(str);
 }
 
 void setup()
 {
+    Serial.setTimeout(100);
     Serial.begin(9600);
 
     Serial1.setTX(0);
@@ -135,42 +61,33 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
 
-    nxmc2 = nxmc2_protocol_new();
-    pokecon = pokecon_protocol_new();
-    protocols[0] = (NxamfBytesProtocolInterface *)nxmc2;
-    protocols[1] = (NxamfBytesProtocolInterface *)pokecon;
-    mux = nxamf_protocol_multiplexer_new(protocols, 2);
-    if (nxmc2 == NULL || pokecon == NULL || mux == NULL)
+    if (!(nxmc2_format_handler_init(&nxmc2) &&
+          orca_format_handler_init(&orca) &&
+          pokecon_format_handler_init(&pokecon) &&
+          nthaka_multi_format_handler_init(&fmt, fmts, 3) &&
+          nthaka_buffer_init(&buf, (nthaka_format_handler_t *)&fmt)))
     {
-        abort();
-    }
-    buffer = nxamf_bytes_buffer_new((NxamfBytesProtocolInterface *)mux);
-    if (buffer == NULL)
-    {
-        abort();
+        digitalWrite(LED_BUILTIN, HIGH);
+        while (true)
+            ;
     }
 }
 
 void loop()
 {
-    if (Serial.available() == 0)
+    uint8_t d;
+    nthaka_buffer_state_t s;
+    if (Serial.readBytes(&d, 1) != 1 ||
+        (s = nthaka_buffer_append(&buf, d, &out)) == NTHAKA_BUFFER_REJECTED)
     {
-        inactive_count++;
-        if (SERIAL_INACTIVE_TIMEOUT < inactive_count)
-        {
-            inactive_count = 0;
-            nxamf_bytes_buffer_clear(buffer);
-        }
+        nthaka_buffer_clear(&buf);
         return;
     }
-    inactive_count = 0;
-
-    uint8_t packet = Serial.read();
-    NxamfGamepadState *state = nxamf_bytes_buffer_append(buffer, packet);
-    if (state == NULL)
+    else if (s == NTHAKA_BUFFER_PENDING)
     {
         return;
     }
 
-    reflect_state(state);
+    update();
+    nthaka_buffer_clear(&buf);
 }
