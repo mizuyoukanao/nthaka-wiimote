@@ -88,7 +88,7 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
     {
         assert(buf[0] == _SERVO);
 
-        out->home = NTHAKA_BUTTON_PRESSED;
+        out->home = NTHAKA_BUTTON_STATE_PRESSED;
     }
     else
     {
@@ -103,17 +103,17 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
             }
         }
 
-        out->home = NTHAKA_BUTTON_RELEASED;
+        out->home = NTHAKA_BUTTON_STATE_RELEASED;
 
         uint8_t btns0 = buf_[1];
         if (btns0 == _RELEASE_ALL)
         {
-            out->a = NTHAKA_BUTTON_RELEASED;
-            out->b = NTHAKA_BUTTON_RELEASED;
-            out->x = NTHAKA_BUTTON_RELEASED;
-            out->y = NTHAKA_BUTTON_RELEASED;
-            out->l = NTHAKA_BUTTON_RELEASED;
-            out->r = NTHAKA_BUTTON_RELEASED;
+            out->a = NTHAKA_BUTTON_STATE_RELEASED;
+            out->b = NTHAKA_BUTTON_STATE_RELEASED;
+            out->x = NTHAKA_BUTTON_STATE_RELEASED;
+            out->y = NTHAKA_BUTTON_STATE_RELEASED;
+            out->l = NTHAKA_BUTTON_STATE_RELEASED;
+            out->r = NTHAKA_BUTTON_STATE_RELEASED;
         }
         else
         {
@@ -133,8 +133,8 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
         uint8_t btns1 = buf_[2];
         if (btns1 == _RELEASE_ALL)
         {
-            out->zr = NTHAKA_BUTTON_RELEASED;
-            out->plus = NTHAKA_BUTTON_RELEASED;
+            out->zr = NTHAKA_BUTTON_STATE_RELEASED;
+            out->plus = NTHAKA_BUTTON_STATE_RELEASED;
             dleft = 0;
             dright = 0;
             dup = 0;

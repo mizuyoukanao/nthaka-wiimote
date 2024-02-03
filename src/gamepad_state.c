@@ -31,14 +31,14 @@ void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state
     }
 }
 
-static const char *_btn(nthaka_button_t btn)
+static const char *_btn(nthaka_button_state_t btn)
 {
     switch (btn)
     {
-    case NTHAKA_BUTTON_RELEASED:
-        return "NTHAKA_BUTTON_RELEASED";
-    case NTHAKA_BUTTON_PRESSED:
-        return "NTHAKA_BUTTON_PRESSED";
+    case NTHAKA_BUTTON_STATE_RELEASED:
+        return "NTHAKA_BUTTON_STATE_RELEASED";
+    case NTHAKA_BUTTON_STATE_PRESSED:
+        return "NTHAKA_BUTTON_STATE_PRESSED";
     default:
         return "UNKNOWN";
     }
