@@ -1213,8 +1213,12 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
 
     uint16_t btns = 0x0000;
     uint8_t hat = NTHAKA_HAT_STATE_NEUTRAL;
+    uint8_t x_0 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    uint8_t y_0 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    uint8_t x_1 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
+    uint8_t y_1 = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
     // sscanf doesn't care whether the "0x" prefix is present or not
-    sscanf(str, "%hx %hhx", &btns, &hat);
+    sscanf(str, "%hx %hhx %hhx %hhx %hhx %hhx", &btns, &hat, &x_0, &y_0, &x_1, &y_1);
 
     bool update_rs = nthaka_internal_bit(btns, 0) == 1;
     bool update_ls = nthaka_internal_bit(btns, 1) == 1;
@@ -1267,48 +1271,35 @@ static bool _deserialize(nthaka_format_t *parent, uint8_t *buf, size_t size, nth
 
     if (update_ls && update_rs)
     {
-        uint8_t lx = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-        uint8_t ly = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-        uint8_t rx = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-        uint8_t ry = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-        sscanf(str, "%*hx %*hhx %hhx %hhx %hhx %hhx", &lx, &ly, &rx, &ry);
-
-        out->l_stick.x = lx;
-        out->l_stick.y = ly;
+        out->l_stick.x = x_0;
+        out->l_stick.y = y_0;
         fmt->_prev_l.x = out->l_stick.x;
         fmt->_prev_l.y = out->l_stick.y;
 
-        out->r_stick.x = rx;
-        out->r_stick.y = ry;
+        out->r_stick.x = x_1;
+        out->r_stick.y = y_1;
         fmt->_prev_r.x = out->r_stick.x;
         fmt->_prev_r.y = out->r_stick.y;
     }
-    else if (update_ls || update_rs)
+    else if (update_ls)
     {
-        uint8_t x = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-        uint8_t y = NTHAKA_STICK_STATE_AXIS_NEUTRAL;
-        sscanf(str, "%*hx %*hhx %hhx %hhx", &x, &y);
+        out->l_stick.x = x_0;
+        out->l_stick.y = y_0;
+        fmt->_prev_l.x = out->l_stick.x;
+        fmt->_prev_l.y = out->l_stick.y;
 
-        if (update_ls)
-        {
-            out->l_stick.x = x;
-            out->l_stick.y = y;
-            fmt->_prev_l.x = out->l_stick.x;
-            fmt->_prev_l.y = out->l_stick.y;
+        out->r_stick.x = fmt->_prev_r.x;
+        out->r_stick.y = fmt->_prev_r.y;
+    }
+    else if (update_rs)
+    {
+        out->l_stick.x = fmt->_prev_l.x;
+        out->l_stick.y = fmt->_prev_l.y;
 
-            out->r_stick.x = fmt->_prev_r.x;
-            out->r_stick.y = fmt->_prev_r.y;
-        }
-        else
-        {
-            out->l_stick.x = fmt->_prev_l.x;
-            out->l_stick.y = fmt->_prev_l.y;
-
-            out->r_stick.x = x;
-            out->r_stick.y = y;
-            fmt->_prev_r.x = out->r_stick.x;
-            fmt->_prev_r.y = out->r_stick.y;
-        }
+        out->r_stick.x = x_0;
+        out->r_stick.y = y_0;
+        fmt->_prev_r.x = out->r_stick.x;
+        fmt->_prev_r.y = out->r_stick.y;
     }
     else
     {
