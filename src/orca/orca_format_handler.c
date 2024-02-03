@@ -21,7 +21,7 @@ static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
     case ORCA_FORMAT_INITIAL:
         if (d == _SERVO)
         {
-            fmt->_s = ORCA_FORMAT_FINAL;
+            fmt->_s = ORCA_FORMAT_ACCEPTED;
             return NTHAKA_BUFFER_ACCEPTED;
         }
         else if (d != _HEADER)
@@ -49,10 +49,10 @@ static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
             return NTHAKA_BUFFER_PENDING;
         }
 
-    case ORCA_FORMAT_FINAL:
+    case ORCA_FORMAT_ACCEPTED:
     default:
     }
-    fmt->_s = ORCA_FORMAT_FINAL;
+    fmt->_s = ORCA_FORMAT_REJECTED;
     return NTHAKA_BUFFER_REJECTED;
 }
 
@@ -72,7 +72,7 @@ static nthaka_gamepad_state_t _;
 static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     orca_format_handler_t *fmt = (orca_format_handler_t *)parent;
-    if (fmt == NULL || buf == NULL || fmt->_s != ORCA_FORMAT_FINAL)
+    if (fmt == NULL || buf == NULL || fmt->_s != ORCA_FORMAT_ACCEPTED)
     {
         return false;
     }

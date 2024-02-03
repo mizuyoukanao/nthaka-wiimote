@@ -99,43 +99,7 @@ extern "C"
                                                                .r_stick = NTHAKA_STICK_STATE_NEUTRAL,   \
                                                                .ext = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}})
 
-#define nthaka_gamepad_state_copy(dst, src) ((dst != NULL && src != NULL) ? ((dst)->y = (src)->y,                 \
-                                                                             (dst)->b = (src)->b,                 \
-                                                                             (dst)->a = (src)->a,                 \
-                                                                             (dst)->x = (src)->x,                 \
-                                                                             (dst)->l = (src)->l,                 \
-                                                                             (dst)->r = (src)->r,                 \
-                                                                             (dst)->zl = (src)->zl,               \
-                                                                             (dst)->zr = (src)->zr,               \
-                                                                             (dst)->minus = (src)->minus,         \
-                                                                             (dst)->plus = (src)->plus,           \
-                                                                             (dst)->l_click = (src)->l_click,     \
-                                                                             (dst)->r_click = (src)->r_click,     \
-                                                                             (dst)->home = (src)->home,           \
-                                                                             (dst)->capture = (src)->capture,     \
-                                                                             (dst)->hat = (src)->hat,             \
-                                                                             (dst)->l_stick.x = (src)->l_stick.x, \
-                                                                             (dst)->l_stick.y = (src)->l_stick.y, \
-                                                                             (dst)->r_stick.x = (src)->r_stick.x, \
-                                                                             (dst)->r_stick.y = (src)->r_stick.y, \
-                                                                             (dst)->ext[0] = (src)->ext[0],       \
-                                                                             (dst)->ext[1] = (src)->ext[1],       \
-                                                                             (dst)->ext[2] = (src)->ext[2],       \
-                                                                             (dst)->ext[3] = (src)->ext[3],       \
-                                                                             (dst)->ext[4] = (src)->ext[4],       \
-                                                                             (dst)->ext[5] = (src)->ext[5],       \
-                                                                             (dst)->ext[6] = (src)->ext[6],       \
-                                                                             (dst)->ext[7] = (src)->ext[7],       \
-                                                                             (dst)->ext[8] = (src)->ext[8],       \
-                                                                             (dst)->ext[9] = (src)->ext[9],       \
-                                                                             (dst)->ext[10] = (src)->ext[10],     \
-                                                                             (dst)->ext[11] = (src)->ext[11],     \
-                                                                             (dst)->ext[12] = (src)->ext[12],     \
-                                                                             (dst)->ext[13] = (src)->ext[13],     \
-                                                                             (dst)->ext[14] = (src)->ext[14],     \
-                                                                             (dst)->ext[15] = (src)->ext[15],     \
-                                                                             (void)0)                             \
-                                                                          : (void)0)
+    void nthaka_gamepad_state_copy(nthaka_gamepad_state_t *dst, nthaka_gamepad_state_t *src);
 
 #define nthaka_gamepad_state_stringify(s, out, size) ((s) != NULL ? (snprintf((out), (size), "{.y=%s,"                                                  \
                                                                                              ".b=%s,"                                                   \
@@ -217,6 +181,24 @@ extern "C"
                                                                 (fmt)->deserialize((fmt), (buf), (size), (out)))
 #define nthaka_format_handler_reset(fmt) ((fmt) != NULL ? (fmt)->reset((fmt)) \
                                                         : (void)0)
+
+#ifndef NTHAKA_MULTI_FORMAT_SIZE
+#define NTHAKA_MULTI_FORMAT_SIZE (size_t)(8)
+#endif
+
+    typedef struct nthaka_multi_format_handler_t
+    {
+        nthaka_format_handler_t parent;
+
+        nthaka_format_handler_t *_fmts[NTHAKA_MULTI_FORMAT_SIZE];
+        nthaka_gamepad_state_t _out[NTHAKA_MULTI_FORMAT_SIZE];
+        size_t _size;
+
+        size_t *_last_deserialized_index;
+        size_t __last_deserialized_index;
+    } nthaka_multi_format_handler_t;
+
+    bool nthaka_multi_format_handler_init(nthaka_multi_format_handler_t *fmt, nthaka_format_handler_t *fmts[], size_t size);
 
 #ifndef NTHAKA_BUFFER_SIZE
 #define NTHAKA_BUFFER_SIZE (size_t)(64)

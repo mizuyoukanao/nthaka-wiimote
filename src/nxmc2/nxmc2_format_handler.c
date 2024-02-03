@@ -1,6 +1,8 @@
 #include "nthaka/nxmc2.h"
 #include "../internal.h"
 
+#include <assert.h>
+
 static const uint8_t _HEADER = 0xAB;
 static const uint8_t _HAT_MAX = 8;
 static const uint8_t _BTNS_MSB_MAX = 0x3F;
@@ -47,10 +49,10 @@ static nthaka_buffer_state_t _update(nthaka_format_handler_t *parent, uint8_t d)
         fmt->_s++;
         return NTHAKA_BUFFER_ACCEPTED;
 
-    case NXMC2_FORMAT_FINAL:
+    case NXMC2_FORMAT_ACCEPTED:
     default:
     }
-    fmt->_s = NXMC2_FORMAT_FINAL;
+    fmt->_s = NXMC2_FORMAT_REJECTED;
     return NTHAKA_BUFFER_REJECTED;
 }
 
@@ -68,10 +70,15 @@ static void _reset(nthaka_format_handler_t *parent)
 static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t size, nthaka_gamepad_state_t *out)
 {
     nxmc2_format_handler_t *fmt = (nxmc2_format_handler_t *)parent;
-    if (fmt == NULL || buf == NULL || fmt->_s != NXMC2_FORMAT_FINAL)
+    if (fmt == NULL || buf == NULL || fmt->_s != NXMC2_FORMAT_ACCEPTED)
     {
         return false;
     }
+
+    assert(size == 11);
+    assert(buf[0] == _HEADER);
+    assert(buf[2] <= _BTNS_MSB_MAX);
+    assert(buf[3] <= _HAT_MAX);
 
     if (out == NULL)
     {

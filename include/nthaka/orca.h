@@ -13,7 +13,8 @@ extern "C"
         ORCA_FORMAT_INITIAL,
         ORCA_FORMAT_0x80,
         ORCA_FORMAT_0x80_0x00,
-        ORCA_FORMAT_FINAL
+        ORCA_FORMAT_ACCEPTED,
+        ORCA_FORMAT_REJECTED
     } orca_format_state_t;
 
     typedef struct orca_format_handler_t
