@@ -153,28 +153,28 @@ static bool _deserialize(nthaka_format_handler_t *parent, uint8_t *buf, size_t s
 
         switch (dup << 3 | dright << 2 | ddown << 1 | dleft)
         {
-        case 0b1000:
+        case 0x8 /*0b1000*/:
             out->hat = NTHAKA_HAT_UP;
             break;
-        case 0b1100:
+        case 0xC /*0b1100*/:
             out->hat = NTHAKA_HAT_UPRIGHT;
             break;
-        case 0b0100:
+        case 0x4 /*0b0100*/:
             out->hat = NTHAKA_HAT_RIGHT;
             break;
-        case 0b0110:
+        case 0x6 /*0b0110*/:
             out->hat = NTHAKA_HAT_DOWNRIGHT;
             break;
-        case 0b0010:
+        case 0x2 /*0b0010*/:
             out->hat = NTHAKA_HAT_DOWN;
             break;
-        case 0b0011:
+        case 0x3 /*0b0011*/:
             out->hat = NTHAKA_HAT_DOWNLEFT;
             break;
-        case 0b0001:
+        case 0x1 /*0b0001*/:
             out->hat = NTHAKA_HAT_LEFT;
             break;
-        case 0b1001:
+        case 0x9 /*0b1001*/:
             out->hat = NTHAKA_HAT_UPLEFT;
             break;
         default:

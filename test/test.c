@@ -1,4 +1,5 @@
 #include "buffer.h"
+#include "dol.h"
 #include "nxmc2.h"
 #include "orca.h"
 #include "pokecon.h"
@@ -12,7 +13,8 @@ int main(void)
 {
     int ret = 0;
 
-    test_t tests[] = {TEST(test_buffer),
+    test_t tests[] = {TEST(test_dol),
+                      TEST(test_buffer),
                       TEST(test_nxmc2),
                       TEST(test_orca),
                       TEST(test_pokecon),
