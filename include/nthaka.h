@@ -88,24 +88,6 @@ extern "C"
 #define NTHAKA_GAMEPAD_STATE_STRING_LENGTH_MAX 612
     void nthaka_gamepad_state_stringify(nthaka_gamepad_state_t *s, char *out, size_t size);
 
-    typedef struct nthaka_buffer_interface_t
-    {
-        bool (*append)(struct nthaka_buffer_interface_t *buf, uint8_t d, nthaka_gamepad_state_t *out);
-        void (*clear)(struct nthaka_buffer_interface_t *buf);
-    } nthaka_buffer_interface_t;
-
-    typedef struct nthaka_multi_buffer_manager_t
-    {
-        nthaka_buffer_interface_t parent;
-
-        nthaka_buffer_interface_t **bufs;
-        size_t len;
-        size_t last_deserialized_index;
-    } nthaka_multi_buffer_manager_t;
-
-    void nthaka_multi_buffer_manager_init(nthaka_multi_buffer_manager_t *buf, nthaka_buffer_interface_t **bufs, size_t len);
-    size_t nthaka_multi_buffer_manager_get_last_deserialized_index(nthaka_multi_buffer_manager_t *buf);
-
     typedef enum nthaka_buffer_state_t
     {
         NTHAKA_BUFFER_PENDING,

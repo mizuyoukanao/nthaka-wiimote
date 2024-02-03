@@ -5,8 +5,6 @@
 
 #include "util.h"
 
-// #include "multi_buffer_manager.h"
-
 #include <stdio.h>
 
 int main(void)
