@@ -45,3 +45,11 @@ classDiagram
 
   nthaka_buffer_t <.. nthaka_format_handler_t
 ```
+
+## Development Notes
+
+Due to the presence of a symbolic link in the [example](example/) project, cloning this repository on Windows requires [specific permissions](https://github.com/git-for-windows/git/wiki/Symbolic-Links). I recommend using tools like `gsudo` as demonstrated below:
+
+```
+> sudo git clone -c core.symlink=true https://github.com/U-1F992/nthaka.git
+```
