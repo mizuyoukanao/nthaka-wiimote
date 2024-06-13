@@ -1,6 +1,6 @@
 # Nthaka
 
-Meta firmware for NX automation.
+Meta firmware for NX automation + Wiimote emulation code (https://github.com/Loc15/PicoGamepadConverter). 
 
 ## Overview
 
