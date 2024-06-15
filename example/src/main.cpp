@@ -53,7 +53,6 @@ static inline void async_led_on(uint32_t dur_ms)
     add_alarm_in_ms(dur_ms, _led_off, NULL, false);
 }
 
-//Reinventing the wheel...
 void led_on() {
     digitalWrite(LED_BUILTIN, HIGH);
 }
@@ -134,8 +133,8 @@ static void update()
                     wiimote_report.wiimote.right = 0;
                     break;
             }
-            wiimote_report.wiimote.ir_x = (int8_t)(out.l_stick.x - 0x80);
-            wiimote_report.wiimote.ir_y = (int8_t)(out.l_stick.y - 0x80);
+            wiimote_report.wiimote.ir_x = (int8_t)map(out.l_stick.x, 0, 255, -128, 127);
+            wiimote_report.wiimote.ir_y = (int8_t)map(out.l_stick.y, 0, 255, 127, -128);
 
             /*check if it wanna change the mode*/
             if (wiimote_report.wiimote.one & wiimote_report.wiimote.two) {
@@ -217,12 +216,12 @@ static void update()
                     wiimote_report.wiimote.right = 0;
                     break;
             }
-            wiimote_report.wiimote.ir_x = (int8_t)(out.r_stick.x - 0x80);
-            wiimote_report.wiimote.ir_y = (int8_t)(out.r_stick.y - 0x80);
+            wiimote_report.wiimote.ir_x = (int8_t)map(out.r_stick.x, 0, 255, -128, 127);
+            wiimote_report.wiimote.ir_y = (int8_t)map(out.r_stick.y, 0, 255, 127, -128);
 
             /*nunchuk*/
             wiimote_report.nunchuk.x = out.l_stick.x;
-            wiimote_report.nunchuk.y = out.l_stick.y;
+            wiimote_report.nunchuk.y = map(out.l_stick.y, 0, 255, 255, 0);
             wiimote_report.nunchuk.c = out.l;
             wiimote_report.nunchuk.z = out.zl;
 
@@ -352,9 +351,9 @@ static void update()
             wiimote_report.classic.ltrigger = out.l;    //digital button of lt
             wiimote_report.classic.rtrigger = out.r;  //digital button of rt
             wiimote_report.classic.ls_x = out.l_stick.x;
-            wiimote_report.classic.ls_y = out.l_stick.y;
+            wiimote_report.classic.ls_y = map(out.l_stick.y, 0, 255, 255, 0);
             wiimote_report.classic.rs_x = out.r_stick.x;
-            wiimote_report.classic.rs_y = out.r_stick.y;
+            wiimote_report.classic.rs_y = map(out.r_stick.y, 0, 255, 255, 0);
 
             /*check if it wanna change the mode*/
             if (out.l_click & out.r_click) {
